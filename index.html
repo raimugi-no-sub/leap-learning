@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LEAPスロット単語テスト</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{--bg:#1c1233;--panel:#2a1b4a;--line:#46307a;--text:#f6f1ff;--sub:#b5a6d9;--gold:#ffc233;--ok:#3ddc97;--ng:#ff5d73;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4effc;--panel:#fff;--line:#d3c4f0;--text:#24113f;--sub:#6b5a8f;--gold:#b7790a;--ok:#12975f;--ng:#d6334d;color-scheme:light}}
+:root[data-theme="dark"]{--bg:#1c1233;--panel:#2a1b4a;--line:#46307a;--text:#f6f1ff;--sub:#b5a6d9;--gold:#ffc233;--ok:#3ddc97;--ng:#ff5d73}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif}
+body{max-width:520px;margin:0 auto;padding:0 14px 40px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:12px 0 8px;z-index:5;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--line)}
+.coins{font-size:32px;font-weight:900;color:var(--gold);line-height:1}
+.coins small{font-size:13px;color:var(--sub);font-weight:500;margin-left:4px}
+.combo{text-align:right;font-weight:700;color:var(--sub);font-size:13px}
+.combo b{font-size:22px;color:var(--ok)}
+nav{display:flex;gap:6px;margin:12px 0}
+nav button{flex:1;padding:10px;border:2px solid var(--line);background:transparent;color:var(--sub);border-radius:12px;font:700 15px inherit;font-family:inherit;cursor:pointer}
+nav button.on{background:var(--gold);color:#2a1b00;border-color:var(--gold)}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px}
+.q{font-size:38px;font-weight:900;text-align:center;margin:10px 0 4px;word-break:break-word}
+.hint{text-align:center;color:var(--sub);font-size:13px;min-height:40px}
+.ch small.tag{display:block;font-weight:500;opacity:.85;font-size:12px;visibility:hidden}
+.ch.done small.tag{visibility:visible}
+.ch #nx{margin-top:4px;text-align:center;background:var(--gold);color:#2a1b00;border-color:var(--gold);visibility:hidden}
+.ch.done #nx{visibility:visible}
+.ch .xr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ch .xb{text-align:center;padding:11px 8px;font-size:14px;color:var(--sub)}
+.pop{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:min(94vw,492px);background:var(--panel);border:3px solid var(--gold);border-radius:18px;padding:14px 16px;z-index:30;box-shadow:0 10px 40px rgba(0,0,0,.55);animation:pp .18s ease-out}
+@keyframes pp{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+.pop b{font-size:20px;color:var(--gold)}
+.pop #popM{margin:6px 0 10px;font-size:16px;font-weight:700;line-height:1.5}
+.pop .btn{flex:1;padding:10px 14px;text-align:center}
+.dice{display:flex;gap:14px;justify-content:center;margin:6px 0 16px}
+.die{width:70px;height:70px;border-radius:14px;background:#fff;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:9px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.die i{border-radius:50%;margin:2px}
+.die i.on{background:#2a1b4a}
+.dice.spin .die{filter:blur(1px)}
+.dr{display:grid;gap:6px;margin-bottom:8px}
+.dc{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--text);font-family:inherit;font-weight:900;font-size:18px;cursor:pointer;min-height:54px}
+.dc small{font-size:10px;color:var(--sub);font-weight:500}
+.dc i{position:absolute;top:-8px;right:-4px;background:var(--gold);color:#2a1b00;font-style:normal;font-size:11px;font-weight:900;padding:1px 6px;border-radius:99px}
+.dc.hit{border-color:var(--ok);box-shadow:0 0 12px var(--ok)}
+.dlab{font-size:11px;color:var(--sub);margin:8px 0 4px}
+@keyframes blink{from{opacity:1}to{opacity:.45}}
+@keyframes pulse{from{box-shadow:0 0 6px var(--ng)}to{box-shadow:0 0 26px var(--ng)}}
+@keyframes shk{0%{transform:translate(0)}25%{transform:translate(-1px,1px)}50%{transform:translate(1px,-1px)}75%{transform:translate(-1px,-1px)}100%{transform:translate(0)}}
+.card.reach{border-color:var(--ng);animation:pulse .5s ease-in-out infinite alternate}
+.card.sreach{border-color:var(--gold);animation:pulse .25s ease-in-out infinite alternate}
+.sreach .reels{animation:shk .1s linear infinite}
+.reel.rch{border-color:var(--gold);box-shadow:0 0 14px var(--gold);animation:blink .4s alternate infinite}
+.reel.rchw{border-color:var(--ng);animation:blink .25s alternate infinite}
+.rbn{display:inline-block;font-size:26px;font-weight:900;color:var(--ng);letter-spacing:2px;animation:blink .4s alternate infinite}
+@keyframes rbp{from{background-position:0 0,0 0}to{background-position:0 0,300% 0}}
+@keyframes rbp2{from{background-position:0 0}to{background-position:300% 0}}
+@keyframes hue{from{filter:hue-rotate(0)}to{filter:hue-rotate(360deg)}}
+@keyframes fall{to{top:105vh;transform:rotate(720deg)}}
+.card.jpwin{border:3px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(90deg,#ff3b3b,#ffb300,#ffee00,#3ddc97,#00b8ff,#7c4dff,#ff4fd8,#ff3b3b) border-box;background-size:100% 100%,300% 100%;animation:rbp 1.4s linear infinite;box-shadow:0 0 28px rgba(255,255,255,.35)}
+.jpwin .reel.win{border-color:#ff4fd8;animation:hue 1s linear infinite}
+.jpt{display:inline-block;font-size:30px;background:linear-gradient(90deg,#ff3b3b,#ffb300,#ffee00,#3ddc97,#00b8ff,#7c4dff,#ff4fd8,#ff3b3b);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rbp2 1.2s linear infinite}
+.cf{position:fixed;top:-16px;width:10px;height:14px;z-index:40;pointer-events:none;animation:fall linear forwards}
+.hrow{display:grid;gap:6px}
+.ov{position:fixed;inset:0;z-index:60;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 10px) 12px calc(env(safe-area-inset-bottom,0px) + 12px);display:flex;flex-direction:column;align-items:center;overflow:auto}
+.ov.hidden{display:none}
+.dwBk{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5)}
+.dw{position:fixed;top:0;right:0;bottom:0;width:min(86vw,340px);z-index:71;background:var(--panel);border-left:2px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 12px) 14px calc(env(safe-area-inset-bottom,0px) + 14px);overflow:auto;transform:translateX(100%);transition:transform .25s}
+.dw.open{transform:none}
+.dwBk.hidden{display:none}
+.hr{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--text);font-family:inherit;text-align:left;cursor:pointer;width:100%}
+.hr.sel{border-color:var(--gold);background:rgba(255,194,51,.12)}
+.hr .nm{flex:1;font-weight:700;font-size:14px;line-height:1.3}
+.hr .od{font-size:12px;color:var(--sub);text-align:right;line-height:1.4}
+.hr .mk{min-width:34px;text-align:center;font-weight:900;color:var(--gold);font-size:13px}
+.hb{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:900;font-size:15px;border:2px solid rgba(0,0,0,.35);flex:none}
+.lane{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.ln{position:relative;flex:1;height:26px;border-radius:8px;background:var(--bg);border-right:4px solid var(--gold);overflow:hidden}
+.hm{position:absolute;top:0;font-size:20px;line-height:26px;transform:scaleX(-1)}
+.rk{width:30px;text-align:center;font-weight:900;color:var(--gold);font-size:12px}
+.tk{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-top:6px;font-size:13px}
+.ch{display:grid;gap:8px;margin-top:14px}
+.ch button,.btn{padding:14px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--text);font-family:inherit;font-size:16px;font-weight:700;text-align:left;cursor:pointer;line-height:1.4}
+.ch button.ok{background:var(--ok);border-color:var(--ok);color:#06241a}
+.ch button.ng{background:var(--ng);border-color:var(--ng);color:#fff}
+.gain{text-align:center;min-height:28px;font-weight:900;font-size:18px;margin-top:10px}
+.gain.ok{color:var(--ok)}.gain.ng{color:var(--ng)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg button{padding:7px 12px;border-radius:99px;border:2px solid var(--line);background:transparent;color:var(--sub);font:700 13px inherit;font-family:inherit;cursor:pointer}
+.seg button.on{border-color:var(--gold);color:var(--gold)}
+.reels{display:grid;grid-template-columns:repeat(3,84px);gap:8px;justify-content:center;margin:6px 0 16px}
+.jp{text-align:center;font-weight:700;color:var(--sub);font-size:13px;margin-bottom:10px}.jp b{display:block;font-size:26px;color:var(--gold)}
+.reel{height:84px;border-radius:14px;background:var(--bg);border:3px solid var(--line);display:grid;place-items:center;font-size:44px;opacity:.55}.reel.mid{border-color:var(--sub);opacity:1}.reel.win{border-color:var(--gold);box-shadow:0 0 14px var(--gold);opacity:1}
+.reel.spin{filter:blur(1.5px)}
+.spinbtn{width:100%;padding:16px;border:0;border-radius:16px;background:var(--gold);color:#2a1b00;font:900 20px inherit;font-family:inherit;cursor:pointer;margin-top:14px}
+.spinbtn:disabled{opacity:.45}
+.res{text-align:center;font-weight:900;font-size:18px;min-height:28px;margin-top:12px}
+.pay{color:var(--sub);font-size:12px;line-height:1.7;margin-top:12px}
+.up{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.up:last-child{border:0}
+.up h3{margin:0 0 2px;font-size:16px}.up p{margin:0;color:var(--sub);font-size:12px}
+.up button{min-width:96px;text-align:center;background:var(--gold);color:#2a1b00;border-color:var(--gold)}
+.up button:disabled{opacity:.4}
+textarea{width:100%;height:90px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--text);padding:10px;font-size:13px;font-family:inherit}
+.note{color:var(--sub);font-size:12px;line-height:1.6}
+.stats{display:flex;justify-content:space-around;text-align:center;color:var(--sub);font-size:12px}
+.stats b{display:block;color:var(--text);font-size:20px}
+.num{width:78px;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--text);font-family:inherit;font-size:15px;text-align:center}
+nav button{font-size:13px;padding:10px 2px;white-space:nowrap}
+nav #menuBtn{flex:0 0 46px;font-size:18px;padding:6px 0;line-height:1}
+.mnBk{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5)}
+.mn{position:fixed;top:0;right:0;bottom:0;width:min(72vw,260px);z-index:81;background:var(--panel);border-left:2px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;gap:10px;transform:translateX(100%);transition:transform .25s;visibility:hidden}
+.mn.open{transform:none;visibility:visible}
+.mn .mi{display:flex;align-items:center;gap:10px;width:100%;padding:16px 14px;border:2px solid var(--line);background:transparent;color:var(--text);border-radius:14px;font:700 17px inherit;font-family:inherit;cursor:pointer;text-align:left}
+.mn .mi.on{background:var(--gold);color:#2a1b00;border-color:var(--gold)}
+.hp summary{cursor:pointer;font-weight:900;font-size:17px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.hp summary::-webkit-details-marker{display:none}
+.hp summary::after{content:'▾';color:var(--sub);transition:transform .2s}
+.hp[open] summary::after{transform:rotate(180deg)}
+.hp p,.hp ul{margin:10px 0 0;font-size:14px;line-height:1.8}
+.hp ul{padding-left:20px}
+.hp li{margin:2px 0}
+.q.ex{font-size:20px;line-height:1.7;text-align:left;font-weight:700}
+.fld{display:block;width:100%;margin:4px 0 10px;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--text);font-family:inherit;font-size:15px}
+.hidden{display:none}
+.vbox{margin:4px 0 12px;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);min-height:42px;line-height:1.7;font-size:15px;font-weight:700;word-break:break-word}
+.tmr{height:8px;background:var(--bg);border-radius:6px;overflow:hidden;margin:6px 0 2px}
+.tmr i{display:block;height:100%;width:100%;background:var(--ok)}
+.bdr{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)}
+.bdr.me{background:rgba(255,194,51,.14);border-radius:10px}
+.bdr .bk{width:36px;text-align:center;font-weight:900;font-size:18px;flex:none}
+.bdr .nm{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bdr .nm small{display:block;color:var(--gold);font-size:11px;font-weight:700}
+.bdr .v{font-weight:900;font-size:17px}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="coins"><span id="coins">0</span><small>コイン</small></div><div id="ttl" style="display:none;font-size:12px;font-weight:700;color:var(--gold);margin-top:3px"></div></div>
+  <div class="combo">コンボ <b id="combo">0</b><br>倍率 ×<span id="mult">1.00</span></div>
+</header>
+<nav>
+  <button data-t="quiz" class="on">テスト</button>
+  <button data-t="slot">あそび</button>
+  <button data-t="chal">チャレンジ</button>
+  <button data-t="view">表示</button>
+  <button id="menuBtn" aria-label="メニュー">☰</button>
+</nav>
+
+<div class="mnBk hidden" id="mnBk"></div>
+<aside class="mn" id="mn" aria-hidden="true">
+  <div class="row" style="justify-content:space-between;margin-bottom:6px"><b style="font-size:18px">メニュー</b><button class="btn" id="mnX" style="padding:6px 12px;font-size:13px">✕</button></div>
+  <button class="mi" data-t="board">🏆 リーダーボード</button>
+  <button class="mi" data-t="store">🛒 ショップ</button>
+  <button class="mi" data-t="shop">⚙ 設定</button>
+  <button class="mi" data-t="help">❓ ヘルプ</button>
+  <p class="note" style="margin-top:auto">画面の右端から左へスワイプしても開きます。</p>
+</aside>
+
+<section id="quiz">
+  <div class="card row" style="padding:12px 16px;justify-content:space-between">
+    <span class="note">出題範囲 No.</span>
+    <span class="row"><input type="number" id="rf" min="1" class="num"> 〜 <input type="number" id="rt" min="1" class="num"></span>
+    <span class="note" id="rn"></span>
+  </div>
+  <div class="card">
+    <div class="row seg" style="justify-content:center">
+      <button data-m="en" class="on">英語→日本語</button>
+      <button data-m="jp">日本語→英語</button>
+      <button data-m="ex">例文 日→英</button>
+      <button data-m="ej">例文 英→日</button>
+    </div>
+    <div class="q" id="q"></div>
+    <div class="hint" id="hint"></div>
+    <div id="tmrW" style="display:none"><div class="tmr"><i id="tmrB"></i></div><div class="note" id="tmrT" style="text-align:right"></div></div>
+    <div class="ch" id="ch"></div>
+    <div class="gain" id="gain"></div>
+  </div>
+</section>
+
+<section id="slot" class="hidden">
+  <div class="row seg" style="justify-content:center;margin-bottom:12px">
+    <button data-g="slot" class="on">🎰 スロット</button>
+    <button data-g="dice">🎲 サイコロ</button>
+    <button data-g="derby">🐎 ダービー</button>
+  </div>
+  <div class="card" id="slotCard">
+    <div class="jp">👑 ジャックポット（7️⃣7️⃣7️⃣）<b id="jp">1000</b></div>
+    <div class="reels" id="reels"></div>
+    <div class="row seg" style="justify-content:center" id="bets"></div>
+    <button class="spinbtn" id="spin">回す</button>
+    <div class="res" id="res"></div>
+    <div class="pay">真ん中の段の左→右を判定します。<br>7️⃣×3：200倍＋ジャックポット　💎×3：80倍　🎰×3：30倍<br>🍒×3：15倍　🔔×3：12倍　🍉×3：8倍　🔁×3：賭け金が戻る<br>7・💎・🎰の混合：5倍　🍒🍒＋他：4倍<br>左端が🍒（中央はチェリー以外）：2倍　🍉🍉＋他：2倍　🔔🔔＋他：2倍<br>賭け金の5%がジャックポットにたまります。</div>
+  </div>
+  <div class="card hidden" id="diceCard">
+    <div class="dice" id="dice"></div>
+    <div class="row seg" style="justify-content:center;margin-bottom:12px"><span class="note">1タップ</span><span class="row seg" id="chips"></span></div>
+    <div id="dgrid"></div>
+    <div class="row" style="justify-content:space-between;margin-top:6px"><span class="note">賭け合計 <b id="dtot" style="color:var(--gold);font-size:18px">0</b></span><button class="btn" id="dclr" style="padding:8px 14px">ベットをクリア</button></div>
+    <button class="spinbtn" id="droll">振る</button>
+    <div class="res" id="dres"></div>
+    <div class="pay">マスをタップするとその金額がベットされます（複数のマスに賭けられます）。<br>大(11〜17)・小(4〜10)：的中で賭け金の1倍が増える。ゾロ目が出ると大小はどちらも負け。<br>出目：その数が出た個数ぶん1倍ずつ（1個なら1倍、2個なら2倍、3個なら3倍）。<br>ゾロ目（どれでも）：30倍／ゾロ目指定（例 555）：180倍。</div>
+  </div>
+  <div class="card hidden" id="derbyCard">
+    <div id="track"></div>
+    <div id="live" class="row" style="justify-content:center;gap:5px;min-height:30px;margin-bottom:6px"></div>
+    <div class="res" id="dbres" style="white-space:pre-line;font-size:15px"></div>
+    <div class="row seg" id="dbTypes" style="justify-content:center;margin:12px 0 8px"></div>
+    <div class="hrow" id="dbPick"></div>
+    <div class="note" id="dbOddsLine" style="margin:8px 0;min-height:18px;text-align:center"></div>
+    <div class="row" style="justify-content:center"><span id="dbChips" class="row seg"></span><button class="btn" id="dbAdd" style="padding:8px 14px">ベット追加</button></div>
+    <div id="dbTkt"></div>
+    <div class="row" style="justify-content:space-between;margin-top:8px"><span class="note">賭け合計 <b id="dbTot" style="color:var(--gold);font-size:18px">0</b></span><button class="btn" id="dbClr" style="padding:8px 14px">ベットをクリア</button></div>
+    <button class="spinbtn" id="dbGo">レース開始</button>
+    <div class="pay">単勝：1着を当てる／複勝：3着以内／馬連：1・2着の2頭（順不同）／馬単：1・2着を着順どおり<br>ワイド：3着以内の2頭（順不同）／3連複：1〜3着の3頭（順不同）／3連単：1〜3着を着順どおり<br>オッズはレースごとに変わり、払戻率は約85%です。オッズは賭け金に対する払戻の倍率（賭け金込み）です。</div>
+  </div>
+</section>
+
+<section id="board" class="hidden">
+  <div class="card">
+    <h3 style="margin:0 0 8px">🏆 リーダーボード</h3>
+    <div class="row seg" id="bdCat" style="margin-bottom:8px"></div>
+    <div id="bdList"></div>
+    <p class="note" id="bdMsg" style="margin-top:8px"></p>
+    <div class="row" style="margin-top:8px"><button class="btn" id="bdReload">更新</button><label class="note"><input type="checkbox" id="bdJoin" checked> ランキングに参加する</label></div>
+    <p class="note">ログインして、クラウドに保存するたびに自分の記録が反映されます。参加をやめると、自分の記録がランキングから消えます。</p>
+  </div>
+</section>
+
+<section id="edit" class="hidden">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px"><p style="margin:0;font-size:13px;font-weight:900;color:var(--ng)">⚠ サイト管理者の許可がない限り変えないでください。</p><button class="btn" id="editBack" style="padding:6px 12px;font-size:13px;white-space:nowrap">← 設定へ</button></div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <span class="row"><button class="btn" id="eP" style="padding:10px 14px">◀</button><input type="number" id="eN" class="num" min="1" value="1"><button class="btn" id="eNx" style="padding:10px 14px">▶</button></span>
+      <span class="row"><button class="btn" id="eGo">表示</button><button class="btn" id="eFind">次の例文未登録</button></span>
+    </div>
+    <p class="note" id="eInfo"></p>
+    <label class="note">英単語</label><input id="eW" class="fld">
+    <label class="note">意味（「、」区切り）</label><input id="eM" class="fld">
+    <label class="note">例文（英語）　対象語を [ ] で囲むと確実に空欄になります</label><textarea id="eE" class="fld" style="height:74px"></textarea>
+    <label class="note">例文の訳（日本語）　対象語の意味を「 」で囲むと、英→日モードの正解になります</label><textarea id="eJ" class="fld" style="height:60px"></textarea>
+    <div class="row"><button class="btn" id="eSave">保存</button><button class="btn" id="eDel">この番号を削除</button></div>
+    <p class="note" id="eMsg"></p>
+  </div>
+  <div class="card hidden" id="pubCard">
+    <h3 style="margin:0 0 6px">🌐 全員に公開（管理者のみ）</h3>
+    <p class="note">いまの単語リスト（例文を含む）を、全員の「公開リスト」として配信します。みんなの端末には、次に開いたときに自動で反映されます。</p>
+    <p class="note" id="pubAdm" style="font-weight:bold"></p>
+    <div class="row"><button class="btn" id="pubAll">全員に公開する</button></div>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 6px">単語リストの出力（txt）</h3>
+    <p class="note" id="tStat"></p>
+    <p class="note">番号・英単語・意味・例文・訳をtxtにします。「設定」の単語追加から読み込み直せます。</p>
+    <div class="row" style="margin:8px 0"><button class="btn" id="tOut">txtで書き出す</button><button class="btn" id="tCopy">コピー</button><button class="btn" id="wReset">公開リストに戻す</button></div>
+    <textarea id="tTxt" class="fld" style="height:70px" placeholder="ファイルが使えない場合、ここに表示されます"></textarea>
+    <p class="note" id="tMsg"></p>
+  </div>
+</section>
+
+<section id="help" class="hidden">
+  <p class="note" style="margin:0 0 8px">項目をタップすると開きます。</p>
+  <details class="card hp" open>
+    <summary>🎯 テスト</summary>
+    <p>英単語を4択で答えて、正解するとコインがもらえます。</p>
+    <ul>
+      <li>上のボタンで形式を選べます：英語→日本語／日本語→英語／例文 日→英／例文 英→日</li>
+      <li>出題範囲（No.○〜○）を指定できます。</li>
+      <li>正解するとコンボが増えて、コインの倍率が上がります。間違えるとコンボは0に戻ります。</li>
+      <li>コンボには制限時間があります。時間がくるとコンボが1つずつ減ります（強化で延ばせます）。</li>
+      <li>選択肢には「分からない」と「この中にはない」があります。「この中にはない」が正解のこともあります。</li>
+      <li>単語ごとに評価値があります。正解で+1、間違いで−5になり、苦手な単語ほど出やすくなります。</li>
+    </ul>
+  </details>
+  <details class="card hp">
+    <summary>🎰 あそび</summary>
+    <p>上のタブで、スロット・サイコロ・ダービーを切り替えます。賭けたコインが増えたり減ったりします。</p>
+    <ul>
+      <li><b>スロット：</b>賭け金を選んで「回す」。真ん中の段の揃い方で配当が決まります。🍒が左端に出るだけでも2倍です。7️⃣揃いはジャックポットです。</li>
+      <li><b>サイコロ：</b>マスをタップして賭けます（大小、出目、ゾロ目）。複数のマスに同時に賭けられます。</li>
+      <li><b>ダービー：</b>8頭のレースに馬券を買います（単勝・複勝・馬連・馬単・ワイド・3連複・3連単）。レース中に「🎫 馬券」で、いま買った馬券を見られます（その間はレースが止まります）。</li>
+    </ul>
+  </details>
+  <details class="card hp">
+    <summary>🏁 チャレンジ</summary>
+    <p>範囲と問題数を決めて、スコアに挑戦するモードです。</p>
+    <ul>
+      <li>速く、ミスなく答えるほど高得点です。</li>
+      <li>コンボの制限時間を短くすると、コンボ倍率の伸びが大きくなります。</li>
+      <li>全問ノーミスで、最終スコアが1.5倍になります。</li>
+      <li>結果に応じてコインがもらえます。履歴はこのタブの下に残ります（タップで大きく表示）。</li>
+    </ul>
+  </details>
+  <details class="card hp">
+    <summary>📖 表示</summary>
+    <p>単語を見るだけの画面です（編集はできません）。番号で単語・意味・例文・訳を確認できます。</p>
+  </details>
+  <details class="card hp">
+    <summary>🛒 ショップ（☰メニュー）</summary>
+    <ul>
+      <li><b>強化：</b>報酬倍率、コンボ強化、コンボ制限時間、あそび運を、コインで買います。</li>
+      <li><b>転生：</b>コインと強化をリセットして、永続の報酬倍率（+0.5ずつ）をもらいます。</li>
+      <li><b>見た目ショップ：</b>テーマと称号を買います（強さには関係しません）。</li>
+    </ul>
+  </details>
+  <details class="card hp">
+    <summary>⚙ 設定（☰メニュー）</summary>
+    <ul>
+      <li><b>オンラインセーブ：</b>IDとパスワードでセーブをクラウドに保存します。</li>
+      <li><b>編集モード：</b>単語の編集用です（管理者専用です）。</li>
+      <li><b>単語リスト：</b>自分の単語を読み込めます。</li>
+      <li><b>セーブデータ：</b>ファイルに書き出したり、読み込んだりできます。</li>
+    </ul>
+  </details>
+</section>
+
+<section id="view" class="hidden">
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <span class="row"><button class="btn" id="vP" style="padding:10px 14px">◀</button><input type="number" id="vN" class="num" min="1" value="1"><button class="btn" id="vNx" style="padding:10px 14px">▶</button></span>
+      <button class="btn" id="vGo">表示</button>
+    </div>
+    <p class="note" id="vInfo"></p>
+    <div class="q" id="vW" style="margin:12px 0 6px"></div>
+    <div id="vM" style="text-align:center;font-size:20px;font-weight:700;margin-bottom:14px"></div>
+    <label class="note">例文</label>
+    <div class="vbox" id="vE"></div>
+    <label class="note">例文の訳</label>
+    <div class="vbox" id="vJ"></div>
+  </div>
+</section>
+
+<section id="chal" class="hidden">
+  <div class="card" id="chSetup">
+    <h3 style="margin:0 0 6px">🏁 チャレンジ</h3>
+    <p class="note">指定範囲の単語を、ミスなく・早く答えるほど高スコア。制限時間を短くするほどコンボ倍率が大きく伸びます。全問ノーミスなら最終スコア×1.5。コインは結果のスコアに応じて最後にまとめて貰えます（「コンボ制限時間」の強化は反映されません）。</p>
+    <div class="row" style="justify-content:space-between;margin:10px 0"><span class="note">出題範囲 No.</span><span class="row"><input type="number" id="cf" min="1" class="num"> 〜 <input type="number" id="ct" min="1" class="num"></span></div>
+    <div class="note">出題形式</div><div class="row seg" id="cMode" style="margin:4px 0 10px"></div>
+    <div class="note">問題数（範囲内の語数まで、1問単位）</div><div class="row" style="margin:4px 0 6px"><input type="number" id="cNum" min="1" class="num"><span class="note" id="cMax"></span></div><div class="row seg" id="cN" style="margin:0 0 10px"></div>
+    <div class="note">コンボ制限時間（1問あたり）</div><div class="row seg" id="cL" style="margin:4px 0 6px"></div>
+    <p class="note" id="cInfo"></p>
+    <p class="note" id="cErr" style="color:var(--ng)"></p>
+    <button class="spinbtn" id="cGo">スタート</button>
+  </div>
+  <div class="card hidden" id="chRun">
+    <div class="row" style="justify-content:space-between"><b id="cProg">1/20</b><b id="cScore" style="color:var(--gold)">0</b><span class="note">コンボ <b id="cCombo" style="color:var(--ok)">0</b>　×<span id="cMul">1.00</span></span></div>
+    <div class="tmr"><i id="cBar"></i></div>
+    <div class="q" id="cq"></div>
+    <div class="ch" id="cch"></div>
+    <div class="gain" id="cGain"></div>
+    <div class="row" style="justify-content:center"><button class="btn" id="cStop" style="padding:8px 16px;font-size:13px">中断する</button></div>
+  </div>
+  <div class="card hidden" id="chEnd"></div>
+  <div class="card" id="chHistCard">
+    <div class="row" style="justify-content:space-between"><h3 style="margin:0">履歴</h3><button class="btn" id="cHClr" style="padding:6px 12px;font-size:12px">履歴を消去</button></div>
+    <p class="note" id="cBest"></p>
+    <div id="cHist"></div>
+  </div>
+</section>
+
+<section id="store" class="hidden">
+  <div class="card" id="ups"></div>
+  <div class="card" id="pgCard"></div>
+  <div class="card" id="cosCard"></div>
+</section>
+
+<section id="shop" class="hidden">
+
+  <div class="card stats"><div><b id="sc">0</b>正解数</div><div><b id="sm">0</b>最高所持コイン</div><div><b id="sa">0%</b>正答率</div><div><b id="sb">0</b>最高コンボ</div></div>
+  <div class="card" id="fbCard">
+    <h3 style="margin:0 0 6px">☁ オンラインセーブ（ID・パスワード）</h3>
+    <p class="note">IDとパスワードでログインすると、セーブデータがクラウドに保存され、別の端末でも続きから遊べます。IDは英数字・「_」「.」「-」の3〜20文字、パスワードは6文字以上。パスワードを忘れると復元できません。</p>
+    <div id="fbLogin">
+      <input id="fbId" class="fld" placeholder="ID（例：leap_taro）" autocomplete="username" autocapitalize="none">
+      <input id="fbPw" class="fld" type="password" placeholder="パスワード" autocomplete="current-password">
+      <div class="row"><button class="btn" id="fbIn">ログイン</button><button class="btn" id="fbUp">新規登録</button></div>
+    </div>
+    <div id="fbUser" class="hidden">
+      <p style="margin:0 0 8px">ログイン中：<b id="fbName"></b></p>
+      <label class="note"><input type="checkbox" id="fbAuto" checked> 自動でクラウドに保存する</label>
+      <div class="row" style="margin-top:8px"><button class="btn" id="fbPush">今すぐ保存</button><button class="btn" id="fbPull">クラウドから読み込む</button><button class="btn" id="fbOut">ログアウト</button></div>
+    </div>
+    <p class="note" id="fbMsg" style="margin-top:8px"></p>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 6px">✏ 編集モード</h3>
+    <p class="note" style="margin:0 0 4px;color:var(--ng);font-weight:900">サイト管理者の許可がない限り変えないでください。</p>
+    <p class="note">単語・例文の編集と、単語リストの書き出しを行う画面です。</p>
+    <div class="row" style="margin-top:8px"><button class="btn" id="goEdit">編集モードを開く</button></div>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 6px">単語リスト</h3>
+    <p class="note">公開中の単語リストを自動で読み込みます。リストが更新されると、次に開いたときに自動で反映されます（例文・評価値は同じ単語のものを引き継ぎます）。下から自分で読み込んだリストを使っている間は、自動では切り替わりません。</p>
+    <p class="note" id="pubMsg" style="font-weight:bold"></p>
+    <div class="row" style="margin-bottom:10px"><button class="btn hidden" id="pubBtn">公開リストに切り替える</button></div>
+    <h3 style="margin:0 0 6px">自分で単語を読み込む</h3>
+    <p class="note">形式：「番号 単語 [品詞] 意味」の行（タブ区切りでも可）</p>
+    <input type="file" id="file" accept=".txt,.csv,.tsv,.json,.xlsx,.xls" style="width:100%;margin-bottom:8px;color:var(--text)">
+    <p class="note">対応ファイル：txt / csv / tsv / json / xlsx。1行に「単語, 意味」（番号列があってもOK）。jsonは [{"w":"agree","m":"賛成する"}] または {"agree":"賛成する"} 形式。文字コードはUTF-8とShift_JISを自動判定します。</p>
+    <textarea id="imp" placeholder="または、ここに直接貼り付け：1 agree [自] ①賛成する ..."></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" id="impBtn">読み込む</button>
+      <button class="btn" id="rsAll">評価値のみリセット</button>
+      <button class="btn" id="reset">初期化</button>
+      <span class="note" id="impMsg"></span>
+    </div>
+    <p class="note">現在の出題数：<span id="wc"></span>語</p>
+  </div>
+  <div class="card">
+    <h3 style="margin:0 0 6px">セーブデータ</h3>
+    <p class="note">コイン・強化・各単語の評価値・出題範囲などがJSONになります。登録単語は含まれません（単語は「編集」タブのtxt出力を使います）。</p>
+    <div class="row" style="margin:8px 0">
+      <button class="btn" id="svOut">ファイルに書き出す</button>
+      <button class="btn" id="svCopy">コピー</button>
+    </div>
+    <input type="file" id="svIn" accept=".json,application/json" style="width:100%;margin-bottom:8px;color:var(--text)">
+    <textarea id="svTxt" placeholder="コピーしたJSONをここに貼り付けて読み込めます"></textarea>
+    <div class="row" style="margin-top:8px"><button class="btn" id="svLoad">貼り付けから読み込む</button><span class="note" id="svMsg"></span></div>
+  </div>
+</section>
+
+<div class="ov hidden" id="raceOv">
+  <div class="row" style="justify-content:space-between;width:100%;max-width:480px"><b>🐎 ダービー</b><button class="btn" id="ovTk" style="padding:6px 12px;font-size:13px">🎫 馬券</button><b id="ovLap" style="color:var(--gold)">1/2周</b></div>
+  <div id="bigTrack" style="width:100%;max-width:480px"></div>
+  <div id="ovLive" class="row" style="justify-content:center;gap:5px;margin:6px 0;max-width:480px"></div>
+  <div id="ovRes" class="res" style="white-space:pre-line;font-size:16px"></div>
+  <button class="btn hidden" id="ovClose" style="padding:12px 28px;margin-top:8px">閉じる</button>
+  <div class="dwBk hidden" id="dwBk"></div>
+  <aside class="dw" id="dw"><div class="row" style="justify-content:space-between;margin-bottom:6px"><b>🎫 購入中の馬券</b><button class="btn" id="dwX" style="padding:6px 12px;font-size:13px">✕</button></div><div class="note" id="dwSt" style="margin-bottom:6px"></div><div id="dwTk"></div><div class="note" style="margin-top:10px">賭け合計 <b id="dwTot" style="color:var(--gold);font-size:18px">0</b></div></aside>
+</div>
+<div class="ov hidden" id="chDet" style="justify-content:center"><div id="chDetBody" style="width:100%;max-width:420px"></div><button class="btn" id="chDetX" style="padding:10px 26px;margin-top:16px">閉じる</button></div>
+<div class="pop hidden" id="pop"><b id="popT"></b><div id="popM"></div><div class="row"><button class="btn" id="popX">閉じる</button><button class="btn" id="popN">次の問題 →</button></div></div>
+<!--
+ ===== Firebase 設定 =====
+ 1) https://console.firebase.google.com でプロジェクトを作成（無料のSparkプランのままでOK）
+ 2) 「Authentication」→ ログイン方法 → 「メール/パスワード」を有効化
+ 3) 「Firestore Database」を作成し、ルールを下記に差し替えて公開
+      rules_version = '2';
+      service cloud.firestore { match /databases/{d}/documents {
+        match /users/{uid} { allow read, write: if request.auth != null && request.auth.uid == uid; }
+        match /board/{uid} {
+          allow read: if request.auth != null;
+          allow create, update: if request.auth != null && request.auth.uid == uid
+            && request.resource.data.name == request.auth.token.email.split('@')[0];
+          allow delete: if request.auth != null && request.auth.uid == uid;
+        }
+        match /pub/words {
+          allow read: if true;
+          allow write: if request.auth != null
+            && request.auth.token.email in ['rimg_dyo@leap-save.example.com'];
+        }
+      } }
+ 4) プロジェクトの設定 → マイアプリ(Web) に出る firebaseConfig を、下の FIREBASE_CONFIG に貼り付け
+ 5) このHTMLはファイルを直接開いても使えます（Firebase Hosting / GitHub Pages などで公開してもOK）。通信は Firebase の REST API を直接呼びます
+-->
+<script>
+window.FIREBASE_CONFIG={
+  apiKey:"AIzaSyANyuxKG6mLgilJdLoi1e2RVRgaeTTnS3s",
+  authDomain:"dopa-gakusyu.firebaseapp.com",
+  projectId:"dopa-gakusyu",
+  appId:"1:214998964082:web:48adb6920acf02cbf26feb"
+};
+/* 「全員に単語を公開」できる管理者のログインID（小文字）。Firestoreルールの管理者リストと同じIDにしてください。例：['admin'] */
+window.ADMIN_IDS=['rimg_dyo'];
+window.cloudReady=new Promise(r=>{window.cloudSet=r});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const BUILTIN=`agree|賛成する
+oppose|～に反対する
+advise|～に忠告する
+tip|助言、ヒント、チップ
+discuss|～について話し合う
+blame|～に責任があるとする
+argue|主張する、言い争う
+claim|主張する、要求する
+complain|文句を言う
+offer|～を申し出る
+suggest|示唆する、提案する
+recommend|～を推薦する
+grateful|感謝している
+apologize|謝る
+excuse|言い訳
+celebrate|～を祝う
+congratulate|～にお祝いを述べる
+admire|～を称賛する
+impress|～に感銘を与える
+award|賞、～を授与する
+explain|～を説明する
+describe|～を説明する、描写する
+communicate|意思の疎通をはかる
+express|～を表現する
+promise|約束（する）
+information|情報
+technology|科学技術
+research|研究（する）
+material|材料、資料
+artificial|人工的な
+electric|電気の
+invent|～を発明する
+discover|～を発見する
+develop|発達する、開発する
+skill|技術、力
+ability|能力
+talent|才能
+effort|努力
+practice|練習、実践
+achieve|～を達成する
+manage|何とか～する、経営する
+improve|～を改善する
+produce|～を生産する
+create|～を創造する
+establish|～を確立する、設立する
+form|～を形成する、形態
+save|省く、貯金する、救う
+medicine|薬、医学
+patient|患者、忍耐強い
+condition|状態、条件
+medical|医療の
+stress|ストレス、強調する
+suffer|苦しむ
+exercise|運動
+breathe|呼吸する
+thirsty|のどが渇いた
+physical|身体的な、物理的な
+fever|熱
+strength|体力、力
+tear|涙、引き裂く
+taste|味がする、味
+rule|規則、支配する
+role|役割
+habit|習慣、癖
+custom|習慣、税関
+tradition|伝統
+society|社会
+law|法律、法則
+ancestor|祖先
+population|人口
+native|母国の、その土地の
+abroad|海外へ
+local|地元の
+survey|調査（する）
+value|価値、重んじる
+treasure|財宝、大事な物
+fashion|流行、流儀
+public|大衆、公共の
+evidence|証拠
+vote|投票（する）
+government|政府
+nation|国家、国民
+capital|首都、資本
+state|州、状態、述べる
+political|政治的な
+price|価格、代償
+sum|金額、合計
+budget|予算
+fee|料金、謝礼
+fare|運賃
+bill|勘定、請求書、法案
+trade|貿易、交換する
+wealth|富
+economy|経済、節約
+cost|費用がかかる、犠牲
+company|会社、仲間
+task|仕事
+earn|稼ぐ`;
+/* 公開単語リスト：public/ に置いたこのファイルを起動時に読み込みます。
+   リストを変えるときはファイルを差し替えるだけでOK（txt/tsv/csv。「設定」の読み込みと同じ形式）。
+   取得できないとき（オフライン等）は上の BUILTIN を使います。 */
+/* 単語リストはこのファイルに内蔵（words.txt の内容） */
+const WORDS_TXT="#leapslot v1 : 番号<TAB>英単語<TAB>意味<TAB>例文<TAB>例文の訳\n1\tagree\t賛成する、（主語の中で）意見が一致する、（with ～）（気候，食べ物が）（～に）合う\t\t\n2\toppose\t～に反対する\t\t\n3\tadvise\t～に忠告する\t\t\n4\ttip\t助言、ヒント、チップ、（足や山などの）先、先端（いずれも）\t\t\n5\tdiscuss\t～について話し合う、議論する、～を話題に出す\t\t\n6\tblame\t～に責任があるとする\t\t\n7\targue\t（that SV）～と主張する、（with ～）（～と）言い争う\t\t\n8\tclaim\t（that SV）～と主張する、～を要求する、主張する、主張、要求\t\t\n9\tcomplain\t文句を言う、苦情を言う、（of ～）（病気などを）訴える\t\t\n10\toffer\t～を申し出る、申し出、値引き\t\t\n11\tsuggest\t～を示唆する、～を提案する\t\t\n12\trecommend\t～を推薦する、勧める\t\t\n13\tgrateful\t感謝している\t\t\n14\tapologize\t（to ～）（～に）謝る\t\t\n15\texcuse\t言い訳、～を許す、（A from B）（B からA）を免除する\t\t\n16\tcelebrate\t（特別な日、出来事）を祝う、（儀式など）を挙行する、執り行う\t\t\n17\tcongratulate\t（人）を祝う、～にお祝いを述べる\t\t\n18\tadmire\t～を称賛する、～に感心する\t\t\n19\timpress\t～に感銘を与える、～を感心させる\t\t\n20\taward\t賞、～を授与する\t\t\n21\texplain\t～を説明する\t\t\n22\tdescribe\t～を説明する\t\t\n23\tcommunicate\t（with ～）（～と）意思の疎通をはかる、～を伝える\t\t\n24\texpress\t（意見，気持ち）を表現する、急行（列車，バス）\t\t\n25\tpromise\t約束、～を約束する\t\t\n26\tinformation\t情報\t\t\n27\ttechnology\t（科学）技術\t\t\n28\tresearch\t（学術）研究、～を研究する\t\t\n29\tmaterial\t材料、生地、資料、教材、物質的な、重大な\t\t\n30\tartificial\t人工的な\t\t\n31\telectric\t電気の、電動の\t\t\n32\tinvent\t～を発明する、（話など）をでっち上げる\t\t\n33\tdiscover\t～を発見する、（that SV）～を知る、～に気がつく、（知るという意味で）～に出会う\t\t\n34\tdevelop\t発達する、～を発達させる、～を開発する、（話，考え）を発展させる、（病気）にかかる\t\t\n35\tskill\t技術、力\t\t\n36\tability\t能力\t\t\n37\ttalent\t才能\t\t\n38\teffort\t努力\t\t\n39\tpractice\t練習、実践、慣習、～を練習する、～を実践する\t\t\n40\tachieve\t～を達成する\t\t\n41\tmanage\t（to do）何とかして～する、～を経営する、管理する\t\t\n42\timprove\t～を改善する、磨く、よくなる\t\t\n43\tproduce\t～を生産する、産出する、（見せるために）～を取り出す、農作物\t\t\n44\tcreate\t～を創造する、～を引き起こす\t\t\n45\testablish\t～を確立する、定着させる、～を設立する\t\t\n46\tform\t～を形成する、形態、書式\t\t\n47\tsave\t（時間，手間）を省く、～を貯金する、（命など）を救う、～を除いて（＝except）\t\t\n48\tmedicine\t（for ～）（～の）薬、医学（＝medical science）\t\t\n49\tpatient\t患者、忍耐強い\t\t\n50\tcondition\t状態、容態、（通例 ―s）（周囲の）状況、条件\t\t\n51\tmedical\t医療の、医学の\t\t\n52\tstress\tストレス、（on ～）（～に対する）強調、～を強調する\t\t\n53\tsuffer\t（from ～）（病気などで）苦しむ、（苦痛，損害）を経験する\t\t\n54\texercise\t運動、（―s）練習、運動する、～を行使する\t\t\n55\tbreathe\t呼吸する、息をする\t\t\n56\tthirsty\tのどが渇いた、（for ～）（～を）切望して\t\t\n57\tphysical\t身体的な、物理的な\t\t\n58\tfever\t（体温の）熱、熱狂\t\t\n59\tstrength\t（physical ―）体力、力\t\t\n60\ttear\t（通例 ―s）涙、（up）～を引き裂く\t\t\n61\ttaste\t～の味がする、～の味をみる、味、好み\t\t\n62\trule\t規則、～を支配する\t\t\n63\trole\t役割\t\t\n64\thabit\t習慣、癖\t\t\n65\tcustom\t習慣、（―s）税関、関税\t\t\n66\ttradition\t伝統\t\t\n67\tsociety\t社会、（ある具体的な）社会、（one's ―）～と同席すること、協会\t\t\n68\tlaw\t（the ―）（集合的に）法律、国法、（個々の）法律、（科学などの）法則\t\t\n69\tancestor\t祖先\t\t\n70\tpopulation\t人口、個体数、（一定の地域に住む）住民\t\t\n71\tnative\t母国の、その土地の、（ある土地の）生まれの人\t\t\n72\tabroad\t海外へ、海外で\t\t\n73\tlocal\tその土地の、地元の、地方の、地元の人\t\t\n74\tsurvey\t調査、～を調査する\t\t\n75\tvalue\t価値、（―s）価値観、お買い得品、～を重んじる\t\t\n76\ttreasure\t財宝、宝、大事な物［人］、（思い出など）を大事にする\t\t\n77\tfashion\t流行、流儀、やり方、（手などで）～を作る\t\t\n78\tpublic\t（the ―）大衆、公共の、公の\t\t\n79\tevidence\t証拠\t\t\n80\tvote\t投票（数)、投票する\t\t\n81\tgovernment\t政府\t\t\n82\tnation\t国家、（the ―)国民\t\t\n83\tcapital\t首都、資本、重大な、死に値する\t\t\n84\tstate\t州、状態、国家、（意見，情報）を述べる\t\t\n85\tpolitical\t政治的な、政治の\t\t\n86\tprice\t価格、（―s）物価、代償\t\t\n87\tsum\t（修飾語を伴って）金額、合計、（簡単な）計算、（up）～を要約する\t\t\n88\tbudget\t予算、安い\t\t\n89\tfee\t（会費，遊園地などの）料金、（専門職への）謝礼\t\t\n90\tfare\t運賃\t\t\n91\tbill\t勘定、請求書、紙幣、法案\t\t\n92\ttrade\t貿易、（the ～ trade）～業、商売、～を交換する\t\t\n93\twealth\t富、財産、（a ― of ～）豊富な～\t\t\n94\teconomy\t経済、節約\t\t\n95\tcost\t（費用）を要する、～がかかる、～を犠牲にする、費用、犠牲\t\t\n96\tcompany\t会社、（one's ―）一緒にいること、仲間、来客\t\t\n97\ttask\t仕事\t\t\n98\tearn\t（金）を稼ぐ、もうける、（評判など）を得る\t\t\n99\thurt\t（身体の部位が）痛む、（身体，感情）を傷つける\t\t\n100\tinjure\t～を痛める、～をけがさせる\t\t\n101\tdamage\t～に損害を与える、損害、被害、（―s）賠償金\t\t\n102\tdestroy\t～を（完全に）破壊する、～を殺す、全滅させる\t\t\n103\truin\t～を台無しにする、～を破滅させる、（―s）廃墟、荒廃\t\t\n104\tdanger\t危険\t\t\n105\tneighbor\t近所の人、（a next-door ―）隣の人\t\t\n106\taudience\t聴衆、観客\t\t\n107\tcrowd\t群衆\t\t\n108\tauthor\t著者、（主に文学作品の）作家\t\t\n109\tstaff\t（集合的に）職員、従業員\t\t\n110\tclerk\t店員、事務員、社員\t\t\n111\tcustomer\t客\t\t\n112\tpassenger\t乗客\t\t\n113\telderly\t年配の、（the ―）（総称的に）年配の人々\t\t\n114\tfemale\t女性の、（動物）雌の、女性、雌\t\t\n115\thead\t向かう、～を率いる\t\t\n116\tfollow\t～の後について行く、～に続く、（忠告，方針など）に従う\t\t\n117\twander\t歩き回る、さまよう\t\t\n118\ttravel\t旅行する、移動する、（光，音などが）進む\t\t\n119\tpass\t～を通り過ぎる、～を抜く、（試験）に受かる、（（人）A）（人）に（A を）渡す、（時が）過ぎる、通行証\t\t\n120\tlikely\t（to do）～しそうだ、可能性が高い、おそらく\t\t\n121\tnatural\t当然の、自然の、生まれながらの\t\t\n122\tcertain\t確かな、（名詞の前で）ある～\t\t\n123\tprobably\tおそらく\t\t\n124\tface\t～に直面する、～向きである、顔、体面、文字盤\t\t\n125\tavoid\t～を避ける\t\t\n126\tsolve\t～を解決する\t\t\n127\ttrouble\t問題、ごたごた（通例)、～を困らせる\t\t\n128\tissue\t問題、（雑誌の）号、（切手など）を発行する\t\t\n129\tcheer\t（on）～に声援を送る、（up）～を励ます、声援、励まし、（―s）乾杯\t\t\n130\tencourage\t（A to do）（A）に（～するよう）促す、奨励する、～を励ます\t\t\n131\tsupport\t～を支持する、（家族など）を養う、（理論など）を立証する、支持、支援<不可算>\t\t\n132\tprevent\t（A from B）（AがBするの）を妨げる、～を予防する\t\t\n133\tdeny\t～を否定する、（O1）に（O2を）与えない\t\t\n134\tenable\t（A to do）（A）に［が］（～することを）可能にする\t\t\n135\tsucceed\t（in ～）（～に）成功する、（to ～）（家業などを）継ぐ\t\t\n136\tmiss\t～を逃す、～を休む、～を恋しく思う\t\t\n137\tfail\t（in［at］～）（～に）失敗する、（to do）～できない、（試験）に落ちる、（人）に役に立たない\t\t\n138\tmistake\t間違い、（A for B）（A）を（B と）間違える\t\t\n139\tcheck\t～を調べる、～を阻止する、小切手、勘定書、検査、点検、抑制\t\t\n140\thide\t～を隠す、隠れる\t\t\n141\tdraw\t（線で絵など）を描く、（注意）を引く、～を引っ張る、集める\t\t\n142\tjoin\t（クラブ，団体など）に加わる、～をつなぐ、（食事などを）～とともにする、（議論，活動などに）参加する\t\t\n143\tthrow\t～を投げる、（away［out］）～を捨てる、（パーティなど）を催す、投げること\t\t\n144\toperate\t（機械など）を操作する、手術する、（機械などが）作動する、（組織が）運営される\t\t\n145\trepair\t～を修理する、～を修復する、修理、修復\t\t\n146\tsew\t～を縫う、（on）（ボタンなど）を縫いつける\t\t\n147\traise\t～を上げる、（子ども，作物）を育てる、（お金，資金）を集める、（問題）を提起する、賃上げ、昇給\t\t\n148\tserve\t（飲食物）を出す、～に役立つ、役立つ\t\t\n149\tpour\t～を注ぐ、降りそそぐ\t\t\n150\tspill\t～をこぼす、（石油などの）流出\t\t\n151\tpretend\t（to do / that SV）（～する/ ～である）ふりをする\t\t\n152\tbehave\tふるまう\t\t\n153\tbear\t（can ―）～に耐える、～を持つ、運ぶ、～を産む\t\t\n154\texplore\t～を探検する、（街など）を探索する、（問題など）を探る\t\t\n155\thappen\t（to ～）（～に）起こる、（to do）偶然～する\t\t\n156\tappear\t現れる、（to be ～）～のように思える\t\t\n157\tremain\t～のままでいる、残る\t\t\n158\tsurvive\t生き残る、～から生き延びる、～の後も存続する\t\t\n159\tbelong\t（to ～）（～に）所属している\t\t\n160\trepresent\t～を代表する、（記号などが）を表す、～を表現する\t\t\n161\tbase\t～の基礎を置く、基礎（の部分）、基盤、基地\t\t\n162\tinclude\t～を含む\t\t\n163\tcontain\t～を含む、（主に否定で）～を抑える\t\t\n164\town\t（所有格の後で）、自分自身の、（名詞的に）自分自身のもの、～を所有している\t\t\n165\tshare\t～を共有する、（考えなど）を（人に）伝える、共有、分け前\t\t\n166\tcollect\t（同種の物）を集める、～を徴収する、回収する\t\t\n167\tgather\t～を集める、集まる\t\t\n168\thistory\t歴史、履歴、前歴、病歴\t\t\n169\tsubject\t科目、話題、被験者、（be ― to ～）～を受けやすい\t\t\n170\teducation\t教育\t\t\n171\tknowledge\t知識、知っていること\t\t\n172\tuniform\t制服、同一の、一定の\t\t\n173\tgrade\t（小，中，高の）学年、等級、成績\t\t\n174\tsenior\t（高校，大学の）最上級生、高齢者の、（地位が）上位の\t\t\n175\tgraduate\t（from ～）（～を）卒業する\t\t\n176\tdecide\t（to do）（～すること）を決定する、決心する、（on ～）（～を）決める\t\t\n177\tjudge\t～を判断する、裁判官、審判（員）\t\t\n178\tquit\t～を（完全に）やめる\t\t\n179\tretire\t（from ～）（～を）引退する、退職する\t\t\n180\treview\t再検討、（新聞などの）批評、復習\t\t\n181\tchoose\t～を選ぶ、選ぶ\t\t\n182\timagine\t～を想像する\t\t\n183\tguess\t～を推測する、推測\t\t\n184\texpect\t～を予期する、（A of［from］ B）（B にA）を期待する、（be ―ing）（～を）身ごもっている（※③は も可）\t\t\n185\tpredict\t～を予測する\t\t\n186\tremember\t（doing）（過去にしたこと）を覚えている、（to do）（～すること）を覚えている、（me to ～）（～に）よろしく伝える\t\t\n187\tremind\t（A of B）（A）に（B のことを）思い出させる、（（人）to do）（人）に～するように念を押す\t\t\n188\trealize\t～を（はっきり）理解する、（夢，計画など）を実現する\t\t\n189\tappreciate\t～を（正しく）理解する、～のよさがわかる、～に感謝する\t\t\n190\taccept\t～を受け入れる\t\t\n191\tconsider\t～をよく考える、考慮する、（人の気持ち）を思いやる、（A （to be［as］)B)（A）を（B と）みなす\t\t\n192\tmind\t気にする、精神、頭脳、（才能，知性のある）人\t\t\n193\twonder\t（wh―節 / if SV）～かなと思う、（at ～）（～に）驚く\t\t\n194\tseem\t～のように思われる\t\t\n195\tcompare\t（A with［to, and］ B）（A）を（B と）比較する、（A to B）（A）を（B に）例える、（with［to］～）（～に）匹敵する\t\t\n196\tconcentrate\t（on ～）（～に）集中する、（A on B）（A）を（B に）集中させる\t\t\n197\tfocus\t（on ～）（～に）焦点を当てる、力を注ぐ、焦点\t\t\n198\tallow\t（人が）～を許可する、（物が）～を可能にする\t\t\n199\tadmit\t～を認める、～の入場［入学］を許可する\t\t\n200\tground\t地面、根拠\t\t\n201\tpollution\t汚染、公害\t\t\n202\tsight\t光景、視力\t\t\n203\tview\t眺め、景色、見解、見方、（A as B）（A）を（B と）みなす\t\t\n204\tlandscape\t風景、（the ―）（政治，社会の）情勢\t\t\n205\tnature\t（無冠詞）自然、（しばしばthe ― of ～)（～の）性質\t\t\n206\tseed\t種、シード選手\t\t\n207\tplant\t植物、（大規模な）工場、発電所、～を植える\t\t\n208\tbloom\t（花が）咲く、開花\t\t\n209\tharvest\t収穫、～を収穫する、（臓器，体液など）を摘出する\t\t\n210\tinsect\t昆虫\t\t\n211\tearthquake\t地震\t\t\n212\ttemperature\t温度、気温、体温\t\t\n213\tdegree\t（温度などの）度、程度、学位\t\t\n214\tflood\t洪水 <可算>、～を水浸しにする\t\t\n215\tfreeze\t凍る、凍りつく、～を凍らせる\t\t\n216\treflect\t～を反射する、～を反映する、（on ～）（～を）熟考する\t\t\n217\tpolite\t（人，言動が）礼儀正しい\t\t\n218\trude\t（言葉、行為が）無礼な、不作法な\t\t\n219\tlonely\t孤独な\t\t\n220\tlazy\t（やる気がなく）怠惰な、いい加減な、（名詞の前で）くつろいだ\t\t\n221\tstrict\t厳しい\t\t\n222\tugly\t醜い\t\t\n223\tintelligent\t知的な、賢い\t\t\n224\tsilly\tばかな\t\t\n225\tnervous\tあがって、落ち着かない、神経質な、臆病な、（身体の）神経の\t\t\n226\tawake\t目を覚まして\t\t\n227\talone\t1人で、（名詞＋alone）～だけ\t\t\n228\tattitude\t態度、姿勢\t\t\n229\tcharacter\t性格、特徴、登場人物、文字\t\t\n230\tcharacteristic\t特徴、特有の、特徴的な\t\t\n231\tfeature\t特徴、特集記事、～を特集する\t\t\n232\tdetail\t詳細、（建物などの）細部\t\t\n233\tadvantage\t（over ～）（～に対する）利点\t\t\n234\tfault\t（ちょっとした）欠点、不具合、（one's ―）責任、断層\t\t\n235\tquality\t質、（通例―s）（人間の）資質\t\t\n236\tcorrect\t正確な、正しい、～を訂正する、矯正する\t\t\n237\tideal\t理想的な、申し分のない、理想、理想的な姿\t\t\n238\tfair\t公正な、公平な、品評会、見本市\t\t\n239\tappropriate\t適切な\t\t\n240\tfamous\t（for one's ～）（～で）有名な、（as ～）（～として）有名な\t\t\n241\telementary\t初歩的な、基本の\t\t\n242\tmajor\t主要な、（in ～）（～を）専攻する、専攻\t\t\n243\tmatter\t重要である、（修飾語を伴い）物質 <不可算>、（―s）事態、状況\t\t\n244\tbright\t明るい、（主に子どもや若者が）賢い\t\t\n245\tbrilliant\t輝いている、すばらしい\t\t\n246\tlively\t生き生きとした\t\t\n247\tcomfortable\t（物が）快適な、（人が）心地よい\t\t\n248\tpleasant\t（人にとって）楽しい、心地よい\t\t\n249\tconvenient\t都合がよい、近くて便利がよい\t\t\n250\tfalse\t誤った、偽の\t\t\n251\tterrible\tひどい、苦手で\t\t\n252\tawful\tひどい、不快な\t\t\n253\tthin\t薄い、（病的に）やせた、（毛が）薄い\t\t\n254\ttight\t引き締まった、きつい、厳しい\t\t\n255\tloose\tゆるい、解き放たれた\t\t\n256\traw\t生の、加工されていない\t\t\n257\tempty\t空の、中身のない、～を空にする\t\t\n258\tsmooth\t滑らかな、順調な、（服のしわ）をのばす、（髪）をなでつける\t\t\n259\tdirect\t直接的な、～を指揮(監督、演出)する、（注意など）を向ける、～に道を教える\t\t\n260\tfamiliar\t知られた、（人が）（よく）知っている\t\t\n261\tsimilar\t（to ～）（～に）似た\t\t\n262\tdiffer\t異なる\t\t\n263\tvary\tさまざまだ、変わる\t\t\n264\tspecific\t特定の、明確な、具体的な\t\t\n265\tcommon\t普及した、普通の、（主に名詞の前で）共通の\t\t\n266\tunusual\t珍しい\t\t\n267\tadd\t～を加える、（to ～）（～を）増やす\t\t\n268\tincrease\t増える、～を増やす、（in ～）（～の）増加\t\t\n269\treduce\t～を減らす、（A to B)A をB にする\t\t\n270\tdivide\t～を分割する、（by ～）（～によって）（数字）を割る\t\t\n271\tcount\t～を数える、数える、重要である、（on ～）（～を）（全面的に）当てにする\t\t\n272\tweigh\t～の重さがある、～の重さを量る、～を（比較）検討する\t\t\n273\tquarter\t分の、15分、25セント、（都市のある特定な）地域\t\t\n274\tlot\t（a ― of ～）多くの～、（副詞的に）（a ―）とても、（one's）（～の）状況、運命、（何らかの目的を持つ）土地\t\t\n275\tpile\t積み重ね、山、多量、～を積み重ねる\t\t\n276\trate\t割合、速さ、（ホテルなどの一定の）料金、～を評価する\t\t\n277\tfigure\t数字、人物、スタイル、体つき、図、目立つ\t\t\n278\tlack\t（（a）― of ～）（～の）不足、～を欠いている\t\t\n279\textra\t余分な、追加の、臨時の、余分な［追加された］もの\t\t\n280\tready\t用意ができている、（be ～ to do）進んで～する\t\t\n281\tprepare\t～の準備をする、用意をする、準備をする、用意をする、（be ―d to do）（～する）準備ができている\t\t\n282\tadjust\t（to ～）（～に）慣れる、～を調整する\t\t\n283\tapply\t（to ～）（～に）当てはまる、（for ～）（～に）申し込む、～を当てはめる、応用する、（薬，口紅など）を塗る\t\t\n284\tsuit\t（人）に適している、好都合だ、（服装，色が人）に似合う、訴訟（＝lawsuit)、スーツ\t\t\n285\tcase\t場合、（the ―）事実、（犯罪）事件、症例、（make a ―）主張（する）\t\t\n286\tscene\t（劇，小説などの）場面、（事故）現場、（the ～ scene）～（業）界\t\t\n287\tchance\t（to do）（～する）機会、（of ～ / that SV）（～の/ ～する）可能性\t\t\n288\topportunity\t（よい）機会、好機\t\t\n289\texperience\t経験、（個々の）体験、～を経験する\t\t\n290\ttime\t（漠然とした）時間、（ある長さの）時間、回数、倍、（―s）情勢、時代、（接続詞的に（the)next ―）次に～するとき\t\t\n291\tspring\t春、泉、温泉、飛び出る、突然出現する\t\t\n292\tminute\t（時間の）分、（a ―）ちょっとの間、（―s）議事録、～とても小さい、細かい、（the ―）～するとすぐに\t\t\n293\tage\t年齢、時代、（―s）長い間、高齢化する\t\t\n294\tgeneration\t世代、生み出すこと、発電\t\t\n295\tanniversary\t記念日\t\t\n296\trecently\t最近、近ごろ\t\t\n297\tused\t（to ～）以前は～だった、よく～したものだ、（be ― to doing）（～することに）慣れている、中古の\t\t\n298\tearly\t（時間，時期が）早く、初期に、（予定より）早く、早い、初期の\t\t\n299\tfirst\t第1の、（for the ― time）初めて、初めて、（文頭で）まず第、～に（＝firstly)、（at ―）最初のうちは\t\t\n300\tlatest\t（the ―）最新の\t\t\n301\tmodern\t現代の、近代的な\t\t\n302\tancient\t古代の、古びた\t\t\n303\tspend\t（時間）を費やす、（お金）を使う\t\t\n304\tdelay\t～を遅らせる、遅延、延期\t\t\n305\tborrow\t～を借りる\t\t\n306\tlend\t（無償で）～を貸す、（銀行が利子をつけて）を貸す\t\t\n307\trent\t～を借りる、（A to B）（A）を（B に）賃貸しする、家賃、賃貸料、使用料\t\t\n308\tprovide\t（A with B）（AにB）を供給する、与える\t\t\n309\tboard\t（細長い）板、（幹部などによる）委員会、～に乗る\t\t\n310\tgarbage\tごみ\t\t\n311\titem\t品物、（集合名詞を数えるときに用いる）...点、個、（リストなどの）項目\t\t\n312\twheel\t車輪、（the ―）ハンドル、（車輪のついたもの）を動かす\t\t\n313\tnote\tメモ、紙幣、（that SV）（～ということ）を指摘する、～に注意を払う\t\t\n314\tpresent\tプレゼント、現在、現在の、出席して、存在して、～を贈る、提示する\t\t\n315\tbargain\t買い得品<可算> （商談などで）交渉する\t\t\n316\tstuff\t（漠然とした）もの、～を詰める\t\t\n317\tstring\tひも、（a ― of ～）一連の～、（ギターなどの）弦\t\t\n318\tleisure\t余暇、（形容詞的に）余暇の\t\t\n319\tdiet\t食事、規定食、（D―)（日本の）国会\t\t\n320\tfurniture\t家具\t\t\n321\trefrigerator\t冷蔵庫\t\t\n322\ttraffic\t交通（量）\t\t\n323\tsell\t～を売る、売れる\t\t\n324\tpay\t（A for B)（B の代金としてA）を支払う、（for A)（A の代金を）支払う、（仕事などが）割に合う、給料\t\t\n325\twear\t～を身につけている、～をすり減らす、すり減る\t\t\n326\tclothes\t服\t\t\n327\tmarry\t～と結婚する、（―ied）結婚している\t\t\n328\tgreet\t～に挨拶する、出迎える\t\t\n329\torder\t～を注文する、（医者や上官などが）～に命令する、注文、命令、順序、秩序\t\t\n330\troom\t部屋、余地、空間\t\t\n331\tstory\t階\t\t\n332\tsite\t用地、現場、場所、（史跡などの）跡\t\t\n333\tyard\t（主に）庭、ヤード（＝約0.9 m）\t\t\n334\tbottom\t底、一番下、最下位、尻\t\t\n335\tline\t列、行、線、電話回線、セリフ、（―up）並ぶ\t\t\n336\trow\t列、（ボート）をこぐ\t\t\n337\tbackground\t背景、経歴、生い立ち\t\t\n338\tdirection\t方向、方角、（―s）道順、指示\t\t\n339\tculture\t文化、培養、養殖、教養、～を耕す、栽培［養殖］する\t\t\n340\tart\t芸術、（何かを行う）技術、（liberal ―s）一般教養\t\t\n341\tcartoon\t漫画\t\t\n342\tnovel\t小説、斬新な\t\t\n343\tinstrument\t楽器、器具\t\t\n344\ttune\t曲、（番組に）チャンネルを合わせる、～の調子を合わせる\t\t\n345\tsentence\t（ ①つ①つの）文、判決、（A to B）（A）を（B）の刑にする\t\t\n346\tarticle\t記事、品物、冠詞、条項\t\t\n347\tpassage\t（文章などの）一節、（時の）経過、移動\t\t\n348\tvocabulary\t語彙\t\t\n349\trumor\tうわさ\t\t\n350\tspell\t～をつづる、呪文、（天気などのある一続きの）期間\t\t\n351\tpronounce\t（単語など）を発音する、（判決など）を宣告する、～と断言する\t\t\n352\tsign\t兆候、印、標識、看板、掲示、～を署名する\t\t\n353\tmean\t～を意味する、（to do）～するつもりだ、意地悪な\t\t\n354\tpublish\t～を出版する、（公式に結果など）を発表する\t\t\n355\tdisplay\t～を展示する、（実力など）を発揮する、～を誇示する、展示、表現、誇示\t\t\n356\ttrust\t～を信頼する、信頼、信用\t\t\n357\tdepend\t（物，事が主語）（on ～）（～）次第である、（人が主語）（on ～）（～に）頼っている\t\t\n358\trely\t（on ～）（～に）頼る\t\t\n359\tpray\t祈る\t\t\n360\tbeg\t～を嘆願する、求める\t\t\n361\tprefer\t（A to B)（B よりA）を好む\t\t\n362\tweep\tしくしく泣く\t\t\n363\thate\t～を嫌う\t\t\n364\tworry\t心配をする、心配（事）\t\t\n365\tanxious\t（about ～）（～を）心配して、（to do / for ～）（～を）切望して\t\t\n366\tsatisfy\t～を満足させる、（必要性，空腹など）を満たす\t\t\n367\tannoy\t～を苛立たせる\t\t\n368\tbother\t～に面倒をかける、（to do）わざわざ～する、面倒なもの\t\t\n369\tdisturb\t（うるさくして）～に迷惑をかける、（平和など）を乱す\t\t\n370\tfrighten\t～を怯えさせる\t\t\n371\tregret\t～を後悔する、（to do）残念ながら～しないといけない、後悔\t\t\n372\tfavor\t親切な行為、支持\t\t\n373\tinterest\t関心、（―s）利益、（銀行などの）利子\t\t\n374\tpity\t残念なこと、哀れみ\t\t\n375\tdue\t（〜to （名詞））（名詞）が原因で、締め切りの、到着［出産］予定の\t\t\n376\treason\t理由、理性、～を推理する、思考する、判断する\t\t\n377\tresult\t結果、（in ～）結果として（～に）なる、（from ～）（～の）結果として生じる\t\t\n378\teffect\t効果、影響、結果\t\t\n379\tinfluence\t影響（力)、～に影響を与える\t\t\n380\tend\t（〜 up doing）結局～することになる、端、終わり、（最終的な）目的\t\t\n381\tcause\t～を引き起こす、原因\t\t\n382\taffect\t（直接的に）～に影響を与える、作用する\t\t\n383\tway\t方法、（in ～ way）（～の）点（で)、道、～はるかに\t\t\n384\tmanner\t方法、流儀、態度、（―s）マナー\t\t\n385\tpurpose\t目的\t\t\n386\tsake\t（for ～）ため、日本酒\t\t\n387\tright\t（場所や時の副詞（句）を修飾して）ちょうど、正しい、適切な、右の、（to ～）（～の）権利\t\t\n388\tcomplete\t完全な、～を完成させる\t\t\n389\thardly\t（程度）ほとんど～ない、（― ever）めったに～ない\t\t\n390\talmost\tほとんど\t\t\n391\tpartly\tある程度、部分的に\t\t\n392\tindeed\t（強調として）実際に、本当に、（but を伴って）確かに～\t\t\n393\teven\tさえも、（比較級の前で）さらに、偶数の、均一の、（数字が）ちょうどの\t\t\n394\texactly\t正確に、そのとおり\t\t\n395\tgradually\t徐々に\t\t\n396\ttherefore\tそれゆえに\t\t\n397\tinstead\t代わりに、（of ～）（～の）代わりに\t\t\n398\tuntil\t～まで（ずっと)、～まで（ずっと）\t\t\n399\tbesides\t～に加えて、おまけに\t\t\n400\texcept\t～を除いて、（for ～）（～を）除いて\t\t\n401\tdebate\t討論、～を討論する\t\t\n402\tcriticize\t～を批判する\t\t\n403\taccuse\t～を非難する、～を告訴する\t\t\n404\tinsist\t（on ～）（～と）言い張る、（強く）主張する、～と主張する、～を求める\t\t\n405\tobject\t（to ～）（～に）反対する、物、目的、（嘲笑，欲望などの）対象\t\t\n406\tprotest\t（against ～）（～に対して）抗議する、抗議\t\t\n407\tcontroversial\t論争を招く、物議をかもす\t\t\n408\tbound\t（to do）きっと～（する，～する［である］に違いない)、（for ～）～行きで\t\t\n409\tbet\t（that SV）きっと～だと思う、～を賭ける\t\t\n410\tdemand\t～を（強く）要求する、（for ～）（～への）要求、需要\t\t\n411\tdesire\t願望、～を強く望む\t\t\n412\tpraise\t（A for B）（A）を（B のことで）褒める、称える、賞賛\t\t\n413\thonor\t名誉、栄誉、～を敬う\t\t\n414\tchat\tおしゃべりする、おしゃべり\t\t\n415\trefer\t（to ～）、（人が主語）（～に）言及する、参照する、（物が主語）（～を）示す\t\t\n416\tmention\t～について述べる、言及する\t\t\n417\tconvey\t～を伝える、（乗客，音，病気など）を運ぶ\t\t\n418\tdemonstrate\t～を（はっきり）示す、実演する\t\t\n419\temphasize\t～を強調する\t\t\n420\texaggerate\t～を誇張する、誇張する、大げさに言う\t\t\n421\treply\t（to ～）（～に）返事をする、答える、返事、答え\t\t\n422\trespond\t（to ～）（手紙や問いなどに）返答する、（to ～）（～に）対応する、反応する\t\t\n423\twhisper\tささやく、ささやき（声）\t\t\n424\tremark\t発言、～と発言する\t\t\n425\tobserve\t～を観察する、（that SV）（気づいたことを）～と述べる、（規則など）を遵守する、（記念日など）を祝う\t\t\n426\ttheory\t理論、（学）説\t\t\n427\tanalysis\t分析\t\t\n428\tphenomenon\t現象、特異なもの、天才（①②ともに<可算>）\t\t\n429\tdevice\t装置<可算>\t\t\n430\texperiment\t実験、実験する\t\t\n431\tchemical\t（通例 ―s）化学物質、化学の\t\t\n432\tfuel\t燃料、（感情など）を大きくする\t\t\n433\tnuclear\t原子力の、核の\t\t\n434\tstatistics\t統計（値）、統計学\t\t\n435\tpursue\t～を追求する、続ける、～を追跡する\t\t\n436\taccomplish\t～をやり遂げる\t\t\n437\tovercome\t～を克服する\t\t\n438\tfulfill\t（義務，願望など）を果たす、（必要など）を満たす\t\t\n439\tdevote\t（A to B)（A）を（B に）ささげる\t\t\n440\tstrive\t努力する\t\t\n441\taim\t狙う、（―ed at ～）～向けだ、狙い、目的\t\t\n442\tchallenge\t難問、課題<可算>、～に異議を唱える\t\t\n443\ttrial\t試み、裁判、試練\t\t\n444\tdizzy\tめまいがして\t\t\n445\tappetite\t食欲\t\t\n446\tstarve\t餓死する、（be ―ing）とてもお腹が空いている\t\t\n447\tmental\t精神の、知力の\t\t\n448\trest\t休憩、（the ―）残り、（横になったりして）休む、（on ～）（～）次第だ、～を休ませる\t\t\n449\tsurgery\t手術、外科（①②ともに)\t\t\n450\tdisease\t病気\t\t\n451\tstomachache\t腹痛\t\t\n452\tsymptom\t（通例 ―s）症状、兆候\t\t\n453\tcancer\t～がん、（C―）かに座\t\t\n454\tambulance\t救急車\t\t\n455\trecover\t（from ～）（～から）回復する、（盗品など）を取り戻す\t\t\n456\tsore\t（のどや筋肉が）痛い、（話題など）触れてほしくない、心が痛む\t\t\n457\tswell\t（手足などが）腫れる、（風船，費用などが）膨らむ\t\t\n458\tcough\t咳をする、咳\t\t\n459\tbleed\t出血する\t\t\n460\tfaint\t（色，光などが）かすかな、気絶する、気絶\t\t\n461\texhaust\t～を疲れ果てさせる、～を使い果たす、排出、排気ガス\t\t\n462\tcure\t～を治療する、治療法\t\t\n463\tdisabled\t障がいのある、（the ―）（集合的に）障がいのある人\t\t\n464\tstiff\t（筋肉などが）凝った、（動かすと）痛い、堅い\t\t\n465\tmuscle\t筋肉\t\t\n466\ttongue\t舌、言語、言葉、（have a 〜）話し方\t\t\n467\tsense\t感覚、分別、（言葉の）意味、（何となく）～を感じる\t\t\n468\tsweat\t汗（通例)、汗をかく\t\t\n469\tgender\t性、性別\t\t\n470\tnationality\t国籍\t\t\n471\tcitizen\t市民、国民\t\t\n472\tcivil\t（一般）市民の、国内の、礼儀正しい\t\t\n473\tracial\t人種の、民族の\t\t\n474\trural\t田舎の\t\t\n475\tdomestic\t国内の、家庭内の\t\t\n476\tglobal\t（全）世界的な\t\t\n477\tsuburb\t（通例the ―s）郊外\t\t\n478\tborder\t国境（地帯）、境界、～を縁取る\t\t\n479\tburden\t重荷、負担\t\t\n480\timpact\t（on ～）（～への）影響、（物体間の）衝撃、（on ～）（～に）影響を及ぼす\t\t\n481\tstatus\t地位、（特定の時点の）状況\t\t\n482\tequal\t（to ～）（～に）等しい、平等な、～に等しい\t\t\n483\trelationship\t関係、親密な関係 （①②ともに）\t\t\n484\treputation\t（人，物の）評判\t\t\n485\ttrend\t（世の中の）風潮、傾向、流行\t\t\n486\tservice\t（政府あるいは企業による）事業、制度、（電車，バスの）便、サービス、接客\t\t\n487\treligion\t宗教\t\t\n488\tmoral\t道徳的な、（物語の）教訓、（―s）道徳\t\t\n489\tstandard\t基準、水準、標準の\t\t\n490\tprosperity\t繁栄\t\t\n491\tcrisis\t危機\t\t\n492\tprejudice\t偏見、先入観、～に偏見をもたせる\t\t\n493\tdiscrimination\t差別、識別（①②ともに<不可算>）\t\t\n494\tcharity\t慈善（事業）、慈善団体、（形容詞的に）慈善のための\t\t\n495\tbenefit\t恩恵、（―s）手当、（from ～）（～から）恩恵を得る、～に恩恵を与える\t\t\n496\twelfare\t福祉、（健康なども含めた）幸福、生活保護（①②③いずれも<不可算>）\t\t\n497\tcommunity\t（地域）社会、共同体（の人々）<可算>\t\t\n498\tindividual\t個人、個体、個人の、個々の\t\t\n499\tofficial\t役人、役員、公式の\t\t\n500\timmigrant\t（外国からの）移民\t\t\n501\tvolunteer\tボランティア、（to do）（～することを）自発的に申し出る\t\t\n502\tinteract\t（with～）（～と）交流する、相互作用する\t\t\n503\tcontribute\t（to ～）（～に）貢献する、（～の）一因となる、（A to B）（A）を（B に）寄付する、提供する\t\t\n504\tabolish\t～を廃止する\t\t\n505\timpose\t（A on B）（A）を（B に）課す、押しつける\t\t\n506\taccess\t利用する権利、（場所への）接近方法\t\t\n507\tduty\t義務、関税\t\t\n508\tresponsible\t（人が主語）責任がある、（物が主語）原因となっている\t\t\n509\tpolicy\t政策、方針、保険契約、約款\t\t\n510\telect\t～を（選挙で）選ぶ\t\t\n511\tindustry\t工業、（the ～ industry）産業、業界、勤勉\t\t\n512\tincome\t収入\t\t\n513\tprofit\t利益、利潤\t\t\n514\ttax\t税金（→ →）\t\t\n515\texpense\t費用、経費、（at the ― of ～）（～を）犠牲（にして）\t\t\n516\tdebt\t借金\t\t\n517\tdeposit\t預金、頭金、保証金、埋蔵物、堆積物、～を預ける\t\t\n518\tcharge\t料金、（主にin ―）責任、管理、（against ～）（～に対する）非難、告訴、～を請求する、～を告訴する、～を充電する\t\t\n519\twage\t賃金<可算>、（闘争，運動など）を行う\t\t\n520\trecession\t不況、不景気\t\t\n521\tconsume\t～を消費する\t\t\n522\twaste\t～を浪費する、浪費、無駄、廃棄物\t\t\n523\tinvest\t（A in B）（A）を（B に）投資する、（A with B）（A）に（B を）与える\t\t\n524\timport\t～を輸入する、輸入、輸入品\t\t\n525\tfinancial\t財政的な、金銭的な\t\t\n526\thire\t～を（一時的に）雇う、（金を払って短期間）～を借りる\t\t\n527\temploy\t（人）を雇う、（物，事）を用いる\t\t\n528\tresign\t（as ～）（～を）辞職する、（地位など）を辞める\t\t\n529\tqualify\t（for ～）（～の）資格がある、（as ～）（～としての）資格を得る、～に資格を与える\t\t\n530\tassign\t～を割り当てる、～を配属する\t\t\n531\toccupation\t職業、占有、占領\t\t\n532\tcareer\t職業、経歴\t\t\n533\tprofession\t（専門的な）職業、（the ―）同業者集団\t\t\n534\tunemployment\t失業、失業率（＝― rate）、失業者数 （①②ともに）\t\t\n535\tdocument\t書類、資料、～を記録する\t\t\n536\tdepartment\t（組織の）部門、課、（大学の）学科、（米国などの）省\t\t\n537\tbranch\t支店、支局、（学問の）部門、枝\t\t\n538\tretail\t小売り、小売りされている\t\t\n539\tcolleague\t（from ～）（～の）同僚\t\t\n540\tsystem\t制度、組織、体系 （①②ともに）\t\t\n541\tstructure\t構造\t\t\n542\tarchitecture\t建築（様式）\t\t\n543\tconstruction\t建設\t\t\n544\tfunction\t機能、機能する\t\t\n545\tsurface\t表面<可算>、表面化する\t\t\n546\taspect\t側面<可算>\t\t\n547\tedge\t端、（ナイフなどの）刃、優位\t\t\n548\tmakeup\t（物の）構成、構造、（人の）資質、化粧、（― exam）追試験\t\t\n549\tconsist\t（of ～）（～で）構成されている、（in ～）（～に）ある\t\t\n550\tcompose\t～を構成する、組み立てる、～を作曲［作文］する、～を落ち着かせる\t\t\n551\tattach\t～をくっつける、添付する、～に愛着を持たせる\t\t\n552\tconnect\t～をつなげる、～を関連づける、つながる\t\t\n553\trelate\t（A to B）（A）を（B に）関連づける、～を（順序立てて）話す、（to ～）（～に）理解を示す\t\t\n554\tassociate\t（A with B）（A）を（B と）関連づける、（A）から（B を）連想する、（with ～)（～と）付き合う、同僚、共同経営者\t\t\n555\tstick\t～を貼り付ける、（舌や脚）を出す、（to）（主義などを）守る、固執する\t\t\n556\tthief\t泥棒\t\t\n557\tcrime\t犯罪\t\t\n558\tmotive\t動機\t\t\n559\tpunish\t（（人）for ～）（人）を（～の理由で）罰する\t\t\n560\tviolate\t（法律など）に違反する、（権利など）を侵害する\t\t\n561\tlegal\t合法の、法律の、法的な\t\t\n562\tenemy\t敵<可算>、（形容詞的に）敵の\t\t\n563\tconflict\t対立、紛争、葛藤、（with ～）（～と）矛盾する\t\t\n564\tcompete\t競争する、（in ～）（競技などに）参加する\t\t\n565\tdefeat\t（相手）を打ち負かす、敗北\t\t\n566\tvictim\t犠牲者\t\t\n567\tobstacle\t（to ～）（～に対する）障害\t\t\n568\tharm\t害、～に害を与える\t\t\n569\tinvade\t（プライバシーなど）を侵害する、（国など）に侵入する、～を侵略する\t\t\n570\tendanger\t～を危険にさらす\t\t\n571\tinterrupt\t～を中断する、～を遮る、人の話を遮る\t\t\n572\tspoil\t～を台無しにする、（子ども）を甘やかす\t\t\n573\tspectator\t観客\t\t\n574\trelative\t（家族も含めて）親戚、相対的な\t\t\n575\tdeparture\t出発、逸脱\t\t\n576\tdestination\t目的地、（tourist ―）観光地、旅行先（①②ともに<可算>）\t\t\n577\ttransportation\t交通機関\t\t\n578\tvehicle\t（エンジンの付いた）車両、（思想，意見の）伝達手段\t\t\n579\tbaggage\t（旅行時の）手荷物<不可算>\t\t\n580\tvia\t～経由で、～によって\t\t\n581\tlead\t（to ～）（～に）至る、（a ～ life）（～な生活）を送る、（A to do）A に～させる、鉛、（シャーペンなどの）芯\t\t\n582\trise\t上がる、昇る、上昇\t\t\n583\tflow\t流れる、流れ\t\t\n584\tburst\t破裂する、爆発する、（慣用句で）突然～し始める\t\t\n585\tmelt\t（固体が）溶ける、～を溶かす\t\t\n586\tcommute\t通勤 する、通勤 （距離）\t\t\n587\taccompany\t（人が主語）～と一緒に行く、（物が主語）～に伴う\t\t\n588\temit\t（ガス、熱、光など）を排出する\t\t\n589\tprogress\t進歩、前進、進歩する、進む\t\t\n590\tadvance\t進歩、前進、（軍隊などが）前進する、進歩する、事前の\t\t\n591\tdeal\t（with～）（～を）扱う、取り引き\t\t\n592\thandle\t～を扱う、（手で）～を扱う、触れる、取っ手\t\t\n593\ttreat\t（副詞を伴って）～を扱う、（病人，病気）を治療する、（A to B)（A)に（Bを）おごる、楽しみ\t\t\n594\tclue\t（to ～）（～の）手がかり\t\t\n595\trestrict\t～を制限する\t\t\n596\tlimit\t（数量，範囲）を制限する、制限\t\t\n597\tforbid\t～を禁じる\t\t\n598\tban\t禁止、～を禁止する\t\t\n599\trefuse\t（to do）～するのを拒む、～を断る\t\t\n600\treject\t～を拒絶する、（人）を拒む、除け者にする\t\t\n601\tpersuade\t（A to do）（A）を説得して～させる\t\t\n602\tconvince\t（A of B）（A）に（Bを）確信させる、（A that SV）（A）に（～を）確信させる、（A to do）（A）を説得して～させる\t\t\n603\tinspire\t～を奮起させる、かき立てる、（作品）に創作のヒントを与える\t\t\n604\tdiscourage\t～のやる気をなくさせる、落胆させる\t\t\n605\tpromote\t～を促進する、（be［get］―d to ～）（～に）出世［昇進］する\t\t\n606\tboost\t～を促進させる、増大させる\t\t\n607\texpand\t拡大する、膨張する、～を拡大する、膨張させる\t\t\n608\textend\t～を延長する、広げる、伸びる、広がる\t\t\n609\tbroaden\t～を広げる、広がる\t\t\n610\tspread\t～を広げる、広がる、広がり\t\t\n611\ttie\t（荷物など）を縛る、（ひも，ネクタイなど）を結ぶ、ネクタイ（＝necktie)、（家族などの）きずな\t\t\n612\tfasten\t～を固定する、（ボタンなど）をかける、留める\t\t\n613\tfix\t～を固定する、～を修理する、（主に ）（食事，飲み物）を作る\t\t\n614\tinstall\t（機械など）を設置する、～をインストールする\t\t\n615\tresist\t～を我慢する、～に抵抗する\t\t\n616\tobey\t～に従う\t\t\n617\tengage\t（in ～）（活動に）従事する、（with ～）（理解のために、人や考えに）関与する、（関心、注意など）を引く\t\t\n618\tbump\t（into ～）、（～に）ぶつかる、（～に）偶然出会う\t\t\n619\tbend\t身をかがめる、～を曲げる、（道の）カーブ\t\t\n620\thug\t（人）を （愛情こめて）抱きしめる、抱擁\t\t\n621\tstare\t（at ～）（～を）じっと見つめる、凝視\t\t\n622\tgaze\t（at［on］～）（～を）見つめる、視線、凝視\t\t\n623\tglance\tちらりと見る、ちらりと見ること\t\t\n624\tglimpse\t～がちらりと見える、ちらりと見えること\t\t\n625\tstretch\t（手足や体）を伸ばす、広げる、伸びる、広がる、（ひと続きの）広がり\t\t\n626\tstumble\tつまずく、（across［into］～）（～に）偶然出会う\t\t\n627\tpress\t～を（強く）押す、～を押しつける、勧める、（the ―）報道機関、出版\t\t\n628\tdrag\t～を（ずるずると）引きずる\t\t\n629\tlean\t（against［on］～）（～に）寄りかかる、（forward）身を乗り出す、（健康的に）痩せている\t\t\n630\tscratch\t～をひっかく、かく、ひっかき傷\t\t\n631\tbow\tおじぎする、おじぎ\t\t\n632\tnod\tうなずく、（off）うたた寝する、うなずき、会釈\t\t\n633\tsigh\tため息をつく、ため息\t\t\n634\tyawn\tあくびをする、あくび\t\t\n635\tsneeze\tくしゃみをする\t\t\n636\tbury\t～を埋める、～を埋葬する\t\t\n637\tperform\t～を遂行する、～を演じる、演奏する、（副詞を伴い）やる\t\t\n638\tadopt\t～を採用する、～を養子にする、（動物など）を引き取る\t\t\n639\tescape\t（from ～）（～から）逃れる、～を避ける、逃亡\t\t\n640\tscatter\t～をまき散らす、（群衆などが）散る\t\t\n641\tfold\t～を折る、（up）～を折りたたむ、（腕）を組む、折りたためる\t\t\n642\thang\t～を掛ける、～を絞首刑にする、ぶら下がる\t\t\n643\trelease\t～を解放する、（映画など）を発表する、出す、（ガスなど）を放出する、解放、発売\t\t\n644\tstrike\t～を打つ、（災害が）～を襲う、（考えが人）に思い浮かぶ、（A as B）（A）に（B という）印象を与える、ストライキ\t\t\n645\tbeat\t～を打つ、～に勝つ\t\t\n646\tprotect\t～を守る、保護する\t\t\n647\ttwist\t～を（ねじ）曲げる、（体の一部）をひねる、捻挫する\t\t\n648\tskip\t～をサボる、抜かす\t\t\n649\texpose\t～をさらす、（秘密，犯罪など）を暴露する\t\t\n650\tstir\t（液体など）を混ぜる、（―up ）（感情など）を呼び覚ます\t\t\n651\tshake\t～を振る、～を揺さぶる、（恐怖，寒さで）震える\t\t\n652\tpolish\t～を磨く\t\t\n653\tattend\t～に出席する、通う、（to ～）（～に）注意を向ける、（to ～）（～を）世話する\t\t\n654\timitate\t～をまねる\t\t\n655\tconduct\t～を行う、（電気，熱）を伝える、行為\t\t\n656\tstruggle\t苦闘する、もがく、苦闘、もがくこと\t\t\n657\tburn\t焼ける、～を燃やす\t\t\n658\tcheat\tごまかす、～をだます\t\t\n659\tparticipate\t（in ～）（～に）参加する\t\t\n660\texist\t存在する\t\t\n661\tarise\t生じる\t\t\n662\toccur\t生じる、（to （人））（考えなどが（人）に）思いつく\t\t\n663\tinvolve\t（be ―d in ～）（事件などに）巻き込まれる、（be ―d in ～）（子育てなどに）参加する、～を伴う\t\t\n664\trequire\t～を必要とする\t\t\n665\tcounterpart\t（to ～）（～に）対応する［（～と）同等の］人［物、事］\t\t\n666\tadvent\t到来、（the A―）キリストの降臨\t\t\n667\tmaintain\t～を維持する、（that SV）（～）を（強く）主張する\t\t\n668\tlast\t（時間的に）続く、（服などが）長持ちする （the last ～）、この前の～、最後の～、もっとも～でない、（at ―）ついに\t\t\n669\tpersist\t持続する、残る、（in［with］～）（～を）貫く、（～に）固執する\t\t\n670\texamine\t～を調査する、～を検査する\t\t\n671\tgain\t～を増す、～を得る、利益、増加\t\t\n672\tobtain\t（資格，許可，情報など）を得る\t\t\n673\tacquire\t～を習得する、～を獲得する、～を買収する\t\t\n674\tsearch\t（A for B)（B（物）を求めてA（場所））を捜す、捜索、調査\t\t\n675\tlogical\t論理的な\t\t\n676\tscholarship\t奨学金、学問、（人文科学の）学識\t\t\n677\tinstruction\t（通例―s）指示\t\t\n678\tdetermine\t～を決める、～に大きく影響する、（be ―d to do）～することを決意している、（原因など）を特定する\t\t\n679\tconclude\t（that SV）～と結論を下す\t\t\n680\tdistinguish\t～を区別する\t\t\n681\tclassify\t～を分類する\t\t\n682\testimate\t～を推定する、見積もる、（for ～）（～の）見積もり\t\t\n683\torganize\t（考えなど）をまとめる、～を組織化する、取りまとめる\t\t\n684\trecognize\t（知り合いなど）が誰だかわかる、（that SV）～を認識する\t\t\n685\tsuppose\t（be ―d to do）～することになっている、～と思う、仮定する\t\t\n686\tassume\t～と思い込む、決めつける、～を引き受ける\t\t\n687\tcare\t（否定文で）気にする、世話をする、世話、心配\t\t\n688\tapprove\t（of ～）（～を）認める、承認する、～を承認する\t\t\n689\tnotice\t～に気がついている、通知、掲示、注意\t\t\n690\taware\t気づいている\t\t\n691\tconscious\t意識している、気づいている、意識がある\t\t\n692\tconcerned\t（with［about］～）（～に）関心を持っている、重視している、（with ～）（～を）扱っている、（about［for］～）（～を）懸念している\t\t\n693\tregard\t（A as B）（A）を（B と）みなす、（副詞を伴い）～を評価する、（in ―）点、（―s）よろしくという挨拶\t\t\n694\tcommit\t（oneself to ～ / be ―ed to ～）～に専念する、（A to B)（A）を（B に）委ねる、充てる、（犯罪など）を犯す\t\t\n695\tdoubt\t～を疑う、（that SV）～とは思わない、疑い\t\t\n696\tmemorize\t～を暗記する\t\t\n697\tforgive\t（人，過ち）を許す\t\t\n698\tgrant\t（take ～ for granted）～を当然のことと思う、（権利など）を与える、交付、補助金\t\t\n699\trecall\t～を思い出す、（商品）を回収する、リコールする\t\t\n700\toutlook\t（人生，世界などに対する）考え方、（経済，天候などの）見通し\t\t\n701\tperspective\t（経験などで得られる）視点、（大局的な）見方、遠近法\t\t\n702\tabandon\t～を捨てる、放棄する\t\t\n703\teliminate\t（不要な人，物，事）を排除する、（be ―d）敗退する\t\t\n704\trid\t（get ― of ～）、（不要品）を処分する、～を取り除く\t\t\n705\tremove\t～を取り除く、取り去る、（衣服）を脱ぐ\t\t\n706\tresource\t（―s）（石油などの）資源、（人，国の）財産、（―s）（困難に立ち向かう）力量、（万一の頼みの）手段\t\t\n707\tconservation\t保護、保存\t\t\n708\tpreserve\t（自然など）を保護する、（景観，平和，食品など）を保つ\t\t\n709\tdisaster\t災害、大失敗\t\t\n710\tplanet\t惑星、（the ―）地球\t\t\n711\tenvironment\t環境、周囲（の状況）\t\t\n712\thorizon\t水平線、地平線、（―s）視野\t\t\n713\tlayer\t（大気や地面などの）層 <可算>\t\t\n714\tagriculture\t農業\t\t\n715\tcrop\t作物、収穫（高)、（up）生じる\t\t\n716\tsoil\t土、土壌\t\t\n717\tweed\t雑草、海草、～の雑草を抜く\t\t\n718\tpollen\t花粉\t\t\n719\tdrown\t溺れ死ぬ\t\t\n720\tleak\t漏れる、～を漏らす、漏れ\t\t\n721\tclimate\t気候、（政治，経済，文化の）状況\t\t\n722\tatmosphere\t（the ―）大気、雰囲気、（the（Earth's）―）大気圏\t\t\n723\tforecast\t予報、～を予報する\t\t\n724\thumid\t湿気が多い\t\t\n725\ttropical\t熱帯の\t\t\n726\tsolar\t太陽の\t\t\n727\tspecies\t種\t\t\n728\tpesticide\t（虫や小動物などの）殺虫剤、駆除剤\t\t\n729\textinct\t絶滅した\t\t\n730\tfeed\t～にえさを与える、（子どもなど）を養う、（on ～）（～を）常食とする\t\t\n731\tenergetic\t（人，運動などが）活発な\t\t\n732\tgreedy\t貪欲な\t\t\n733\tbrave\t勇敢な\t\t\n734\tgenerous\t気前のよい\t\t\n735\tintellectual\t知的な\t\t\n736\tcurious\t（人が主語）好奇心が強い、（物が主語）奇妙な、好奇心をそそる\t\t\n737\timaginative\t想像力豊かな\t\t\n738\tafford\t（can ―）～する余裕がある、（SVO1O2）（O1に）O2を与える\t\t\n739\teager\t熱心な\t\t\n740\tselfish\t利己的な、自分勝手な\t\t\n741\taggressive\t攻撃的な、積極的な\t\t\n742\tcruel\t残酷な\t\t\n743\taddicted\t～の中毒になっている\t\t\n744\tstubborn\t頑固な\t\t\n745\tbold\t大胆な\t\t\n746\tguilty\t申し訳なく思う、罪の意識がある、（of ～）（～の）罪を犯した\t\t\n747\tinnocent\t（of ～）（～に関して）無実の、無邪気な\t\t\n748\tsincere\t（心から）誠実な、（言動が）心からの、偽りのない\t\t\n749\tmodest\t（人が）謙虚な、（物が）大きくない、高くない\t\t\n750\tstupid\tばかな\t\t\n751\tindifferent\t無関心で\t\t\n752\tpunctual\t（約束などの）時間を守る\t\t\n753\tcoward\t臆病者\t\t\n754\tprecise\t正確な、精密な\t\t\n755\taccurate\t正確な\t\t\n756\tproper\t適切な\t\t\n757\ttidy\t（主に）きちんとした、整然とした、～を整頓する\t\t\n758\tefficient\t能率的な、無駄がない、（人が）有能な\t\t\n759\treasonable\t理にかなった、（値段が）手ごろな\t\t\n760\tsignificant\t重要な、有意な、（数量，増減などが）かなりの\t\t\n761\tprecious\t（時間や命などが）貴重な、（宝石などが）高価な\t\t\n762\tessential\t不可欠な、（―s）不可欠なもの\t\t\n763\tfundamental\t根本的な、基本的な、（―s）基本事項\t\t\n764\toutweigh\t（価値・重要性・影響力で）～に勝る\t\t\n765\tcritical\t重大な、危機的な状況の、批判的な\t\t\n766\tserious\t深刻な、（人が）真剣な、本気の\t\t\n767\tcomplex\t複雑な、複合体（の建物)、強迫観念\t\t\n768\tcomplicated\t複雑な、ややこしい\t\t\n769\tdelicate\t繊細な、微妙な、（人が）虚弱な\t\t\n770\tplain\t明白な、わかりやすい、質素な、平野、原野\t\t\n771\tobvious\t明白な\t\t\n772\tremarkable\t注目すべき、すばらしい\t\t\n773\toutstanding\t傑出した、目立った\t\t\n774\tvarious\tさまざまな\t\t\n775\tdiversity\t多様性\t\t\n776\tsort\t種（類)、（副詞的に）（― of）多少、～を分類する\t\t\n777\tmarvelous\t驚くべき、素晴らしい\t\t\n778\tactive\t積極的な、活発な\t\t\n779\tpositive\t前向きな、積極的な、確信している\t\t\n780\tpure\t純粋な、（水，空気が）澄んだ\t\t\n781\tsteady\t着実な、一定の\t\t\n782\tflexible\t柔軟な、融通のきく\t\t\n783\tripe\t熟した\t\t\n784\tstable\t安定した、馬小屋、きゅう舎\t\t\n785\tnegative\t否定的な、否定の\t\t\n786\tvague\t曖昧な、漠然とした\t\t\n787\tweird\t変な\t\t\n788\trough\t（表面が）粗い、おおざっぱな、（海，天候などが）荒れている\t\t\n789\tsevere\t（天候，批判，罰則などが）厳しい、（けが，問題などが）ひどい\t\t\n790\tpassive\t受動的な、消極的な\t\t\n791\tvain\t（in ―）無駄に、（努力などが）無駄な、うぬぼれの強い\t\t\n792\tfake\t偽の、偽造の、偽造品\t\t\n793\trisky\t危険な、危うい\t\t\n794\todd\t奇妙な、奇数の、半端な、雑多な、（the ―s）可能性\t\t\n795\tignorant\t無知の\t\t\n796\tcontrast\t対比、～を対比する、対照をなす\t\t\n797\tvalid\t（理由，主張などが）妥当な、正当な、（切符などが）有効な\t\t\n798\trare\t珍しい\t\t\n799\tcasual\t気楽な、ふとした、何気ない\t\t\n800\tavailable\t手に入る、利用できる、（人の予定が）空いている\t\t\n801\tpractical\t（人，知識が）現実的な、実際の、（発明，道具などが）実用的な、実践的な\t\t\n802\tabstract\t抽象的な、（論文などの）要旨\t\t\n803\tbrand-new\t新品の、真新しい\t\t\n804\tsecondhand\t中古の、間接的な\t\t\n805\trapid\t急速な、（―s）急流\t\t\n806\turgent\t緊急の、差し迫った\t\t\n807\tshallow\t浅い、（人，言動などが）浅はかな\t\t\n808\tsharp\t（変化，方向転換などが）急激な、（言葉が）きつい、（刃物，感覚，人などが）鋭い、（時刻が）きっちりで\t\t\n809\tcalm\t落ち着いた、落ち着く、～を落ち着かせる\t\t\n810\tnaked\t（人が）裸の、むき出しの\t\t\n811\tindependent\t独立した、無所属の、無所属の人\t\t\n812\ttense\t張り詰めた、（人が）緊張した、時制\t\t\n813\tnarrow\t狭い、～を狭くする、細める\t\t\n814\tvacant\t空いている、使用されていない\t\t\n815\tvivid\t（記憶，描写などが）鮮明な、（色が）鮮明な\t\t\n816\tawkward\tぎこちない、気まずい、扱いにくい\t\t\n817\tobjective\t客観的な、目標\t\t\n818\tmanual\t手を使う、身体を使う、手動の、手引き書\t\t\n819\talike\t似ている、（A and B ―）（A もB も）同様に\t\t\n820\talien\t異質な、外国（人）の、地球圏外の\t\t\n821\ttend\t（to do）～する傾向にある\t\t\n822\tdeserve\t～に値する\t\t\n823\tfragment\t破片\t\t\n824\trange\t範囲、（from A to B）（A からB の）範囲に及ぶ\t\t\n825\tscale\t規模、（―s）体重計、うろこ\t\t\n826\tunique\t（to ～）（～に）特有の、独自の、独特の\t\t\n827\tparticular\tある特定の、特有の、（about ～）（～の）好みがうるさい、（in ―）特に（＝particularly）\t\t\n828\ttypical\t典型的な\t\t\n829\tgeneral\t一般的な、全体の、大将、将軍\t\t\n830\tordinary\t平凡な、ふつうの\t\t\n831\taccount\t（for ～）、（割合を）占める、（～の原因を）説明する、説明、口座\t\t\n832\tcalculate\t～を計算する\t\t\n833\tmeasure\t～を測る、～の寸法がある、（―s）手段\t\t\n834\tdecline\t減る、衰退する、～を断る、衰退、減少\t\t\n835\tsplit\t～を割る、～を分裂させる、分裂する、分裂、裂け目、割れ目\t\t\n836\tvolume\t容積、体積、ボリューム、音量、（全集などの）1巻\t\t\n837\tproportion\t比率、部分、（―s）規模、大きさ\t\t\n838\tdozen\tダース、（―s of ～）数十の～\t\t\n839\tamount\t量 （to ～）、（合計が）～に達する、結局～になる\t\t\n840\tmass\t大量、（the ―es）大衆、かたまり、質量、（M―）ミサ\t\t\n841\tshortage\t不足\t\t\n842\tenormous\t莫大な、巨大な\t\t\n843\tspare\t余分な、予備の、（時間やお金，労力）を割く、～を惜しむ\t\t\n844\tarrange\t～を手配する、～の段取りをつける、～を整理する\t\t\n845\tadapt\t適応する、～を適応させる\t\t\n846\tmatch\t～と調和する、～に匹敵する、釣り合う人［物］、好敵手\t\t\n847\tfit\t（サイズが人）に合う、健康な、（to do）（～するのに）適した\t\t\n848\temergency\t緊急事態、（形容詞的に）緊急の\t\t\n849\toccasion\t場合、行事、祝い事\t\t\n850\taccidental\t偶然の、偶発的な\t\t\n851\tcurrent\t最新の、今の、流通して、流れ、風潮\t\t\n852\ttemporary\t一時的な\t\t\n853\tpermanent\t永久的な\t\t\n854\tprevious\t（時間，順序で）前の、以前の\t\t\n855\tformer\t（the ―）前者、元の、前の、旧\t\t\n856\tcontemporary\t現代の、同時代の、同時代の人\t\t\n857\tlately\t最近\t\t\n858\timmediately\tすぐに、直接に\t\t\n859\tdeadline\t（for ～）（～の）締め切り <可算>\t\t\n860\tdecade\t10年\t\t\n861\tsupply\t～を供給する、供給\t\t\n862\treplace\t～に取って代わる、（A with B）（A）を（B に）取り替える\t\t\n863\texchange\t～を交換する、交換\t\t\n864\tsubstitute\t（A for B)（B の）代わりに（A）を用いる、（for ～）（～の）代わりになる、代わりをする、代わりの、（for ～）（～の）代用品、代理人\t\t\n865\tsubmit\t（願書，辞表など）を提出する、（to ～）（～に）服従する\t\t\n866\talternative\t（to ～）（～の）代わりのもの、選択肢、代わりの、既存のものとは違う\t\t\n867\tdeliver\t～を配達する、（演説など）をする\t\t\n868\tenclose\t～を同封する、～を囲む、閉じ込める\t\t\n869\tenvelope\t封筒\t\t\n870\ttrick\t（悪意のない）いたずら、（巧妙な）手口、策略、芸、手品、（of ～）秘けつ、～をだます\t\t\n871\tload\t荷（物）、（A with B）（A）に（B を）積む\t\t\n872\tcontent\t中身、内容、（with ～）（～に）満足して\t\t\n873\thousehold\t（集合的に）所帯、家庭、家庭の\t\t\n874\tgood\t（―s）商品、利益、（a ― many ～）かなりの\t\t\n875\tluxury\t高級（品）、ぜいたく品、（形容詞的に）豪華な、ぜいたくな\t\t\n876\tcredit\t（― card）クレジットカード、功績、手柄、（大学の）単位、～の功績を認める\t\t\n877\tquestionnaire\tアンケート\t\t\n878\treservation\t予約、慎重な姿勢\t\t\n879\tfuss\t大騒ぎ\t\t\n880\treward\t報酬、褒美、懸賞金、～に褒美を与える、報いる\t\t\n881\tfarewell\t別れ（のあいさつ）\t\t\n882\treception\tもてなし、歓迎会、（ホテルの）フロント、受信状況\t\t\n883\tportion\t（食事の）1盛り、（食堂などでの）1人前、一部\t\t\n884\tlaundry\t洗濯、洗濯物、クリーニング店（＝a cleaner's）\t\t\n885\tnap\t昼寝、仮眠、昼寝をする、仮眠をとる\t\t\n886\twake\t目が覚める、（眠っている人）を起こす\t\t\n887\tvending machine\t自動販売機\t\t\n888\tgrocery\t食料雑貨店、（―ies）食料雑貨類\t\t\n889\tappointment\t（病院などの）予約、（面会の）約束、（役職などの）任命、指名\t\t\n890\tconsult\t～に相談する、（辞書）を引く、（with ～）（～に）相談する\t\t\n891\tregister\t～を登録する、記録する、（for ～）（授業などに）登録する、（ホテルなどで）記帳する、登録（票）、登録簿\t\t\n892\tdye\t～を染める、染料\t\t\n893\tsubscribe\t（to ～）（～を）定期購読する、加入している、（主に否定文で）（to ～）（考えなどを）支持する\t\t\n894\tguarantee\t～を保証する、保証（期間）\t\t\n895\twipe\t～を拭く、～を一掃する、壊滅させる\t\t\n896\tsweep\t（床，地面）を掃く、（風，波などが）～を押し流す\t\t\n897\ttransfer\t（電車などを）乗り換える、転勤［転校、移籍］する、（物，活動拠点など）を移す、～を転勤［転属］させる、（銀行で）～を振り込む\t\t\n898\tdivorce\t離婚する、～と離婚する、離婚\t\t\n899\tfate\t運命、宿命\t\t\n900\tdestiny\t運命\t\t\n901\tflavor\t風味、味\t\t\n902\tperfume\t香り、香水\t\t\n903\tingredient\t（料理などの）材料、（何かを達成するための）要因、成分\t\t\n904\tbitter\t苦い、つらい、憤慨して\t\t\n905\taisle\t通路\t\t\n906\ttrack\t足跡、小道、（鉄道の）線路、プラットホーム、～を追跡する\t\t\n907\tdistrict\t地区\t\t\n908\tfacility\t施設、設備、能力、器用さ\t\t\n909\theight\t高さ、高い所、最盛期\t\t\n910\tdistant\t遠い\t\t\n911\tlocate\t（be ―d）～に位置している、ある、～の場所を見つける\t\t\n912\toccupy\t～を占める\t\t\n913\tsurround\t～を取り囲む、包囲する\t\t\n914\tclassical\t（音楽，バレエ，ダンスなどで）クラシックの、古典的な\t\t\n915\tcivilization\t文明\t\t\n916\theritage\t遺産\t\t\n917\tscript\t台本、脚本、（ある言語の）文字、（手書きの）文字\t\t\n918\ttale\t話\t\t\n919\tliterature\t文学、文献 （①②ともに）\t\t\n920\ttragedy\t悲劇\t\t\n921\tpoetry\t詩\t\t\n922\tbiography\t伝記\t\t\n923\tterm\t用語、言葉、（long［short］などを伴い）期間、学期、任期、（be on ～ ―s）（～の）間柄（である)、（―s）（契約などの）条件\t\t\n924\tproverb\t諺\t\t\n925\tdialect\t方言\t\t\n926\tfluent\t流暢な\t\t\n927\ttranslate\t～を翻訳する、（into ～）（結果として）～に変わる\t\t\n928\tdefine\t～を定義する、～を規定する\t\t\n929\tinterpret\t～を解釈する、～を通訳する、通訳する\t\t\n930\tquote\t～を引用する、～に価格を提示する、引用文、提示価格、見積り\t\t\n931\tliterally\t文字どおりに\t\t\n932\tindicate\t（データなどが）～を示す、～を指し示す\t\t\n933\treveal\t～を明らかにする、暴露する\t\t\n934\tannounce\t～を発表する\t\t\n935\tbroadcast\t～を放送する、（１回の）放送\t\t\n936\tprove\t～を証明する、（to be ～）～だとわかる\t\t\n937\tadvertise\t～を宣伝する\t\t\n938\tclarify\t～を明らかにする\t\t\n939\tseek\t～を求める、（to do）～しようと努める\t\t\n940\tentertain\t～を楽しませる、～をもてなす\t\t\n941\tamuse\t～を楽しませる\t\t\n942\tattract\t～を引きつける、魅了する\t\t\n943\tfascinate\t～を魅了する、～にとても興味をもたせる\t\t\n944\tabsorb\t（be ―ed in ～）～に没頭する、～を吸収する\t\t\n945\tfond\t（be ― of～）（～が）好きだ、懐かしい\t\t\n946\tscare\t～をおびえさせる\t\t\n947\talarm\t～をぎょっとさせる、恐怖、不安\t\t\n948\tamaze\t～を驚かせる\t\t\n949\tirritate\t（長期にわたって）～をいらいらさせる\t\t\n950\tupset\t～を動揺させる、（均衡など）を乱す、動揺して、腹を立てて\t\t\n951\tpuzzle\t～を当惑させる、難問、パズル\t\t\n952\tconfuse\t～を混乱させる、困惑させる、（A with［and］ B)（A）を（Bと）混同する\t\t\n953\tbore\t～をうんざりさせる、退屈させる\t\t\n954\tfrustrate\t～を欲求不満にさせる、（計画など）を挫折させる\t\t\n955\tdisappoint\t～を失望させる\t\t\n956\tembarrass\t～に恥ずかしい思いをさせる、困惑させる\t\t\n957\tashamed\t恥ずかしい\t\t\n958\tuneasy\t不安な、胸騒ぎがする\t\t\n959\thesitate\tためらう\t\t\n960\treluctant\t（to do）（～するのは）気が進まない\t\t\n961\ttremble\t震える\t\t\n962\tboast\t自慢する、（場所や組織が）～を誇りにしている\t\t\n963\tjealous\t（of ～）（～に）嫉妬した\t\t\n964\tenvy\t～を羨ましく思う、羨望\t\t\n965\tyell\t叫ぶ、大声をあげる、叫び、わめき声\t\t\n966\trespect\t（人）を尊敬する、（物）を尊重する、（for ～）（～に対する）尊敬、尊重、（in ―）点\t\t\n967\tdespair\t絶望\t\t\n968\temotion\t（特に強い）感情\t\t\n969\tsympathy\t同情、共感\t\t\n970\tshame\t残念なこと、恥\t\t\n971\tconfidence\t自信、（in ～）（～に対する）信頼\t\t\n972\tcourage\t勇気\t\t\n973\tpassion\t情熱\t\t\n974\tsorrow\t悲しみ\t\t\n975\tignore\t（人，物）を無視する\t\t\n976\toffend\t（人，物が）～を怒らせる、～の気分を害する\t\t\n977\tdepress\t～を憂うつにさせる、落ち込ませる\t\t\n978\towe\t（A to B)、（A）は（B の）おかげだ、（A）を（Bに）借りている\t\t\n979\tfear\t恐怖、～を恐れる、～を心配する\t\t\n980\tmethod\t方法\t\t\n981\tmedium\t（情報伝達）手段、媒体、メディア、中間の\t\t\n982\tmeans\t手段、（特定な表現で）財産、収入\t\t\n983\textent\t程度\t\t\n984\textremely\t極度に、非常に\t\t\n985\ttotal\t全体の、（a ―）まったくの、合計\t\t\n986\tlargely\t大部分は、主に\t\t\n987\tmoderate\t適度な、節度のある\t\t\n988\tsomewhat\tいくぶん\t\t\n989\tsubtle\tかすかな\t\t\n990\tpossibly\tひょっとすると、（cannot ―）どうしても（～できない）\t\t\n991\teventually\t最終的に、ついに\t\t\n992\tnecessarily\t（not ―）必ずしも（～ない）\t\t\n993\tfrankly\t率直に\t\t\n994\tironically\t皮肉なことに\t\t\n995\tmoreover\tその上\t\t\n996\totherwise\tさもなければ、ほかの点では、ほかの方法で\t\t\n997\tregardless\t（of ～）（～とは）無関係に\t\t\n998\tworth\t～の価値がある、（― doing）（～する）価値がある、価値、（～）相当\t\t\n999\taccording to\t（調査，人の話など）によれば、（能力など）に応じて\t\t\n1000\tdespite\t～にもかかわらず\t\t\n1001\tpropose\t～を提案する、（to ～）（～に）結婚を申し込む\t\t\n1002\tdismiss\t（意見や考えなど）を退ける、～を解雇する\t\t\n1003\tbless\t～を祝福する\t\t\n1004\tglory\t栄光\t\t\n1005\tcompliment\t褒め言葉、賛辞、～を褒める\t\t\n1006\tfeast\t宴会、祝宴、～とても楽しいこと、喜ばせるもの\t\t\n1007\tdeclare\t～を宣言する、（税関や税務署で）～を申告する\t\t\n1008\thighlight\t～を強調する、呼び物、目玉商品、ハイライト\t\t\n1009\timply\t～をほのめかす、（暗に）～を意味する\t\t\n1010\trecite\t～を暗唱する\t\t\n1011\tray\t光線、放射線、（a ― of）一縷の、わずかな\t\t\n1012\tradiation\t放射線\t\t\n1013\tlaboratory\t研究室、研究所\t\t\n1014\toxygen\t酸素\t\t\n1015\tmolecule\t分子\t\t\n1016\tcompound\t化合物、複合的な\t\t\n1017\ttissue\t組織、ティッシュペーパー\t\t\n1018\tcell\t細胞、電池、独房 （①②③いずれも)\t\t\n1019\tgene\t遺伝子\t\t\n1020\tsubstance\t物質、本質、根拠 <不可算>\t\t\n1021\tsolid\t固体の、ぎっしり詰まった、固体\t\t\n1022\tsatellite\t（月などの）衛星、人工衛星\t\t\n1023\torbit\t軌道、（惑星などが）～を周回する\t\t\n1024\tlaunch\t（ロケットなど）を打ち上げる、（運動，事業など）を始める、打ち上げ、開始、発売\t\t\n1025\tattempt\t試み、（to do）（～しようと）試みる\t\t\n1026\tcapacity\t能力、容量、収容力\t\t\n1027\tcapable\t（of ～）（～する）力がある、有能な\t\t\n1028\tattain\t（人が主語）～を達成する、（物，人が主語）～に到達する\t\t\n1029\tdesperate\t必死の、（状況が）絶望的な\t\t\n1030\tdedicate\t（A to B）（A）を（B に）捧げる\t\t\n1031\tpain\t苦痛、（―s）苦労\t\t\n1032\tstrain\t（心身の）負担、無理、（目や筋肉など）を痛める\t\t\n1033\tremedy\t治療法、治療薬、改善策、対策（①②いずれも）\t\t\n1034\tpharmacy\t（調剤）薬局\t\t\n1035\tphysician\t医師、内科医\t\t\n1036\tdisorder\t（心身の）不調\t\t\n1037\tpregnant\t妊娠した\t\t\n1038\tclinical\t臨床の\t\t\n1039\theal\t～を治す、治る\t\t\n1040\tinfect\t（人，動物，地域）に感染させる、伝染する\t\t\n1041\tankle\t足首\t\t\n1042\tthumb\t親指\t\t\n1043\tforehead\t額、おでこ\t\t\n1044\tchin\t下あご、あごの先端\t\t\n1045\tchest\t胸（部)、（大きな木の）箱、密閉容器\t\t\n1046\tbreast\t（主に女性の）胸、乳房\t\t\n1047\tlung\t肺\t\t\n1048\torgan\t臓器、(動植物の)器官、(楽器)オルガン（①②ともに<可算>）\t\t\n1049\tvision\t視力、視野、未来像、未来を見通す力、先見の明\t\t\n1050\tskeleton\t骸骨、骨格\t\t\n1051\tsensation\t感覚、（説明し難い）感情\t\t\n1052\tcode\t（服装などの）規定、暗号\t\t\n1053\tagenda\t議題、協議事項\t\t\n1054\tliberty\t自由\t\t\n1055\tcommittee\t委員会\t\t\n1056\thumanity\t（集合的に）人類、（the ―ies）人文科学、人間性\t\t\n1057\tmankind\t（集合的に）人類\t\t\n1058\tauthority\t権威、権力、（―ies）当局\t\t\n1059\tjustice\t正義\t\t\n1060\tinsurance\t保険\t\t\n1061\thardship\t（主に経済的）苦難\t\t\n1062\tpoverty\t貧困\t\t\n1063\tchaos\t大混乱、混沌\t\t\n1064\tisolation\t孤立、分離、孤独感\t\t\n1065\tregion\t地域\t\t\n1066\tproof\t証拠、証明、（複合語で）～を防ぐ、～に耐える\t\t\n1067\twarranty\t保証\t\t\n1068\tprinciple\t原理、原則、主義、信念\t\t\n1069\torigin\t起源\t\t\n1070\tsetting\t環境、状況、（小説，劇，機械などの）設定、舞台（①②ともに<可算>）\t\t\n1071\tmission\t任務、使命、使節団、（主にキリスト教の）布教（団）\t\t\n1072\tproject\t計画、企画、（予算など）を見積もる、～を投影する\t\t\n1073\tmonument\t記念碑、遺跡、史跡\t\t\n1074\trevolution\t革命\t\t\n1075\tcontract\t契約、～を契約する、（病気）に感染する\t\t\n1076\tinfrastructure\tインフラ、基本的施設\t\t\n1077\tnegotiate\t（with ～）（～と）交渉する、（交渉の上で，条件など）を取り決める\t\t\n1078\tcooperate\t（with ～）（～と）協力する、（in ～）（～を）協力する\t\t\n1079\trestore\t（治安など）を回復する、（古い建物，絵など）を修復する\t\t\n1080\tfound\t～を創立する\t\t\n1081\tconservative\t保守的な\t\t\n1082\taffair\t（―s）情勢、（スキャンダラスな）事件、情事、浮気\t\t\n1083\tagency\t（政府）機関、代理店\t\t\n1084\tcouncil\t議会\t\t\n1085\tkingdom\t（the ～ kingdom）～界、社会、王国\t\t\n1086\trepublic\t共和国\t\t\n1087\tempire\t帝国\t\t\n1088\taid\t援助、救援物資\t\t\n1089\treform\t改革\t\t\n1090\tminister\t大臣、牧師\t\t\n1091\tparliament\t議会\t\t\n1092\tterritory\t領土、（動物などの）縄張り、（学問などの）領域\t\t\n1093\tpoll\t（政治関連の）世論調査、投票、（票）を得る\t\t\n1094\tfortune\t財産、運\t\t\n1095\tproperty\t（主に集合的）財産、資産、（物質の）特性、（建物を含む）所有地\t\t\n1096\tfund\t（―s）資金、基金、～に資金を出す\t\t\n1097\tstock\t株（式)、在庫品、蓄え\t\t\n1098\tlabor\t労働、（集合的に）労働者、努力、陣痛\t\t\n1099\toverwork\t働きすぎる、～を働かせすぎる、酷使する、過労\t\t\n1100\tfirm\t会社、（土台，信念などが）固い、（体が）引き締まった\t\t\n1101\tunion\t労働組合、合併、連邦\t\t\n1102\tadministration\t経営、運営、行政、政権 （①②は）\t\t\n1103\tsecretary\t秘書、（米国の各省の）長官、事務局長\t\t\n1104\teditor\t（新聞，雑誌などの）編集長、（書籍の）編集者\t\t\n1105\tclient\t依頼人、（サービス業の）取引先\t\t\n1106\trecruit\t（団体・組織が）～を新規採用する、新兵、新人\t\t\n1107\tbasis\t基礎、根拠、（on a ～ basis）（～を）基準（として）\t\t\n1108\telement\t（最も重要な）要素、（化学の）元素、（the ―s）自然の力、悪天候、（an ― of ～）少しの～\t\t\n1109\tconstitute\t（主語が複数）～を構成する、（主語が単数）～である\t\t\n1110\tunify\t～を統一する\t\t\n1111\tcombine\t（A with B)（A）を（B と）結びつける、同時に行う、結びつく\t\t\n1112\tunite\t団結する、～を団結させる\t\t\n1113\tlink\t関連、つながり、（A to B）（A）を（Bに）関連づける\t\t\n1114\trelevant\t関連のある、重要な\t\t\n1115\tmurder\t殺人、（形容詞的に）殺人の、（計画的に）～を殺す\t\t\n1116\tarrest\t～を逮捕する、逮捕、（医学用語）停止\t\t\n1117\tprison\t刑務所\t\t\n1118\tvice\t（売春，麻薬などの）犯罪、悪徳、副～\t\t\n1119\twitness\t目撃者、証人、証言、～を目撃する\t\t\n1120\tbullet\t弾丸\t\t\n1121\tsword\t剣\t\t\n1122\twound\t傷、～を傷つける\t\t\n1123\ttriumph\t勝利、勝利する\t\t\n1124\tmilitary\t軍事的な\t\t\n1125\tstrategy\t戦略\t\t\n1126\tconquer\t（国や地域）を征服する、（病気や恐怖など）を克服する\t\t\n1127\tdefend\t（A from B）（B からA）を守る\t\t\n1128\tdominate\t～を支配する\t\t\n1129\trob\t（銀行など）を襲う、（A of B）（A）から（B を）奪う\t\t\n1130\tdeprive\t（A of B)（A）から（B を）奪う\t\t\n1131\tdevastate\t（町など）を壊滅させる、（人）を打ちのめす\t\t\n1132\tcrash\t激突する、（飛行機が）墜落する、激突、墜落\t\t\n1133\thazard\t危険（になり得るもの）<可算>\t\t\n1134\tdebris\t破片、残骸\t\t\n1135\torphan\t孤児\t\t\n1136\tslave\t奴隷、（to ～）（比喩的に）（～の）奴隷\t\t\n1137\tacquaintance\t知人、面識、（ちょっとした）知識\t\t\n1138\tmerchant\t商人\t\t\n1139\tresident\t住人、居住者、滞在者、住んでいる\t\t\n1140\tcrew\t（集合的に）乗組員、（取材などの）チーム\t\t\n1141\tchase\t～を追いかける、追跡\t\t\n1142\tproceed\t（順を追って）進む、（to do）（さらに続けて）～する\t\t\n1143\tfade\t（色，記憶などが）薄れる\t\t\n1144\tdissolve\t溶ける、～を溶かす、（議会など）を解散する\t\t\n1145\tfloat\t浮かぶ、～を浮かべる\t\t\n1146\tsink\t沈む、～を沈める、（台所の）流し\t\t\n1147\tbounce\t（ボールなどが）跳ねる、（宛先不明で）～を返送する\t\t\n1148\ttransform\t～を（大幅に）変える、（大幅に）変形する、変身する\t\t\n1149\tshift\t（考え方の）転換、（勤務の）交替\t\t\n1150\tmodify\t～を修正する\t\t\n1151\trevise\t（制度，予測，論文など）を修正する、改正する\t\t\n1152\tenhance\t～を向上させる\t\t\n1153\tlower\t～を下げる\t\t\n1154\tvoyage\t航海、船旅\t\t\n1155\tconfirm\t～を確認する、～を裏付ける\t\t\n1156\tensure\t～を確実にする\t\t\n1157\taddress\t～に取り組む、～に呼びかける、演説、住所\t\t\n1158\tapproach\t（to ～）（～への）取り組み方、接近、～に取り組む、接近する\t\t\n1159\tresolve\t～を解決する、（to do）（～する）決心をする\t\t\n1160\tsettle\t（紛争など）を解決する、～を置く、据える、定住する、（on ～）（～を）決める\t\t\n1161\tenrich\t～を豊かにする\t\t\n1162\twarn\t～に警告する、（of ～）（～に対して）警告する\t\t\n1163\tforce\t～に強いる、力、武力\t\t\n1164\tappeal\t（to ～）（～に）訴える、魅力、人気、（for ～）（～に対する）訴え\t\t\n1165\tapplause\t拍手\t\t\n1166\tleap\t跳ぶ、躍進、急増\t\t\n1167\tgrab\t（ぐいっと）～をつかむ、（急いで食事，睡眠）をとる\t\t\n1168\tseize\t～をつかむ、（麻薬など）を押収する、（犯人）を捕らえる\t\t\n1169\tcast\t～を投げる、（光など）を投げかける、～に役を与える\t\t\n1170\tstun\t～を気絶させる、～をぼう然とさせる\t\t\n1171\tilluminate\t～を照らす、（問題など）を解明する\t\t\n1172\tuncover\t～を明らかにする、暴く\t\t\n1173\tmend\t～を修繕する\t\t\n1174\treact\t（to ～）（～に）反応する\t\t\n1175\tendure\t（長期にわたり）～に耐える\t\t\n1176\tbind\t～を結びつける、縛る\t\t\n1177\tencounter\t～に偶然出会う、（問題，反対など）に遭う、出会い\t\t\n1178\ttrace\t～を捜し出す、～の追跡調査をする、（微妙な）跡\t\t\n1179\tundergo\t～を経験する\t\t\n1180\tseal\t～を密封する、（personal ―）印鑑、ハンコ\t\t\n1181\tincorporate\t～を取り入れる\t\t\n1182\temerge\t（隠れていたものが）現れる、（国家などが）台頭する\t\t\n1183\tunfold\t展開する、～はっきりしてくる、～を広げる\t\t\n1184\tderive\t（from ～）（～に）由来する、～を引き出す、得る\t\t\n1185\tgenerate\t（電気，利益など）を生み出す\t\t\n1186\tpossess\t～を所有している\t\t\n1187\tretain\t～を保持する\t\t\n1188\tsecure\t（場所，地位，契約など）を確保する、安全で、守られて\t\t\n1189\tcapture\t～を捕らえる、捕獲、（敵地の）攻略\t\t\n1190\tmonitor\t～を監視する、（コンピュータの）画面\t\t\n1191\tinvestigate\t（研究班などが）～を調査する、（警察が）～を捜査する\t\t\n1192\tdetect\t～を探知する、（病気など）を発見する、（うそなど）を見抜く\t\t\n1193\tinquiry\t（into ～）（～の）調査、質問、問い合わせ\t\t\n1194\tspecialize\t（in ～)、（～を）専攻する、（～を）専門にする\t\t\n1195\tsemester\t（米，日本などの２学期制の）学期\t\t\n1196\tbiology\t生物学\t\t\n1197\tecology\t生態（学）\t\t\n1198\tphilosophy\t（学問としての）哲学、人生哲学、考え方\t\t\n1199\tgeography\t地理（学）\t\t\n1200\tinstitution\t（大学，病院などの）機関、（結婚などの）制度\t\t\n1201\tfaculty\t（生まれ持った）能力、（大学の）学部、（大学の）全教員\t\t\n1202\tintermediate\t（授業・教材が）中級の、中間の\t\t\n1203\tnotion\t考え\t\t\n1204\tconcept\t概念、考え\t\t\n1205\tmeditation\t瞑想、熟考\t\t\n1206\tinsight\t（into ～）（～に対する）洞察（力)、見識\t\t\n1207\tcaution\t用心、警告、～に注意［警告］を与える\t\t\n1208\twill\t意志、遺書\t\t\n1209\toption\t選択肢、選択（の自由）\t\t\n1210\tprospect\t見通し\t\t\n1211\tcherish\t～を大切にする、胸に抱く\t\t\n1212\tintend\t（to do）～するつもりだ\t\t\n1213\tsuspect\t（that SV）～ではないかと思う、～に嫌疑をかける、容疑者\t\t\n1214\tidentify\t～を特定する、《生物》～を同定する、（A with B）（A）を（B と）同一視する、（with ～）（～と）一体感をもつ、（～に）なりきる\t\t\n1215\tpermit\t～を許可する、許可証\t\t\n1216\tacknowledge\t～を認める\t\t\n1217\tperceive\t（A as B）（A）を（B だと）認識する、～を知覚する\t\t\n1218\tevaluate\t～を（正しく）評価する\t\t\n1219\tcultivate\t～を耕す、～を育む、～を磨く\t\t\n1220\tshade\t日陰、（絵画，写真の）陰の部分、ブラインド、（ーs）（意味などの）わずかな違い\t\t\n1221\tbreeze\tそよ風\t\t\n1222\tdesert\t砂漠、～を見捨てる\t\t\n1223\tfog\t霧\t\t\n1224\tmoisture\t湿気、水分\t\t\n1225\tdamp\t湿った、じめじめした\t\t\n1226\tpath\t（小）道\t\t\n1227\ttrail\t山道、跡、（a ― of destruction）（破壊の）爪跡\t\t\n1228\tstream\t小川、（a ― of ～）（～の）流れ\t\t\n1229\ttide\t潮（の干満）、潮流、時流\t\t\n1230\treef\t（岩や砂の）礁\t\t\n1231\thabitat\t生息地\t\t\n1232\tvolcano\t火山\t\t\n1233\tmine\t鉱山、地雷（＝landmine）\t\t\n1234\tswallow\tツバメ、～を飲み込む\t\t\n1235\tweb\t（クモの）巣、インターネット（www＝the World Wide Web）\t\t\n1236\tmosquito\t蚊\t\t\n1237\tcattle\tウシ\t\t\n1238\tkitten\t子ネコ\t\t\n1239\torganism\t生物\t\t\n1240\twildlife\t野生生物\t\t\n1241\tbeast\t野獣\t\t\n1242\tape\t類人猿\t\t\n1243\tflock\t（鳥，羊の）群れ、群れる\t\t\n1244\tvein\t静脈\t\t\n1245\tbreed\t繁殖する、～を繁殖させる、～を引き起こす、品種、血統\t\t\n1246\treproduce\t繁殖する、～を繁殖させる、（音，絵など）を再現する\t\t\n1247\ttalkative\tおしゃべりの\t\t\n1248\tearnest\t真面目な、（in ―）真面目（に）\t\t\n1249\tdiligent\t勤勉な\t\t\n1250\tprincipal\t主要な、校長\t\t\n1251\tprime\t（目標，容疑者などが）最重要な、素数\t\t\n1252\tdefinite\t明確な\t\t\n1253\tevident\t明らかな\t\t\n1254\tprominent\t（物が）目立った、（人が）著名な、重要な\t\t\n1255\tmarked\t（名詞の前で）際立った、著しい\t\t\n1256\tgrace\t優美さ、（say ―）（食事の前後の）感謝の祈り（をささげる）\t\t\n1257\tcharm\t魅力、（a good ― luck ―）お守り、まじない\t\t\n1258\tfancy\t高級な、～が欲しい、～したい、～と思う\t\t\n1259\trational\t理性的な\t\t\n1260\tmagnificent\t壮大な、素晴らしい\t\t\n1261\tsuperior\t（be ― to ～）（～）より優れている、上役、上司\t\t\n1262\tloyal\t（to ～）（～に）忠実な\t\t\n1263\thorrible\t（物，天気などが）とてもひどい、ぞっとする\t\t\n1264\tmiserable\t悲惨な、～とても不幸な\t\t\n1265\tdull\t退屈な、切れ味が悪い、（人，感覚などが）鈍い\t\t\n1266\tnasty\t（人，物，発言などが）不快な\t\t\n1267\tinsane\t正気でない\t\t\n1268\tridiculous\tばかげた\t\t\n1269\trotten\t腐った\t\t\n1270\tnotorious\t（for ～）（～で）悪名高い\t\t\n1271\tevil\t（道徳的に）悪い、悪\t\t\n1272\tmess\t乱雑、（with ～）（～を）からかう、ちょっかいを出す\t\t\n1273\tvast\t（地域，土地が）広大な、（数量が）莫大な\t\t\n1274\thuge\t巨大な\t\t\n1275\ttiny\t～とても小さな\t\t\n1276\tsphere\t球体、領域、範囲\t\t\n1277\tstrip\t細長い一片、（罰として）～から奪う、裸になる\t\t\n1278\tvessel\t（血液などを通す）管、（大型の）船\t\t\n1279\tinternal\t内部の、体内の、国内の\t\t\n1280\tmobile\t流動的な、携帯電話\t\t\n1281\tsteep\t（坂などが）険しい、（増減が）急な、（価格などが）異常に高い\t\t\n1282\tintense\t（感情，競争などが）強烈な\t\t\n1283\tinevitable\t避けられない、必然的な\t\t\n1284\tneutral\t中立の、中立\t\t\n1285\tbrief\t手短な、簡潔な、要約\t\t\n1286\tbare\tむき出しの、最低限の\t\t\n1287\tmutual\t（感情，行為が）相互の、（友だち，趣味などが）共通の\t\t\n1288\tpotential\t潜在的な、潜在能力、可能性\t\t\n1289\ttough\tたくましい、頑強な、骨の折れる、厳しい\t\t\n1290\tconventional\t従来の、慣習的な\t\t\n1291\tsupreme\t最高の\t\t\n1292\tresemble\t～に似ている\t\t\n1293\tcontrary\t（on the ―）それどころか、（― to A）（A とは）反対に、（（名詞)to the ―）それとは反対の～\t\t\n1294\tcategory\t範疇\t\t\n1295\tscope\t範囲\t\t\n1296\tgiven\t（時間，量などが）定められた、～を考慮すると\t\t\n1297\tpeculiar\t（to ～）（～に）固有の、独特な、変な\t\t\n1298\tsufficient\t十分な\t\t\n1299\tnumerous\t多くの\t\t\n1300\tsubstantial\tかなりの、たくさんの、内容のある、重要な\t\t\n1301\tunit\t単位\t\t\n1302\tdiameter\t直径\t\t\n1303\tarithmetic\t算術\t\t\n1304\tquantity\t量\t\t\n1305\tdeficiency\t欠乏、不足\t\t\n1306\tmaximum\t最大限\t\t\n1307\tbunch\t(花や鍵などの)束、(ブドウなどの)房\t\t\n1308\tlessen\t～を減らす\t\t\n1309\tera\t時代\t\t\n1310\tsession\t（活動の）期間、（議会などの）会期、（ある活動の）集まり\t\t\n1311\tpause\t休止、休止する\t\t\n1312\tannual\t年に1度の、1年間の（予算，収入など）\t\t\n1313\teternal\t（命や若さなど）永遠の\t\t\n1314\tinitial\t最初の、頭文字、イニシャル\t\t\n1315\tprior\t（to ～）～より前の、（時間・順序が）前の\t\t\n1316\tsubsequent\t（to ～）（～に）続いて起こる\t\t\n1317\tmeanwhile\tその間、（対比を示して）その一方で\t\t\n1318\troutine\t決まりきった仕事、日常の\t\t\n1319\tsouvenir\t土産、記念品\t\t\n1320\tbrick\tれんが、（おもちゃの）積み木\t\t\n1321\tpole\t棒、さお、柱、（天体，地球の）極\t\t\n1322\tmischief\tいたずら\t\t\n1323\tsuperstition\t迷信\t\t\n1324\tstorage\t貯蔵、保管\t\t\n1325\tshelter\t避難（所)、住居\t\t\n1326\tgarment\t衣類\t\t\n1327\tcanal\t運河\t\t\n1328\tcabinet\t戸棚、（the C―）内閣\t\t\n1329\tincident\t（主に不快な）出来事\t\t\n1330\tcircumstance\t（通例 ―s）状況、事情\t\t\n1331\tfetch\t（主に）～を取って来る\t\t\n1332\tdistribute\t～を分配する、配る、（be ―d）分布している\t\t\n1333\tpurchase\t～を購入する、購入（品）\t\t\n1334\tstatue\t像\t\t\n1335\tsculpture\t彫刻\t\t\n1336\tmyth\t（俗説という意味での）神話、（古代の）神話\t\t\n1337\tcraft\t工芸（品)、（職人の）技術、船、乗り物（単複同形）\t\t\n1338\tjournal\t雑誌、専門誌、（公的な）日誌、日記\t\t\n1339\tencyclopedia\t百科事典\t\t\n1340\theaven\t天国、（the ―s）空\t\t\n1341\tfuneral\t葬式\t\t\n1342\tsoul\t魂、（慣用句あるいは否定文で）人\t\t\n1343\tpriest\t神父、僧侶、牧師、聖職者\t\t\n1344\tfaith\t（主に宗教上の）信仰、信頼\t\t\n1345\tsacred\t神聖な\t\t\n1346\tdivine\t神の\t\t\n1347\tMuslim\tイスラム教徒\t\t\n1348\tcontext\t文脈、状況\t\t\n1349\tsingular\t単数の、（褒めて）比類なき、奇妙な\t\t\n1350\tcommand\t言語を操る力、命令、～を集める、～を見渡せる\t\t\n1351\tinstance\t例\t\t\n1352\tdialogue\t（本，劇，映画の中の）会話、対談、対話\t\t\n1353\tusage\t語法\t\t\n1354\tvowel\t母音\t\t\n1355\tpronoun\t代名詞\t\t\n1356\taccent\t訛、アクセント\t\t\n1357\toutline\t～の要点を述べる、～の輪郭を描く\t\t\n1358\tremote\t（地理的に）辺鄙な、（時間，関係などが）遠い\t\t\n1359\tambition\t（強い）願望、野望\t\t\n1360\ttemper\t気性、（熟語で）平静（な気分）\t\t\n1361\taffection\t愛情\t\t\n1362\tenthusiasm\t情熱、熱意\t\t\n1363\trage\t激怒、（戦争，病気が）激しく続く、猛威をふるう\t\t\n1364\tincredible\t信じられない\t\t\n1365\tchuckle\tくすくす笑う、くすくす笑うこと\t\t\n1366\tdare\t（to do）思い切って～する、（do）思い切って～する\t\t\n1367\tscream\t悲鳴を上げる、悲鳴\t\t\n1368\tsoothe\t（人）をなだめる、（痛みなど）をやわらげる\t\t\n1369\ttempt\t～を誘惑する\t\t\n1370\tscold\t～を叱る\t\t\n1371\toppress\t～を圧迫する、虐げる\t\t\n1372\tthreaten\t～を脅かす、（to do）～すると脅す、～の恐れがある\t\t\n1373\tmourn\t～を嘆く、悼む\t\t\n1374\tsacrifice\t～を犠牲にする、犠牲\t\t\n1375\tcurse\t災いの元、呪い、～を呪う、ののしる\t\t\n1376\tstem\t（from ～）（～が）原因である、茎、幹、ワイングラスの脚\t\t\n1377\ttrigger\t～のきっかけになる、～を誘発する、（銃の）引き金\t\t\n1378\tconsequence\t結果、（of ―)重要性\t\t\n1379\tprocess\t過程、～を加工する、処理する\t\t\n1380\tresort\t（to ～）（～に）訴える、行楽地、手段\t\t\n1381\tformula\t方法、秘けつ、（数学，化学などの）式、公式\t\t\n1382\tprocedure\t手続き、手順\t\t\n1383\textraordinary\t並外れた、臨時の（会議など)、特命の（大使など）\t\t\n1384\tabsolute\t絶対的な\t\t\n1385\toverwhelming\t圧倒的な\t\t\n1386\taltogether\t完全に、全部で\t\t\n1387\tentire\tすべての\t\t\n1388\ttremendous\tすさまじい\t\t\n1389\tsheer\t（数量やサイズを強調して）とてつもない～の、まったくの\t\t\n1390\tpartial\t部分的な、不公平な、（to ～）（～が）大好きで\t\t\n1391\tbarely\tかろうじて、ほとんど～ない\t\t\n1392\tapproximately\t（数量が）おおよそ、約\t\t\n1393\tfrequently\t頻繁に\t\t\n1394\tapparently\t見たところでは、<口語>どうやら～らしい\t\t\n1395\tmerely\t（主に名詞の前で）～にすぎない、（動詞などの前で）単に\t\t\n1396\tnevertheless\tそれにもかかわらず\t\t\n1397\tsomehow\t何らかの方法で、何らかの理由で、どういうわけか\t\t\n1398\tthus\tそれゆえ（に)、このように\t\t\n1399\tafterward(s)\t（文頭で）その後、（～afterward）～の後\t\t\n1400\ton behalf of ～\t～を代表して、～のため\t\t\n1401\tassert\t～と断定する、～を主張する\t\t\n1402\tdefy\t～に逆らう、～を拒む\t\t\n1403\tcondemn\t～を非難する、～に (刑の)宣告をする、～を強いる\t\t\n1404\tcite\t～を引き合いに出す、引用する\t\t\n1405\tillustrate\t(例で)～を説明する、例証する、～に挿絵を入れる、～を図解する\t\t\n1406\trefute\t～を論駁する、～に反論する\t\t\n1407\tsue\t～を訴える\t\t\n1408\tarticulate\t(考えなど)をはっきり述べる、考えを明確に表現できる\t\t\n1409\tversion\t(個人的な)解釈、意見、(製品などの)～版\t\t\n1410\tadvocate\t提唱者、支持者、～を主張する、支持する\t\t\n1411\tbreakthrough\t飛躍的進歩、大発見\t\t\n1412\tevolution\t進化\t\t\n1413\tinnovation\t革新\t\t\n1414\tprobe\t探査機、～を調査する\t\t\n1415\tfluid\t流体、流動的な、なめらかな\t\t\n1416\tparticle\t粒子、(not a ― of A)(Aの)かけら (もない)\t\t\n1417\tgravity\t重力、重大さ\t\t\n1418\thypothesis\t仮説\t\t\n1419\tspecimen\t標本、サンプル\t\t\n1420\tmicrobe\t微生物\t\t\n1421\tpoison\t毒\t\t\n1422\tacid\t酸性の、辛辣な\t\t\n1423\ttoxic\t有害な、有毒な\t\t\n1424\tendeavor\t努力、試み、～を (懸命に)努力する、試みる\t\t\n1425\tdoom\t(be ―ed to ～)～の運命にある\t\t\n1426\tmanufacture\t～を製造する、製造、製品\t\t\n1427\tyield\t～を産出する、(to ～)(～に)屈する、産出量\t\t\n1428\tduplicate\t～を複製する、複製品、複製の\t\t\n1429\tassemble\t～を組み立てる、集まる\t\t\n1430\tmold\t～を (型に入れて)作る、(人格，意見など)を形成する\t\t\n1431\tcoin\t～を作り出す、硬貨\t\t\n1432\ttherapy\t治療 (法)\t\t\n1433\tinjection\t注射\t\t\n1434\tdose\t(１回分の)服用量\t\t\n1435\tsanitation\t衛生\t\t\n1436\tgerm\t細菌、ばい菌\t\t\n1437\ttumor\t腫瘍\t\t\n1438\tstroke\t(脳)卒中、(強い)発作\t\t\n1439\tagony\t苦痛\t\t\n1440\tplague\t(大規模な)疫病、伝染病、災害、～を苦しめる\t\t\n1441\tfatigue\t(ひどい)疲労\t\t\n1442\tdiagnosis\t診断\t\t\n1443\tmortality\t(― rate)死亡率、死すべき運命\t\t\n1444\tnursing\t看護\t\t\n1445\tchronic\t慢性の\t\t\n1446\timmune\t免疫の (ある)\t\t\n1447\tterminal\t(病気が)末期の、終着 駅 (の建物)、ターミナルビル\t\t\n1448\tsound\t(身体・精神が)健全な、(土台・理解などが)堅実な\t\t\n1449\trespiratory\t呼吸の\t\t\n1450\tchoke\t(on ～)(～で)息が詰まる、窒息する、～を窒息させる\t\t\n1451\tparalyze\t～を麻痺させる\t\t\n1452\tprescribe\t(薬など)を処方する、(行為など)を指示する\t\t\n1453\tdigest\t～を消化する、～を理解する、要約\t\t\n1454\tweary\t(極度に)疲れている、うんざり している\t\t\n1455\tnourish\t～に栄養を与える、(考えなど)を抱く\t\t\n1456\tappalling\tぞっとするような\t\t\n1457\tflesh\t(人､動物の皮､骨に対する)肉\t\t\n1458\tlimb\t手足 (の①本)\t\t\n1459\terect\t直立した、～を建てる\t\t\n1460\tspinal\t脊椎の\t\t\n1461\tsuck\t～を吸う\t\t\n1462\tshrug\t(肩)をすくめる、肩をすくめる\t\t\n1463\tcompensate\t(A for B)(A)に (Bを)補償する\t\t\n1464\tabuse\t虐待、乱用、～を悪用する\t\t\n1465\tbias\t偏見\t\t\n1466\tprestige\t名声、威信\t\t\n1467\tprivilege\t特権\t\t\n1468\tfeat\t偉業\t\t\n1469\tdignity\t威厳\t\t\n1470\tvirtue\t美徳、(人，物の個々の)長所、(by ― of ～)～のために\t\t\n1471\taristocracy\t(通例 the～)貴族 (階級，社会)\t\t\n1472\trebel\t反逆者、(against ～)(～に)反逆する、反抗する\t\t\n1473\tscheme\t計画、陰謀\t\t\n1474\tconvention\t会議、大会、慣習、条約\t\t\n1475\tconference\t(on ～)(～に関する)会議\t\t\n1476\tconsent\t合意、(to ～)(～に)合意する\t\t\n1477\tinitiative\t新構想、新計画、主導権\t\t\n1478\tprovince\t(カナダなどの)州、(中国の)省、(the ―s)地方\t\t\n1479\tcolony\t植民地、(アリなどの)群落\t\t\n1480\tfrontier\t辺境、(主に)国境、(the ―s)最前線\t\t\n1481\ttreaty\t条約\t\t\n1482\ttribe\t部族、種族\t\t\n1483\tpension\t年金\t\t\n1484\tstake\t(have a ― in ～)(～に)利害関係 (を持つ)、(at ―)危険、(―s)賭け金、配当金\t\t\n1485\tcoverage\t報道、(保険の)補償 (範囲)\t\t\n1486\tobligation\t(社会に対する)責務、(個人に対する)恩義\t\t\n1487\thygiene\t衛生 (状態)、衛生学\t\t\n1488\tsupervisor\t(人・活動などの)監督者\t\t\n1489\tnorm\t(the ―)普通のこと、(―s)規範\t\t\n1490\tpatent\t特許 (権)、～の特許をとる、明白な、見えすいた\t\t\n1491\tprimitive\t原始的な、未開の\t\t\n1492\tethnic\t民族の、民族的な\t\t\n1493\tanonymous\t匿名の\t\t\n1494\tmetropolitan\t大都市の\t\t\n1495\tentitled\t(to ～)(～の)権利がある、～と題された\t\t\n1496\tdemographic\t人口統計上の、(―群の人々から成る)年齢層\t\t\n1497\tdonate\t～を寄付する、(臓器など)を提供する\t\t\n1498\tflourish\t栄える\t\t\n1499\tconform\t(to ～)(～に)合わせる\t\t\n1500\tcomply\t(with ～)(～に)従う、遵守する\t\t\n1501\tlegislation\t(集合的に)法律\t\t\n1502\ttestimony\t(法廷などでの)証言\t\t\n1503\tjury\t陪審 (員団)\t\t\n1504\tlegitimate\t正当な、合法の\t\t\n1505\tenforce\t～を施行する、～を強制する\t\t\n1506\tregime\t政権、政治体制\t\t\n1507\tbureaucracy\t官僚制度、官僚主義、(集合的に)官僚\t\t\n1508\tcorruption\t腐敗、汚職\t\t\n1509\ttyranny\t圧政、専制政治、暴虐 (な行為)\t\t\n1510\tsanction\t(―s)制裁、(公的な)認可\t\t\n1511\tcandidate\t(for ～)(～の)候補 (者)、(～になりそうな)人\t\t\n1512\tsenator\t(しばしば S―)上院議員\t\t\n1513\tambassador\t大使\t\t\n1514\tdiplomat\t外交官\t\t\n1515\trefugee\t難民\t\t\n1516\tally\t同盟国、協力者、(with ～)(～と)提携する\t\t\n1517\treign\t(君主などの)統治 (期間)、君臨する\t\t\n1518\tfederal\t連邦の\t\t\n1519\tcommunist\t共産主義(者)の、共産主義者\t\t\n1520\tmunicipal\t市(営)の、地方自治の\t\t\n1521\testate\t(全)財産、地所\t\t\n1522\tasset\t財産、資産\t\t\n1523\trevenue\t(国などの)歳入、(事業などの)収益\t\t\n1524\tdeficit\t(会社，国の)赤字\t\t\n1525\tcommerce\t商業\t\t\n1526\toutput\t生産高、(エンジン，発電機などの)出力\t\t\n1527\tsubsidy\t補助金\t\t\n1528\ttransaction\t取り引き\t\t\n1529\tbankrupt\t倒産した、破産した\t\t\n1530\tmonetary\t貨幣の、金銭的な\t\t\n1531\tcorporation\t企業、法人\t\t\n1532\tenterprise\t企業、(冒険的な)事業\t\t\n1533\tventure\t(ベンチャー)事業、危険を冒して行く\t\t\n1534\theadquarters\t本社、本部\t\t\n1535\tpersonnel\t(官庁，会社などの)全職員、人事\t\t\n1536\tentrepreneur\t起業家\t\t\n1537\tpredecessor\t前任者、以前あったもの\t\t\n1538\ttoil\t(長時間)骨折って働く、骨の折れる仕事\t\t\n1539\tundertake\t(仕事など)を引き受ける、始める\t\t\n1540\tmerge\t合併する、～を合併させる\t\t\n1541\tcomprise\t～から成る、(割合)を占める\t\t\n1542\tcomponent\t構成要素、成分、(車などの)部品\t\t\n1543\tframework\t枠組、骨組み\t\t\n1544\tprototype\t(of ～)(～の)原型、試作品、典型\t\t\n1545\tdimension\t(問題などの)側面、要因、次元、(―s)寸法、大きさ\t\t\n1546\tmargin\t余白、欄外、(票などの)差、端\t\t\n1547\texcel\t(in ～)( ～において)優れている\t\t\n1548\tcontradict\t～と矛盾する、～に反論する\t\t\n1549\tconsensus\t(意見や証言などの)合意、総意\t\t\n1550\tconverse\t正反対、正反対の、(with ～)(～と)会話する\t\t\n1551\tinequality\t不平等\t\t\n1552\tequivalent\t等しい、同等のもの\t\t\n1553\tcompatible\t(with ～)(～と)適合する、互換性がある\t\t\n1554\tidentical\t同一の、うり二つの\t\t\n1555\tcorrespond\t(to ～)(～と)一致する、(with ～)(～と)(メールや手紙で)やりとりをする\t\t\n1556\trandom\t無作為の、～でたらめの\t\t\n1557\twarrior\t戦士\t\t\n1558\tassault\t襲撃、暴行\t\t\n1559\ttroop\t(―s)軍隊\t\t\n1560\tshield\t(against ～)(～に対する)盾、防御物\t\t\n1561\ttorture\t拷問、辛いこと、～を拷問にかける\t\t\n1562\tdispute\t論争、紛争、～に異議を唱える\t\t\n1563\tcombat\t戦闘、～と戦う\t\t\n1564\ttactics\t戦術\t\t\n1565\tquarrel\t(with ～)(～と)口論する、口論\t\t\n1566\tcontend\t（with ～）（～と）戦う、（that SV）（～と）（強く）主張する\t\t\n1567\tslaughter\t～を虐殺する、（食肉用に）殺す\t\t\n1568\tsuppress\t（反乱，暴動）を鎮圧する、（笑い，怒り）を抑える\t\t\n1569\tsurrender\t（to ～）（～に）降伏する、～を引き渡す\t\t\n1570\thostile\t敵意のある、敵の、（環境などが）厳しい\t\t\n1571\twreck\t（乗り物，家の）残骸、（健康を損ね）ボロボロの人\t\t\n1572\ttoll\t犠牲 者（数）、被害、（高速道路などの）通行料、通話料\t\t\n1573\tdisrupt\t（活動の進行など）をかき乱す\t\t\n1574\tinterfere\t（with ～）（～を）邪魔する、干渉する\t\t\n1575\tconfront\t（困難などが人）に立ちふさがる、（人が困難など）に直面する、立ち向かう\t\t\n1576\texplode\t爆発する、爆発的に増加する\t\t\n1577\tcollide\t（with ～）（～と）衝突する\t\t\n1578\tnephew\t甥\t\t\n1579\tinfant\t（主に歩く前の）幼児\t\t\n1580\tspouse\t配偶者\t\t\n1581\their\t相続人、後継者\t\t\n1582\tfolk\t人々、民間（起源）の\t\t\n1583\tpeer\t（―s）同等の人、同輩、（よく見えなくて）じっと見る\t\t\n1584\trecipient\t受け取る人、被移植者\t\t\n1585\tnavigate\t（旅などで）進路を決める、～を克服して進む、～を航行する\t\t\n1586\tflee\t逃亡する\t\t\n1587\tretreat\t退く、撤退、退却\t\t\n1588\tcrawl\t這って進む、（渋滞などで）這うように進む\t\t\n1589\thover\t（鳥などが）空中にとどまる、うろつく、さまよう\t\t\n1590\tdrift\t漂う\t\t\n1591\talter\t～を変える\t\t\n1592\tconvert\t（A into B）（A）を（B に）転換する、～を改宗させる\t\t\n1593\tovertake\t～を追い越す\t\t\n1594\tdispatch\t（使者・軍隊など）を派遣する、（物資など）を送る\t\t\n1595\tshrink\t縮む、（数量が）減る、～を縮ませる、減らす\t\t\n1596\twither\tしおれる、しぼむ\t\t\n1597\tdescend\t降下する\t\t\n1598\taccelerate\t～を加速する\t\t\n1599\tfluctuate\t（数値，物価が）変動する\t\t\n1600\tdistort\t～を歪める\t\t\n1601\tcrack\t割れる、砕ける、（パンと）音を出す、～を割る、砕く、割れ目\t\t\n1602\ttransition\t移り変わり、推移\t\t\n1603\tgame-changer\t革命的なこと\t\t\n1604\treinforce\t～を補強する\t\t\n1605\tfoster\t（才能など）を育成する、～の里親になる、里親の\t\t\n1606\tbreakdown\t崩壊、故障、衰弱\t\t\n1607\tcollapse\t崩壊する、倒れる、崩壊、倒れること\t\t\n1608\trender\t（SVOC）（O）を（C）にする、（援助など）を与える\t\t\n1609\timpair\t（人間の機能など）を低下させる、損なう\t\t\n1610\tundermine\t～を弱める、揺るがす\t\t\n1611\tcope\t（with～）（～に）対処する\t\t\n1612\ttackle\t～に取り組む\t\t\n1613\tdemolish\t（建物など）を取り壊す\t\t\n1614\tconfine\t～を閉じ込める、（活動など）を制限する\t\t\n1615\tdesignate\t（通例，受け身で）～を指定する\t\t\n1616\tregulate\t（主に規則によって）～を規制する、（機器など）を調整する\t\t\n1617\trefrain\t（from ～）（～を）控える\t\t\n1618\tprohibit\t～を禁じる\t\t\n1619\thalt\t～を止める、止まる、停止\t\t\n1620\tconstraint\t制約\t\t\n1621\tstimulate\t～を刺激する\t\t\n1622\tanimate\t～を活気づける、～をアニメ化する\t\t\n1623\tspur\t～を駆り立てる、促す、拍車、刺激、動機\t\t\n1624\turge\t～をせき立てる、～に強く勧める、（何かがしたい）衝動\t\t\n1625\tcompel\t（A to do）（A）に（～することを）強制する\t\t\n1626\tblur\t～をぼやかす、ぼやける\t\t\n1627\tdivert\t（川など）の方向を変える、（注意など）をそらす\t\t\n1628\treverse\t～を逆転する、覆す、逆、逆の\t\t\n1629\tovershadow\t～の影を薄くさせる\t\t\n1630\tworsen\t～を悪化させる\t\t\n1631\tjeopardize\t（生命，経歴，制度など）を危険にさらす\t\t\n1632\tsupplement\t（栄養，収入など）を補う、補充、栄養補助食品、付録\t\t\n1633\tpose\t～をもたらす\t\t\n1634\tinduce\t～を引き起こす、((人)to do)(人)に～するよう説得する\t\t\n1635\tbetray\t～を裏切る、～を漏らす、（うっかり）さらけ出す\t\t\n1636\tbully\t～をいじめる、いじめっ子\t\t\n1637\tdisregard\t～を無視する\t\t\n1638\tsqueeze\t（果汁など）を搾る、（手，指で）～を強く押す\t\t\n1639\trub\t～をこする、(against ～)( ～に)こすりつける\t\t\n1640\tsmash\t～を粉砕する\t\t\n1641\tinsert\t～を差し込む、（語句など）を書き込む\t\t\n1642\tdetach\t（A from B)（A）を（B から）切り離す\t\t\n1643\twithdraw\t～を引っ込める、（預金など）を引き出す、退く\t\t\n1644\tcompile\t～をまとめる、(辞書などを)編纂する\t\t\n1645\tbrowse\t拾い読みする、～を拾い読みする\t\t\n1646\tmanipulate\t～を操作する\t\t\n1647\timplement\t(契約，計画など)を実行する、(単純な)道具\t\t\n1648\texecute\t～を遂行する、実行する、～を処刑する\t\t\n1649\thost\t(大会など)を主催する、(a ― of)多くの、(客を接待する)主人(*女性も含む)、主催者、開催地、≪生物≫宿主\t\t\n1650\tmount\t～を据え付ける、(馬，自転車)に乗る、増加する\t\t\n1651\tdischarge\t～を排出する、(職務，任地などから)～を解放する\t\t\n1652\tdrain\t～の水を抜く、～の水分を切る、(液体が)流出する、乾く\t\t\n1653\tsoak\t～を浸す、(up)(日光，考えなど)を吸収する\t\t\n1654\tdip\t～を（ちょっと）つける、浸す、～を少し下げる\t\t\n1655\tsuspend\t～を吊るす、～を中断する、～を停職［停学］にする\t\t\n1656\textract\t～を取り出す、抽出する、抽出したもの、抜粋\t\t\n1657\tslap\t～を平手打ちする\t\t\n1658\tembrace\t～を抱擁する、(思想など)を受け入れる\t\t\n1659\tembark\t(on ～)(～に)着手する、乗り込む\t\t\n1660\tintervene\t(in ～)( ～に)介入する\t\t\n1661\tpenetrate\t～に入り込む、～を貫通する、貫通する、入る\t\t\n1662\tintrude\t(on～)(～に)立ち入る\t\t\n1663\tutilize\t～を利用する\t\t\n1664\tembed\t(in...)(...に)～を埋め込む\t\t\n1665\tallocate\t～を割り当てる\t\t\n1666\tcoordinate\t(活動など)をうまく調整する\t\t\n1667\tblink\tまばたきする\t\t\n1668\tspin\tぐるぐる回る、～を回す、～を紡ぐ\t\t\n1669\trotate\t回転する、～を回転させる\t\t\n1670\tscramble\t急いで動く\t\t\n1671\tvanish\t消える\t\t\n1672\tsnap\tポキンと折れる、～をポキンと折る、～をパチンと鳴らす\t\t\n1673\trattle\tガタガタ鳴る、～を鳴らす、ガラガラ\t\t\n1674\tcease\t(to do )～しなくなる\t\t\n1675\thaste\t急ぐこと\t\t\n1676\tconceal\t～を隠す\t\t\n1677\tdisguise\t～を(偽装して)隠す、(oneself as ～)～に変装する、変装\t\t\n1678\tdeceive\t～をだます\t\t\n1679\tneglect\t～を怠る、放置する、(子ども)の世話をしない、放置\t\t\n1680\tevacuate\t(しばしば受動態で)～を避難させる\t\t\n1681\tcoincide\t(with ～)(～と)同時に起きる、(with ～)(～と)一致する\t\t\n1682\tprevail\t(考え，習慣などが)普及している、(最後に人，考えが)優勢となる\t\t\n1683\tsustain\t(生命など)を維持する、支える\t\t\n1684\tlinger\t(いつまでも)残る、(on)長居する\t\t\n1685\trevive\t生き返る、よみがえる、～を生き返らせる\t\t\n1686\tresume\t～を再開する、再開する、履歴書、概要、レジュメ\t\t\n1687\toutbreak\t発生、勃発\t\t\n1688\tinspect\t～を検査する\t\t\n1689\texpedition\t(研究・探求・戦争目的の)探検、遠征、探検隊\t\t\n1690\tenroll\t(in ～)(～に)入学する、(be ―ed)在籍している\t\t\n1691\tdiscipline\t(体罰などで)～を躾ける、躾、規律、(学問)分野\t\t\n1692\ttuition\t授業料、(少人数での)授業\t\t\n1693\tethic\t(―s)(社会や職業上の)倫理(観)、(伝統的に守られた)倫理\t\t\n1694\tpsychology\t心理学、心理\t\t\n1695\tastronomy\t天文学\t\t\n1696\tarchaeologist\t考古学者\t\t\n1697\tthesis\t論文 ( theses)、(正式な議論などの)テーマ\t\t\n1698\tdormitory\t寮\t\t\n1699\tgrasp\t～を理解する、～をつかむ、理解、つかむこと\t\t\n1700\tanticipate\t～を予想する、～を期待する\t\t\n1701\tforesee\t～を予知する\t\t\n1702\tinfer\t(A from B)(B からA)を推測する\t\t\n1703\tdeduce\t(A from B)(B からA)を推定する\t\t\n1704\tdeem\t(Ｏ (to be)Ｃ)ＯをＣだと思う\t\t\n1705\tponder\t～を熟考する\t\t\n1706\tassure\t～に保証する、確信させる\t\t\n1707\tassess\t～を評価する、査定する\t\t\n1708\tconcede\t(譲歩して)～を認める\t\t\n1709\tcompromise\t妥協する、(主義など)を曲げる、妥協\t\t\n1710\tcomprehend\t～を(十分に)理解している\t\t\n1711\treconcile\t(A with B)(A)を(B と)調和させる、和解させる、(oneself to ～)(～を)仕方なく受け入れる\t\t\n1712\tinstill\t(思想など)を(徐々に)教える、～を植え付ける\t\t\n1713\talert\t油断のない、用心深い、(公的な)警告\t\t\n1714\tcognitive\t認知の\t\t\n1715\tintuition\t直感\t\t\n1716\tvow\t誓い、～を誓う\t\t\n1717\tnightmare\t悪夢、悪夢のようなこと\t\t\n1718\tstereotype\t固定観念\t\t\n1719\tillusion\t幻想\t\t\n1720\tcriterion\t基準\t\t\n1721\tideology\tイデオロギー、(政治・経済的)思想\t\t\n1722\ttolerate\t～を大目に見る、我慢する\t\t\n1723\toverlook\t～を(うっかり)見落とす、(人の欠点やミスなど)を見逃す、大目に見る、(場所が)～を見渡す\t\t\n1724\tconceive\t～を思い浮かべる、～を妊娠する、(of ～)(～を)想像する\t\t\n1725\tmisunderstand\t(人，人の言うこと)を誤解している\t\t\n1726\tkeen\t(頭脳，感性などが)鋭い、(be ― on ～)(～に)熱中して、好きで\t\t\n1727\tsubjective\t主観的な\t\t\n1728\tcompulsory\t義務的な、規定の\t\t\n1729\trelieve\t～を取り除く、～を安心させる\t\t\n1730\ttrim\t～を刈り込む、切り取る、こぎれいな\t\t\n1731\tdisposal\t処分、廃棄、(at one's ―)～を自由にする\t\t\n1732\tscent\t(花，果物の良い)香り、(動物が残したそれ自身の)臭い\t\t\n1733\tgrain\t穀物、粒、少量\t\t\n1734\twheat\t小麦\t\t\n1735\tdeforestation\t森林伐採\t\t\n1736\tdrought\t干ばつ\t\t\n1737\tirrigation\t灌漑\t\t\n1738\tspectacle\t(きわめて印象的な)光景、(大がかりな)見せ物\t\t\n1739\taltitude\t標高、高度\t\t\n1740\tcatastrophe\t大災害、災難\t\t\n1741\twilderness\t荒野、野原\t\t\n1742\tdecay\t腐敗、腐敗する、衰える\t\t\n1743\terosion\t侵食\t\t\n1744\tflame\t炎\t\t\n1745\tgalaxy\t銀河\t\t\n1746\tchill\t寒気、～を冷やす\t\t\n1747\tthermal\t熱の\t\t\n1748\tfertile\t肥沃な、肥えた\t\t\n1749\tfossil\t化石化した、化石\t\t\n1750\texploit\t(自然の力など)を利用する、～を搾取する\t\t\n1751\tcontaminate\t～を汚染する\t\t\n1752\terupt\t(火山などが)噴火する\t\t\n1753\troar\tほえる、うなり声、怒号、轟音\t\t\n1754\tinhabit\t～に生息している、ある\t\t\n1755\tnurture\t～を育てる、養育、教育\t\t\n1756\towl\tフクロウ\t\t\n1757\tinstinct\t本能\t\t\n1758\tprey\t餌食、(on ～)餌食にする\t\t\n1759\tanatomy\t解剖(学)、(解剖学的に見た動植物の)構造\t\t\n1760\tmammal\t哺乳動物、哺乳類\t\t\n1761\tpredator\t捕食動物、捕食者\t\t\n1762\thybrid\t交配種、雑種、ハイブリッド\t\t\n1763\tskull\t頭蓋骨\t\t\n1764\ttimber\t(主に<英>)材木\t\t\n1765\ttextile\t織物、織物の\t\t\n1766\tfabric\t布地、織物、組織、構造\t\t\n1767\tmill\t製造工場\t\t\n1768\tweave\t～を織る、～を編む\t\t\n1769\tcompetent\t有能な\t\t\n1770\toptimistic\t楽観的な\t\t\n1771\tpatriotic\t(人，言動などが)愛国的な\t\t\n1772\tnoble\t高潔な、貴族の、貴族\t\t\n1773\tnaughty\tいたずらな\t\t\n1774\tarrogant\t傲慢な\t\t\n1775\tvigorous\t(人，活動が)精力的な、活発な\t\t\n1776\thumble\t控えめな、卑しい、貧しい\t\t\n1777\teligible\t資格のある\t\t\n1778\tcourtesy\t礼儀正しさ\t\t\n1779\tresilient\t回復の早い、回復力のある\t\t\n1780\tinclined\t(be ～ to do)～する傾向がある、～したい気持ちだ\t\t\n1781\thaunt\t(亡霊，考えなどが)～につきまとう、出没する、好んで行く場所、たまり場\t\t\n1782\tintent\t(on ～)(～に)没頭した、決心した、意図\t\t\n1783\tindulge\t(in ～)(～に)ふける、～を思いのままにさせる\t\t\n1784\tflaw\t傷、欠点\t\t\n1785\tdefect\t欠陥\t\t\n1786\ttrait\t特性\t\t\n1787\tanalogy\t類似点、類推、例え\t\t\n1788\tparallel\t類似(物)、(to ～)(～と)平行の、類似した\t\t\n1789\tindispensable\t不可欠な\t\t\n1790\tcrucial\t(極めて)重大な\t\t\n1791\tgrave\t重大な、墓(穴)\t\t\n1792\tprimary\t主な、第、の、初期の、原始の\t\t\n1793\tvital\t不可欠な、きわめて重要な\t\t\n1794\tintegral\t不可欠な、完全な\t\t\n1795\tprofound\t深い\t\t\n1796\tgrim\t(状況などが)厳しい\t\t\n1797\tfierce\t(競争，嵐などが)激しい、どう猛な\t\t\n1798\tharsh\t厳しい\t\t\n1799\tacute\t深刻な、(知能，知覚などが)鋭い、急性の\t\t\n1800\tambiguous\t曖昧な\t\t\n1801\tmisleading\t誤解を招く、紛らわしい\t\t\n1802\tobscure\tぼやけた、わかりにくい、無名の\t\t\n1803\tmature\t成熟した、熟成した、成熟する、熟成する\t\t\n1804\tneat\tきちんとした\t\t\n1805\tdecent\tまともな、きちんとした\t\t\n1806\tstraightforward\t(方法などが)わかりやすい、(人や行動が)率直な\t\t\n1807\tsophisticated\t(機械，システムが)高度な、洗練された、教養のある\t\t\n1808\telaborate\t手の込んだ、凝った、～を苦労して作り上げる、(on ～)(～を)詳しく話す\t\t\n1809\tprompt\t迅速な、～に促す\t\t\n1810\tswift\t素早い\t\t\n1811\tmighty\t強力な\t\t\n1812\texplicit\t(発言や文章などが)明確な\t\t\n1813\tauthentic\t本物の\t\t\n1814\twit\t機知、機知に富んだ人\t\t\n1815\tthrive\t(会社などが)好調である、繁栄する、(動 物などが)健康に育つ\t\t\n1816\tdim\t薄暗い、(記憶などが)ぼんやりした、～を暗くする\t\t\n1817\tgloomy\t薄暗い、陰気な、悲観的な\t\t\n1818\tbarren\t不毛な\t\t\n1819\tidle\t(仕事がなく)何もしていない、怠惰な、(away)(～を)何もしないでいる\t\t\n1820\tadverse\t(何かを行うのに)不都合な、悪い\t\t\n1821\ttiresome\t退屈な、うんざりする\t\t\n1822\tclumsy\t無器用な\t\t\n1823\tfoul\t(味，臭いなどが)不快な、(スポーツなどの)違反、ファウル\t\t\n1824\tshabby\tみすぼらしい、おんぼろの\t\t\n1825\toutrageous\t常軌を逸した、奇想天外な\t\t\n1826\tabsurd\tばかげた\t\t\n1827\tfragile\t壊れやすい、もろい\t\t\n1828\tvulnerable\t傷つきやすい、弱い、(非難，攻撃を)受けやすい、(病気に)かかりやすい\t\t\n1829\tstatic\t静的な、(経済などで)変化のない、活気のない\t\t\n1830\tinnate\t(才能などが)先天的な、生まれつきの\t\t\n1831\texotic\t(動 物が)外来の、異国情緒のある\t\t\n1832\ttame\t飼い慣らされた、従順な、～を飼い慣らす\t\t\n1833\tmanifest\t明らかな、(姿勢，感情など)を明らかにする\t\t\n1834\tdense\t密集した、(霧などが)濃い\t\t\n1835\ttransparent\t透明な\t\t\n1836\tconsistent\t(with ～)矛盾のない、一致している、安定した、不変の\t\t\n1837\tcoherent\t一貫している\t\t\n1838\tuniversal\t普遍的な\t\t\n1839\tunderlying\t根底にある\t\t\n1840\tspontaneous\t自然発生的な\t\t\n1841\tmock\t模擬の、見せかけの、(からかって)～をまねる、～をあざける\t\t\n1842\tcollective\t集団の、共同の\t\t\n1843\tvertical\t垂直の、縦の\t\t\n1844\tongoing\t進行中の、継続中の\t\t\n1845\ttender\t(肉などが)柔らかい、(愛情があり)優しい、(皮膚などが)弱い\t\t\n1846\tupright\t直立して、直立した\t\t\n1847\tease\t簡単さ、(痛み，心配など)を和らげる、楽にする\t\t\n1848\trust\tさび、さびる\t\t\n1849\tstain\tシミ、汚れ、～にシミをつける、～を汚す\t\t\n1850\trag\tぼろ切れ\t\t\n1851\ttexture\t感触、手触り\t\t\n1852\tpreliminary\t予備的な、事前の、予選の、予選\t\t\n1853\tmandatory\t義務的な\t\t\n1854\tindigenous\t(動 物，民族が)固有の\t\t\n1855\trespective\tそれぞれの\t\t\n1856\tmultiply\t～を増やす、(A by B)(A)に(B を)掛ける、増える\t\t\n1857\tsoar\t(価格，温度が)急上昇する、(鳥が)舞い上がる\t\t\n1858\tdiminish\t減少する\t\t\n1859\taccumulate\t～を蓄積する、蓄積する\t\t\n1860\texceed\t～を越える\t\t\n1861\tabundant\t豊富な\t\t\n1862\tample\t豊富な\t\t\n1863\tgross\t総計の、(食べ物，行動などが)ひどい\t\t\n1864\tinfinite\t無限の\t\t\n1865\tsole\t唯一の、足の裏、靴底\t\t\n1866\theap\t(積み重ねられたものの)山、(a ― of ～)たくさんの～\t\t\n1867\tfraction\t少量、分数、端数\t\t\n1868\tsimultaneous\t同時の\t\t\n1869\tmedieval\t中世の\t\t\n1870\tdawn\t夜明け、夜が明ける、(on ～)(～に)わかり始める\t\t\n1871\tspan\t(継続した)期間、(集中力，注意力，機械の持続)期間\t\t\n1872\tadolescent\t思春期の若者、思春期の\t\t\n1873\tmillennium\t1000年間\t\t\n1874\texpire\t期限が切れる\t\t\n1875\tpostpone\t～を延期する\t\t\n1876\tperiodically\t定期的に、周期的に、時折\t\t\n1877\tarray\t(an ― of ～)さまざまな、多彩な\t\t\n1878\trealm\t領域、領土\t\t\n1879\tdomain\t領域\t\t\n1880\tboundary\t境界(線)\t\t\n1881\tspectrum\t(思想・活動などの)範囲、(光の)スペクトル\t\t\n1882\tequip\t～を装備させる、備え付ける、(人)に(知識や能力などを)身につけさせる\t\t\n1883\ttransmit\t～を送る、伝える、(病気など)をうつす\t\t\n1884\tendow\t～を授ける\t\t\n1885\tinherit\t～を受け継ぐ\t\t\n1886\tretrieve\t～を回収する、取り戻す、(ファイルなど)を検索する\t\t\n1887\tdisplace\t～に取って代わる、(戦争，災害などで)～を(故郷などから)追い出す\t\t\n1888\tbond\tきずな、公債、社債 (①②ともに)\t\t\n1889\thospitality\tもてなし、歓迎\t\t\n1890\tcertificate\t証明書、免許状、鑑定書\t\t\n1891\tbrochure\tパンフレット\t\t\n1892\toutlet\t(電気の)コンセント、(販売)店、(感情などの)はけ口\t\t\n1893\taccommodation\t(<米>―s)宿泊施設\t\t\n1894\thaven\t避難所、保護区\t\t\n1895\tvenue\t開催地、会場\t\t\n1896\tintersection\t交差点\t\t\n1897\tpavement\t(主に<英>)歩道\t\t\n1898\tpedestrian\t歩行者\t\t\n1899\texcursion\t小旅行、遠足\t\t\n1900\tshipping\t(商品の)発送\t\t\n1901\tthread\t糸、～に糸を通す\t\t\n1902\tornament\t(小さな)飾り、置物\t\t\n1903\tcosmetic\t(―s)化粧品、美容の、化粧(用)の\t\t\n1904\tchamber\t部屋、(協会などの)会議所、議院\t\t\n1905\tcommodity\t商品、有用なもの\t\t\n1906\tdwell\t住む、(on ～)(～をくどくど)考える\t\t\n1907\tacoustic\t音響の、(アンプを用いない)アコースティックの\t\t\n1908\trecipe\tレシピ、調理法、秘訣、原因\t\t\n1909\tintake\t摂取(量)\t\t\n1910\tprecede\t～に先行する\t\t\n1911\tphase\t段階、位相\t\t\n1912\tpriority\t優先(事項)\t\t\n1913\tpremise\t前提、(―s)(建物を含めた)敷地\t\t\n1914\ttomb\t墓、古墳\t\t\n1915\tlegend\t伝説、言い伝え、伝説的人物\t\t\n1916\tmasterpiece\t傑作\t\t\n1917\tritual\t(宗教的)儀式、儀式の\t\t\n1918\tworship\t崇拝、礼拝、～を崇拝する、(神社などに)お参りする\t\t\n1919\tdoctrine\t(宗教上などの)教義\t\t\n1920\tlegacy\t遺産\t\t\n1921\tsin\t(宗教上，道徳上の)罪\t\t\n1922\tswear\t誓う、罵る\t\t\n1923\tconfess\t（to ～）（～を）白状する、～を認める\t\t\n1924\tcarve\t～を彫る、刻む\t\t\n1925\tmurmur\tつぶやく\t\t\n1926\tverbal\t言葉による\t\t\n1927\toral\t口述の、口の\t\t\n1928\teloquent\t雄弁な\t\t\n1929\tlinguistic\t言語の、言語学の\t\t\n1930\tmetaphor\t隠喩、比喩\t\t\n1931\tprose\t散文\t\t\n1932\tnarrative\t語り、物語\t\t\n1933\tplot\t（小説，演劇などの）筋、悪だくみ、陰謀\t\t\n1934\tdraft\t下書き、草稿、～を徴兵する、（― beer）生の（ビール）\t\t\n1935\tmanuscript\t(手書きの)原稿、写本\t\t\n1936\tparadox\t逆説\t\t\n1937\tslang\t（集合的に）俗語\t\t\n1938\triddle\tなぞなぞ、謎\t\t\n1939\texhibit\t～を展示する、～を示す、展示物、展覧会\t\t\n1940\tportray\t～を描く\t\t\n1941\tdepict\t(主に文字や絵や彫刻などで)～を描く\t\t\n1942\tlandmark\t目印、名所、画期的な出来事\t\t\n1943\ttease\t～をからかう、冷やかす\t\t\n1944\tdelight\t～を喜ばせる、（大）喜び\t\t\n1945\tastonish\t～を（とても）驚かせる\t\t\n1946\tdread\t～を恐れる、恐怖\t\t\n1947\tattribute\t（A to B)（A）を（B）のせいだとする、特性、属性\t\t\n1948\tconsole\t～を慰める\t\t\n1949\tarouse\t～を呼び起こす\t\t\n1950\tdistract\t（注意，意識など）をそらす、～の気を紛らす\t\t\n1951\tstartle\t～を驚かせる\t\t\n1952\tthrill\t～をぞくぞく［わくわく］させる、スリル\t\t\n1953\thumiliate\t～に恥をかかせる\t\t\n1954\tadore\t～を熱愛している\t\t\n1955\tutter\t（叫び声など）を発する、まったくの\t\t\n1956\texclaim\t（驚き，怒りなどで）叫ぶ\t\t\n1957\tshed\t（涙など）を流す、（光）を当てる、（不要なもの）～を取り除く、（ヘビなどが）（皮）を脱ぐ、（木が葉っぱ）を落とす\t\t\n1958\tresent\t～に憤慨する\t\t\n1959\tplead\t（with ～）（～に）懇願する、～を申し立てる\t\t\n1960\tyearn\t切望する、～を切望する\t\t\n1961\tlong\t（for ～）（～を）切望する\t\t\n1962\timmerse\t(A in B)(BにA)を没頭させる\t\t\n1963\tbewilder\t（通例，受け身）～を当惑させる\t\t\n1964\tdespise\t～を軽蔑する\t\t\n1965\twilling\t（be ― to do）嫌がらずに～する\t\t\n1966\tfurious\t激怒した\t\t\n1967\tintimate\t親密な、（知識などが）深い\t\t\n1968\taesthetic\t美的な、審美眼がある\t\t\n1969\tconscience\t良心\t\t\n1970\tmercy\t慈悲、情け、幸運\t\t\n1971\tcompassion\t同情、思いやり\t\t\n1972\timpulse\t衝動\t\t\n1973\taspiration\t熱望\t\t\n1974\tgrief\t（人の死などに対する）深い悲しみ\t\t\n1975\tcontempt\t軽蔑\t\t\n1976\tinsult\t侮辱、～を侮辱する\t\t\n1977\tnuisance\t迷惑（になるもの）\t\t\n1978\tsurge\t(感情などの)高まり、(数字など)急増\t\t\n1979\tincentive\t励み\t\t\n1980\toutcome\t結果\t\t\n1981\tfactor\t要因\t\t\n1982\tliable\t（to do）～しがちだ、（to ～）（病気などに）かかりやすい、（for ～）（～に対して）（法的に）責任がある\t\t\n1983\tthorough\t完全な、徹底的な\t\t\n1984\tadequate\t十分な、適切な\t\t\n1985\toverall\t全体的な、全面的な、全体的に、全面的に\t\t\n1986\tultimate\t究極の、最終の\t\t\n1987\tgenuine\t（感情が）心からの、（絵画などが）本物の\t\t\n1988\tslight\tわずかな\t\t\n1989\tradical\t根本的な、抜本的な、過激な\t\t\n1990\ttrivial\tささいな\t\t\n1991\tpotent\t強力な\t\t\n1992\tlikewise\t同様に、同じように\t\t\n1993\tvirtually\t事実上、ほとんど\t\t\n1994\tabruptly\t不意に、突然\t\t\n1995\tdeliberately\t故意に、慎重に\t\t\n1996\texclusively\tもっぱら、～専用で\t\t\n1997\thence\tだから、それゆえに\t\t\n1998\tnamely\tすなわち\t\t\n1999\tallegedly\t(本当かどうかはわからないが)伝えられるところによると\t\t\n2000\twhereas\t～だが一方\t\t\n2001\troam\t歩き回る\t\t\n2002\tstroll\t散策する\t\t\n2003\tcirculate\t循環する、～を循環させる\t\t\n2004\twane\t（力・程度・色などが）衰える、（月が）欠ける\t\t\n2005\tdeteriorate\t悪化する\t\t\n2006\tplunge\t（into ～）（～に）突っ込む、（A into B）（A）を（B に）突っ込む\t\t\n2007\tbackfire\t裏目に出る\t\t\n2008\tcram\t詰め込み勉強をする、～を詰め込む\t\t\n2009\tspeculate\t推測する、（株・土地などに）投機をする\t\t\n2010\tevaporate\t蒸発する\t\t\n2011\tvomit\t吐く、～を吐く\t\t\n2012\tfrown\t（at ～）（～に）眉をひそめる、（on ～）（～に）難色を示す\t\t\n2013\thatch\t（卵から）かえる、孵化する、（卵から）～をかえす、（計画など）を企てる\t\t\n2014\tcling\t（to ～）（～に）固執する、しがみつく\t\t\n2015\tadhere\t（to ～）（規則，主義，法律などに）忠実に従う\t\t\n2016\tcollaborate\t（to do）共同して働く\t\t\n2017\tlag\t（behind ～）（～に）遅れる\t\t\n2018\tcater\t料理を提供する、（to ～）（～の要望などに）応える\t\t\n2019\tflush\t（ほおなどが）紅潮する、～を水で流す\t\t\n2020\tascribe\t（A to B）（A）の原因は（B にある）と主張する\t\t\n2021\tendorse\t（計画，候補者など）を支持する\t\t\n2022\tdisclose\t～を公表する、暴く\t\t\n2023\timprovise\t～を即興で作る［歌う、演奏する］\t\t\n2024\ttransplant\t（花や木，器官など）を移植する、移植\t\t\n2025\tencompass\t～を含む\t\t\n2026\tforge\t（関係など）を築く、～を偽造する\t\t\n2027\tentangle\t（be［get］ ―ed in［with］ ～)～に絡まる\t\t\n2028\tentail\t（必然的に）～を伴う\t\t\n2029\therald\t～の先触れをする\t\t\n2030\tsurpass\t～を上回る\t\t\n2031\ttranscend\t（経験・理解などの限界）を超える\t\t\n2032\tflatter\t～にお世辞を言う\t\t\n2033\tenact\t（法律など）を制定する\t\t\n2034\tamend\t（憲法・法律など）を修正する\t\t\n2035\tkidnap\t～を誘拐する\t\t\n2036\tsmuggle\t～を密輸する\t\t\n2037\tconvict\t～に有罪判決を下す、有罪判決を受けた者\t\t\n2038\thinder\t～を妨げる\t\t\n2039\tinflict\t（A on B）（BにA（痛み，打撃など））を与える\t\t\n2040\talleviate\t（苦痛・困難など）を軽減する\t\t\n2041\teradicate\t～を根絶する\t\t\n2042\texpel\t～を追放する、～を退学処分にする\t\t\n2043\tomit\t～を省く\t\t\n2044\tdiscard\t（不用品）を捨てる\t\t\n2045\tcurb\t～を抑制する、縁石\t\t\n2046\trestrain\t～を抑制する\t\t\n2047\tinhibit\t～を抑制する\t\t\n2048\thamper\t（しばしば受身形で）を妨げる、邪魔をする\t\t\n2049\tlure\t～を誘い込む、魅力、誘惑\t\t\n2050\treassure\t～を安心させる\t\t\n2051\tdictate\t～を書き取らせる、～を命令する、規定する\t\t\n2052\tprovoke\t（非難など）を引き起こす、（意図的に）～を怒らせる\t\t\n2053\trefine\t～を洗練させる\t\t\n2054\tenlighten\t～を啓蒙する\t\t\n2055\tunleash\t（怒りなど）を爆発させる、～の束縛を解く\t\t\n2056\tprolong\t（時間・期間・感情など）を長引かせる\t\t\n2057\tmitigate\t（苦痛・影響・罰など）～を緩和する\t\t\n2058\tgrind\t（穀物，肉など）を挽く\t\t\n2059\twithstand\t～に耐える\t\t\n2060\texert\t（力，影響力など）を働かせる\t\t\n2061\tsummon\t～を呼ぶ、召喚する、喚問する、（勇気など）を奮い立たせる\t\t\n2062\tthrust\t～を強く押しつける、（刃物で）～を突き刺す\t\t\n2063\tpierce\t～を突き刺す、～を突き通す\t\t\n2064\tharness\t（自然の力など）を利用する\t\t\n2065\texcavate\t～を発掘する\t\t\n2066\tevade\t～を逃れる\t\t\n2067\tembody\t～を具体化する\t\t\n2068\tassimilate\t（食物，考えなど）を吸収する、（言語，民族など）を同化する\t\t\n2069\tdiscern\t～を見分ける\t\t\n2070\tscrutinize\t～を詳細に調べる、精査する\t\t\n2071\tstreamline\t（作業・組織など）～を合理化する\t\t\n2072\tmentor\t～を指導する、（会社，大学などでの）指導者\t\t\n2073\tcontemplate\t～を熟考する\t\t\n2074\tconjecture\t～を推測する\t\t\n2075\tpresume\t（人が主語）～と推定する、（計画などが主語）～を前提とする\t\t\n2076\tgauge\t～を（慎重に）判断する、評価する\t\t\n2077\tverify\t（事実かどうか）を確かめる、検証する\t\t\n2078\tpledge\t～を誓う\t\t\n2079\tdismay\t～を狼狽させる、狼狽\t\t\n2080\tlament\t～を深く悲しむ、嘆く\t\t\n2081\tperplex\t～を困惑させる\t\t\n2082\tdisgust\t～に嫌悪を抱かせる、嫌悪\t\t\n2083\tevoke\t～を呼び起こす\t\t\n2084\tharbor\t（悪意・疑いなど）を心に抱く、（菌など）を住まわせる\t\t\n2085\tfriction\t摩擦\t\t\n2086\tmutation\t突然変異\t\t\n2087\theredity\t遺伝\t\t\n2088\tsynthesis\t合成、統合\t\t\n2089\tveterinarian\t獣医\t\t\n2090\tepidemic\t（大）流行\t\t\n2091\tobesity\t（病的な）肥満\t\t\n2092\tneuron\tニューロン、神経単位\t\t\n2093\tdementia\t認知症\t\t\n2094\tdiabetes\t糖尿病\t\t\n2095\tplacebo\t偽薬、プラシーボ\t\t\n2096\tmalnutrition\t栄養失調\t\t\n2097\tdehydration\t脱水（症状）\t\t\n2098\tabortion\t（妊娠）中絶（手術）\t\t\n2099\tantibiotic\t（通例 ―s）抗生物質\t\t\n2100\tpsychiatry\t精神科、精神医学\t\t\n2101\tcardiologist\t心臓専門医\t\t\n2102\tkidney\t腎臓\t\t\n2103\tposture\t姿勢\t\t\n2104\tmetabolism\t（新陳）代謝、代謝作用\t\t\n2105\tfamine\t飢饉\t\t\n2106\triot\t暴動\t\t\n2107\tasylum\t亡命\t\t\n2108\tworkforce\t労働人口、総労働力\t\t\n2109\tprefecture\t県、府\t\t\n2110\thierarchy\t階層構造\t\t\n2111\tautonomy\t自治（権）、自主性\t\t\n2112\tdelegation\t代表団、使節団\t\t\n2113\tcongress\t（米国などの）議会、会議\t\t\n2114\tcensus\t国勢［公的］調査\t\t\n2115\tmonarch\t君主\t\t\n2116\tmonopoly\t独占（権，品）、独占企業\t\t\n2117\tsurplus\t余剰、（会計・財政）余剰金、黒字\t\t\n2118\texpertise\t専門的知識、専門的技術\t\t\n2119\tquota\tノルマ、割り当て\t\t\n2120\tsubordinate\t部下、下位の\t\t\n2121\twarehouse\t倉庫、問屋\t\t\n2122\tpeasant\t（個々の）小作農\t\t\n2123\tcorrelation\t相関（関係）\t\t\n2124\tasymmetry\t非対称、不釣り合い\t\t\n2125\tdisparity\t相違、不均衡\t\t\n2126\tdivergence\t逸脱、相違、《数学》発散\t\t\n2127\tclash\t衝突、対立、（with ～）衝突する\t\t\n2128\tpersecution\t迫害\t\t\n2129\tgenocide\t大量虐殺\t\t\n2130\tatrocity\t残虐行為\t\t\n2131\tbribe\t賄賂\t\t\n2132\tculprit\t（具体的な犯罪の）犯人、（何かの問題の）元凶\t\t\n2133\thostage\t人質\t\t\n2134\tconspiracy\t陰謀\t\t\n2135\tperil\t（大きな）危機\t\t\n2136\tpitfall\t（通例 ―s）落とし穴、隠れた危険\t\t\n2137\titinerary\t旅程（表）\t\t\n2138\tupheaval\t大変動\t\t\n2139\tcommencement\t開始、（高校・大学の）卒業式、学位授与式\t\t\n2140\tthreshold\t（新しいものの）始まり\t\t\n2141\tonset\t（通例良くないことの）始まり\t\t\n2142\tmomentum\t勢い、～はずみ\t\t\n2143\tdeterrent\t抑止するもの\t\t\n2144\tgeometry\t幾何学\t\t\n2145\tanthropologist\t（文化）人類学者\t\t\n2146\tinternship\t実務研修、医学研修\t\t\n2147\tparadigm\t理論的枠組、パラダイム\t\t\n2148\taltruism\t利他主義\t\t\n2149\tclaustrophobia\t閉所恐怖症\t\t\n2150\tAntarctic\t（the ―）南極（地方）\t\t\n2151\tlatitude\t緯度（省略形 lat.）\t\t\n2152\todor\t（不快な）臭い\t\t\n2153\tmeadow\t草地、牧草地\t\t\n2154\tcalamity\t（大きな）災害\t\t\n2155\tprecipitation\t降水（量）、沈殿\t\t\n2156\tmeteor\t流星、隕石\t\t\n2157\tasteroid\t小惑星\t\t\n2158\teclipse\t（日食，月食などの）食\t\t\n2159\tglacier\t氷河\t\t\n2160\tpeninsula\t半島\t\t\n2161\themisphere\t半球\t\t\n2162\tlump\tかたまり、しこり、（together）～をひとかたまりにする\t\t\n2163\tcluster\t（同種の）集団、（植物の）房\t\t\n2164\toffspring\t（集合的に）（人間・動物の）子、子孫\t\t\n2165\tlivestock\t家畜\t\t\n2166\tcarnivore\t肉食動物\t\t\n2167\tvertebrate\t脊椎動物、脊椎動物の\t\t\n2168\tprimate\t霊長類\t\t\n2169\tparasite\t寄生虫［動物、植物］\t\t\n2170\tcortex\t皮質\t\t\n2171\tsibling\t兄弟姉妹\t\t\n2172\textrovert\t外交的な人\t\t\n2173\tstigma\t汚名\t\t\n2174\tplight\t窮状、苦境\t\t\n2175\tturmoil\t混乱\t\t\n2176\tfallacy\t誤びゅう\t\t\n2177\tloophole\t抜け穴\t\t\n2178\tcongestion\t混雑、充血\t\t\n2179\tvacuum\t真空（状態）、（政治などの）空白、～に掃除機をかける\t\t\n2180\tdigit\t桁\t\t\n2181\tbulk\t（the ― of ～）（～の）大半\t\t\n2182\tlongevity\t長寿、（在職期間などが）長いこと\t\t\n2183\tdetour\t回り道\t\t\n2184\tsewage\t下水、（下水の）汚物、汚水\t\t\n2185\tlandfill\t埋め立て、埋め立て地\t\t\n2186\tappliance\t（家庭用）器具\t\t\n2187\tcuisine\t（独特の）料理（法）\t\t\n2188\tbeverage\t（通例 ―s）飲料\t\t\n2189\tstaple\t必需食料品、主要作物、主要な\t\t\n2190\tscenario\t（予想される）筋書き、事態、科学的モデル\t\t\n2191\tautograph\t（有名人などの）サイン\t\t\n2192\tarchive\t（―s）（集合的に）記録文書、公文書、公文書保管庫\t\t\n2193\trhetoric\t美辞麗句、修辞（法)、修辞的な\t\t\n2194\tconnotation\t言外の意味、含意\t\t\n2195\tanecdote\t逸話、秘話\t\t\n2196\tlord\t（通例 the Lord）神、高位の貴族、支配者\t\t\n2197\tsaint\t聖人、（S―）（人名の前で）聖...\t\t\n2198\tprophet\t預言者、予言者\t\t\n2199\tpilgrim\t巡礼者\t\t\n2200\tsalvation\t救済\t\t\n2201\tartifact\t（考古学的価値のある）人工遺物、出土品（artefact）\t\t\n2202\ttoken\t（as a ― of）（～の）しるし（として)、（バスなどで使われる）代用硬貨、トークン、商品引換券\t\t\n2203\tcue\t合図、キュー\t\t\n2204\tquest\t探求\t\t\n2205\tmelancholy\t憂うつ、ふさぎ込み\t\t\n2206\tself-esteem\t自尊心\t\t\n2207\tempathy\t共感（能力）、感情移入\t\t\n2208\tprecaution\t用心、予防策\t\t\n2209\tdistress\t苦しみ、苦難、～を苦しめる\t\t\n2210\tapprehension\t不安、逮捕\t\t\n2211\tscorn\t軽蔑\t\t\n2212\tmenace\t（to ～）（～にとっての）厄介なもの［人］、脅威\t\t\n2213\tsentiment\t感情\t\t\n2214\tverge\t瀬戸際、寸前、道路べり、（場所の）縁\t\t\n2215\tplausible\t（説明，言い訳などが）もっともらしい\t\t\n2216\tholistic\t全体（論）的な\t\t\n2217\tcontagious\t感染（性）の\t\t\n2218\tvocal\t発声の、（about ～）（～について）遠慮なく意見を述べる\t\t\n2219\tsensory\t感覚の\t\t\n2220\tnumb\t（寒さや麻酔などで）麻痺している、感覚を失った\t\t\n2221\tphysiological\t生理的な\t\t\n2222\tbilateral\t二国間の、双方の\t\t\n2223\tfeudal\t（主に欧州の）封建制の\t\t\n2224\timperial\t帝国の\t\t\n2225\tcomplementary\t相補的な\t\t\n2226\tpertinent\t（直接）関連のある、適切な\t\t\n2227\tintrinsic\t固有の、本来備わっている\t\t\n2228\tunprecedented\t前例のない、空前の\t\t\n2229\ttentative\t仮の、試験的な\t\t\n2230\tdrastic\t抜本的な、思い切った\t\t\n2231\tubiquitous\t偏在している、至る所にある\t\t\n2232\tpervasive\t広く行き渡った\t\t\n2233\texponential\t（増加が）指数関数的な、急激な\t\t\n2234\tperpetual\t絶え間ない、永続する\t\t\n2235\tfuture-oriented\t未来志向の\t\t\n2236\tintact\t無傷の\t\t\n2237\tmaternal\t母の、母親らしい\t\t\n2238\tmasculine\t男性的な\t\t\n2239\tjuvenile\t青少年の\t\t\n2240\tintelligible\t理解できる\t\t\n2241\tdairy\t酪農（業）の\t\t\n2242\tstray\t（動物などが）家のない、道に迷った\t\t\n2243\tdormant\t（火山などが）休止状態の、眠っている\t\t\n2244\tcomprehensive\t包括的な\t\t\n2245\tedible\t食用の\t\t\n2246\tperishable\t（食べ物などが）腐りやすい\t\t\n2247\tnaive\t世間知らずの、愚直な\t\t\n2248\tzealous\t熱心な\t\t\n2249\ttimid\t臆病な\t\t\n2250\tdelinquent\t非行の\t\t\n2251\tsober\t（酒に）酔っていない、（人，習慣などが）真面目な\t\t\n2252\tobstinate\t頑固な、強情な\t\t\n2253\tsolitary\t（人が）孤高の、ただひとつの\t\t\n2254\tvulgar\t（人，行動が）品がない、（冗談などが）卑わいな\t\t\n2255\tskeptical\t懐疑的な\t\t\n2256\taccustomed\t（to ～）（～に）慣れている\t\t\n2257\tobsessed\t（with［by］ ～）（～に）取りつかれて、頭が一杯で\t\t\n2258\tpreoccupied\t（with ～）（～に）夢中になった、（～で）頭がいっぱいで\t\t\n2259\tprone\t（be ― to do）（好ましくないことを）～しがちである\t\t\n2260\tapt\t（be ― to do）（本来的に）～する傾向がある\t\t\n2261\tempirical\t経験［実験］による\t\t\n2262\tsusceptible\t（to ～）（～の）影響を受けやすい\t\t\n2263\tpivotal\t極めて重要な\t\t\n2264\tfabulous\t～とても素敵な、莫大な\t\t\n2265\tsplendid\t素晴らしい\t\t\n2266\tintriguing\t興味深い\t\t\n2267\tingenious\t独創的な\t\t\n2268\taffluent\t裕福な\t\t\n2269\trenowned\t有名な\t\t\n2270\teminent\t著名な、地位が高い\t\t\n2271\tconspicuous\t目立つ\t\t\n2272\tadept\t（at ～）（～に）熟練した\t\t\n2273\tproficient\t熟達した\t\t\n2274\timmense\t莫大な、膨大な\t\t\n2275\tunanimous\t満場一致の\t\t\n2276\treckless\t無謀な\t\t\n2277\tfutile\t無駄な\t\t\n2278\tbrutal\t残忍な\t\t\n2279\tominous\t不吉な\t\t\n2280\tdetrimental\t（to ～）（～に）有害な\t\t\n2281\twicked\t邪悪な\t\t\n2282\tcynical\t冷笑的な\t\t\n2283\tsavage\t（とても）容赦ない、どう猛な\t\t\n2284\tarbitrary\t独断的な、勝手な\t\t\n2285\tmonotonous\t単調な\t\t\n2286\tcrude\t粗末な、粗野な、加工されていない\t\t\n2287\textravagant\t法外な、金遣いが荒い\t\t\n2288\tobsolete\t廃れた\t\t\n2289\tdevoid\t（of ～）（～を完全に）欠いている\t\t\n2290\tscarce\t乏しい\t\t\n2291\tsolemn\t（場所，祝祭が）厳粛な、（音楽が）荘厳な、（態度が）真面目な\t\t\n2292\trigid\t硬い、（規則・行為・人などが）厳格な\t\t\n2293\trobust\t～がっしりした、（経済が）活発な\t\t\n2294\ttangible\t触れられる、明確な\t\t\n2295\tsuperficial\t表面的な\t\t\n2296\tspatial\t空間の\t\t\n2297\thollow\t空洞の、（物の表面が）くぼんだ、うわべだけの\t\t\n2298\thomogeneous\t均質の、同種の\t\t\n2299\tfeasible\t（計画・方法などが）実現［実行］可能な\t\t\n2300\tviable\t（計画などが）実行可能な\t\t\n";
+const WORDS_URL='words.txt';
+const SYM=['🍉','🔔','🍒','🎰','💎','7️⃣','🔁'],WT=[.22,.19,.13,.14,.10,.05,.17];
+const [WM,BL,CH,BR,KK,SV,RP]=SYM;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={coins:0,lv:{m:0,c:0,l:0,t:0},best:0,ok:0,tot:0,mode:'en',bet:10,imp:''},combo=0,words=[],cur=null,locked=false;
+
+function save(){if(S.coins>(S.mx||0))S.mx=S.coins;try{localStorage.setItem('leapslot',JSON.stringify(S))}catch(e){}try{window.cloudSched&&window.cloudSched()}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('leapslot')||'null');if(d)S=Object.assign(S,d)}catch(e){}normS()}
+function normS(){if(!S.lv)S.lv={m:0,c:0,l:0,t:0};if(S.lv.t==null)S.lv.t=0;Object.keys(MAXLV).forEach(k=>{if((S.lv[k]||0)>MAXLV[k])S.lv[k]=MAXLV[k]});if(!Array.isArray(S.ch))S.ch=[];if(!Array.isArray(S.own))S.own=[];if(S.pg==null)S.pg=0;if(S.mx==null)S.mx=0}
+function splitTop(m){
+  const out=[];let buf='',d=0;
+  for(const ch of m){
+    if(ch==='（'||ch==='(')d++;
+    else if(ch==='）'||ch===')')d=Math.max(0,d-1);
+    if(d===0&&/[①-⑩、，,;；\/]/.test(ch)){out.push(buf);buf=''}else buf+=ch;
+  }
+  out.push(buf);return out;
+}
+function stripEnParen(m){
+  const st=[{o:'',out:'',own:''}];
+  for(const ch of m){
+    const t=st[st.length-1];
+    if(ch==='（'||ch==='('){st.push({o:ch,out:'',own:''});continue}
+    if((ch==='）'||ch===')')&&st.length>1){
+      const f=st.pop(),p=st[st.length-1];
+      p.out+=f.o+f.out+ch;
+      continue;
+    }
+    t.out+=ch;t.own+=ch;
+  }
+  while(st.length>1){const f=st.pop();st[st.length-1].out+=f.o+f.out}
+  return st[0].out;
+}
+function items(m){
+  m=stripEnParen(m.replace(/\[[^\]]*\]/g,' ').replace(/〈[^〉]*〉/g,''));
+  return splitTop(m).map(s=>s.replace(/\s+/g,' ').trim()).map(s=>/^[をにがはでと]/.test(s)?'～'+s:s).filter(s=>s&&/[^\s～（）()]/.test(s));
+}
+function parseList(txt){
+  const out=[],fmt=/^#leapslot/i.test(txt.trim());
+  txt.split(/\r?\n/).forEach(l=>{
+    l=l.trim();if(!l||l[0]==='#')return;let w,m,ex='',exj='';const nm=l.match(/^(\d+)[\s,;]/);
+    if(l.includes('\t')){
+      const raw=l.split('\t').map(x=>x.trim());
+      if(fmt){if(/^\d+$/.test(raw[0]))raw.shift();w=raw[0];m=raw[1];ex=raw[2]||'';exj=raw[3]||''}
+      else{const p=raw.filter(Boolean);if(/^\d+$/.test(p[0]))p.shift();w=p[0];m=p.slice(1).join(' ')}
+    }
+    else{const r=l.match(/^(?:\d+\s+)?([A-Za-z][A-Za-z\-'’ ~().]*?)\s+(\[.+|[^\x00-\x7F].*)$/);if(r){w=r[1];m=r[2]}}
+    if(!w){const c=l.match(/^(?:\d+\s*[,;]\s*)?"?([A-Za-z][^,;"]*?)"?\s*[,;]\s*"?(.+?)"?$/);if(c){w=c[1];m=c[2]}}
+    if(w&&m&&/^[A-Za-z]/.test(w)){const ms=items(m);if(ms.length)out.push({w:w.trim(),ms,ex,exj,n:nm?+nm[1]:out.length+1})}
+  });
+  return out;
+}
+const builtinWords=()=>BUILTIN.split('\n').map((l,i)=>{const [w,m]=l.split('|');return{w,ms:items(m),n:i+1,ex:'',exj:''}});
+function saveWords(){try{localStorage.setItem('leapslot_words',JSON.stringify(words))}catch(e){}}
+function buildWords(){
+  let a=null;
+  try{const d=JSON.parse(localStorage.getItem('leapslot_words')||'null');if(Array.isArray(d)&&d.length>10)a=d}catch(e){}
+  if(!a){
+    if(S.imp){const x=parseList(S.imp);if(x.length>20)a=x}
+    a=a||builtinWords();
+    words=a;S.imp='';saveWords();save();
+  }
+  words=a;
+  $('#wc').textContent=words.length;updRange();
+}
+function setWords(arr){
+  const old=new Map(words.map(x=>[x.w,x]));
+  arr.forEach(x=>{const o=old.get(x.w);if(o){if(!x.ex&&o.ex)x.ex=o.ex;if(!x.exj&&o.exj)x.exj=o.exj}});
+  words=arr;saveWords();$('#wc').textContent=words.length;updRange();
+}
+function decodeTxt(buf){let t=new TextDecoder('utf-8').decode(buf);if(t.includes('\ufffd'))t=new TextDecoder('shift_jis').decode(buf);return t.replace(/^\ufeff/,'')}
+/* 公開リストとの同期。leapslot_wsrc = {h:最後に反映した公開リストのハッシュ, custom:自分で読み込んだリストを使用中か} */
+function wsrc(){try{return JSON.parse(localStorage.getItem('leapslot_wsrc')||'null')||{}}catch(e){return{}}}
+function setWsrc(o){try{localStorage.setItem('leapslot_wsrc',JSON.stringify(o))}catch(e){}}
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)+'-'+s.length}
+const sameWords=(a,b)=>a.length===b.length&&a.every((x,i)=>x.w===b[i].w);
+function pubInfo(t,ng){const m=$('#pubMsg');m.textContent=t;m.style.color=ng?'var(--ng)':''}
+let pubN=0;
+const cloudApi=()=>Promise.race([window.cloudReady,new Promise(r=>setTimeout(()=>r(null),3000))]);
+async function fetchPub(){
+  let txt=WORDS_TXT,src='builtin';
+  try{
+    const api=await cloudApi(),p=api?await api.pubGet():null;
+    if(p&&p.txt&&parseList(p.txt).length>=4){txt=p.txt;src='cloud'}
+  }catch(e){}
+  const arr=parseList(txt);
+  if(arr.length<4)throw new Error('単語を読み取れませんでした');
+  return{h:hashStr(txt),arr,src};
+}
+function showCustom(st){
+  $('#pubBtn').classList.remove('hidden');
+  pubInfo((st.h&&st.h!==st.cur?'公開リストが更新されています（'+pubN+'語）。':'')+'いまは自分で読み込んだリスト（'+words.length+'語）を使用中です'+(pubN&&!(st.h&&st.h!==st.cur)?'（公開リスト：'+pubN+'語）':''));
+}
+/* mode: なし=起動時の自動同期／'update'=例文を引き継いで切り替え／'reset'=例文も消して置き換え */
+async function syncPub(mode){
+  let p;
+  try{p=await fetchPub()}
+  catch(e){pubInfo(mode?'公開リストを取得できませんでした（'+e.message+'）':'公開リストを取得できなかったため、この端末に保存されている単語（'+words.length+'語）で出題しています',!!mode);return false}
+  pubN=p.arr.length;
+  const st=wsrc();
+  if(!mode&&p.src==='builtin'&&st.src==='cloud'){pubInfo('公開リストを取得できなかったため、この端末の単語（'+words.length+'語）で出題しています');return false}
+  if(!mode){
+    let custom=!!st.custom;
+    if(!st.h&&!custom)custom=!(sameWords(words,builtinWords())||sameWords(words,p.arr));
+    if(custom){setWsrc({h:st.h,custom:true,src:st.src});showCustom({h:st.h,cur:p.h});return false}
+    if(st.h===p.h){$('#pubBtn').classList.add('hidden');pubInfo('公開リスト（'+pubN+'語）を使用中');return true}
+  }
+  if(mode==='reset')words=[];
+  setWords(p.arr);setWsrc({h:p.h,custom:false,src:p.src});
+  $('#pubBtn').classList.add('hidden');
+  pubInfo(!mode&&st.h?'公開リストが更新されたので反映しました（'+pubN+'語）':'公開リスト（'+pubN+'語）を使用中');
+  next();return true;
+}
+const baseMult=()=>1+0.25*S.lv.m;
+const pgMul=()=>1+0.5*(S.pg||0);
+const mult=()=>baseMult()*pgMul();
+const comboBonus=n=>1+Math.min(n,30)*(0.1+0.05*S.lv.c);
+/* 強化レベルの上限：報酬倍率15／コンボ強化15／コンボ制限時間15／あそび運10 */
+const MAXLV={m:15,c:15,t:15,l:10};
+const cost={m:()=>Math.round(100*Math.pow(1.7,S.lv.m)),c:()=>Math.round(150*Math.pow(1.8,S.lv.c)),l:()=>Math.round(200*Math.pow(2,S.lv.l)),t:()=>Math.round(120*Math.pow(1.7,S.lv.t||0))};
+
+/* ===== 転生（プレステージ）・見た目ショップ ===== */
+const PG_BASE=1000000,PG_STEP=2,PG_BONUS=0.5; /* 条件=PG_BASE×PG_STEP^回数 ／ 倍率=1+PG_BONUS×回数 */
+const pgReq=()=>PG_BASE*Math.pow(PG_STEP,S.pg||0);
+const THEMES=[
+  {id:'',name:'ノーマル',price:0,desc:'標準の配色（端末の明るさに合わせます）'},
+  {id:'sakura',name:'桜',price:50000,desc:'やわらかなピンクの配色（明るさは端末の設定に合わせます）',
+    L:{bg:'#fff0f5',panel:'#ffffff',line:'#f3bfd3',text:'#4a1530',sub:'#9b5b75',gold:'#e0517f',ok:'#12975f',ng:'#d6334d'},
+    D:{bg:'#2a0f1d',panel:'#3d1829',line:'#7a3a57',text:'#ffeaf2',sub:'#d79ab4',gold:'#ffb8cf',ok:'#5be3a6',ng:'#ff7a93'}},
+  {id:'sea',name:'海',price:200000,desc:'青の落ち着いた配色（明るさは端末の設定に合わせます）',
+    L:{bg:'#e6f3fb',panel:'#ffffff',line:'#a8d2ee',text:'#0a2540',sub:'#4b7595',gold:'#1a86c8',ok:'#12975f',ng:'#d6334d'},
+    D:{bg:'#08203a',panel:'#0f3257',line:'#1f5a8f',text:'#eaf6ff',sub:'#8fb8d9',gold:'#ffd166',ok:'#3ddc97',ng:'#ff6b81'}},
+  {id:'forest',name:'森',price:500000,desc:'緑の配色（明るさは端末の設定に合わせます）',
+    L:{bg:'#eaf6ec',panel:'#ffffff',line:'#b4dbbf',text:'#12301f',sub:'#4f7a5e',gold:'#b9800a',ok:'#12975f',ng:'#d6334d'},
+    D:{bg:'#0f2418',panel:'#17382a',line:'#2f6a4a',text:'#effaf1',sub:'#9cc7a8',gold:'#f2c14e',ok:'#6fe3a1',ng:'#ff7a6b'}},
+  {id:'night',name:'星空',price:1000000,desc:'夜空に星の光の配色（明るさは端末の設定に合わせます）',
+    L:{bg:'#eceeff',panel:'#ffffff',line:'#c3c8ee',text:'#14173a',sub:'#5b6199',gold:'#a67c00',ok:'#12975f',ng:'#d6334d'},
+    D:{bg:'#05060f',panel:'#0e1124',line:'#2a2f5c',text:'#f0f2ff',sub:'#8f96c7',gold:'#ffe38a',ok:'#5df2c3',ng:'#ff6f91'}},
+  {id:'gold',name:'黄金',price:5000000,desc:'金の豪華な配色（明るさは端末の設定に合わせます）',
+    L:{bg:'#fff8e1',panel:'#fffdf5',line:'#e6cf8c',text:'#3a2a05',sub:'#8a7036',gold:'#a87b00',ok:'#12975f',ng:'#d6334d'},
+    D:{bg:'#14110a',panel:'#211b0e',line:'#6b5420',text:'#fff4d6',sub:'#c9b27a',gold:'#ffcc33',ok:'#7be495',ng:'#ff7a6b'}}
+];
+const TITLES=[
+  {id:'t1',name:'見習い',price:1000},
+  {id:'t2',name:'単語ハンター',price:10000},
+  {id:'t3',name:'LEAPの民',price:100000},
+  {id:'t4',name:'スロッター',price:500000},
+  {id:'t5',name:'大富豪',price:2000000},
+  {id:'t6',name:'億万長者',price:100000000},
+  {id:'t7',name:'転生者',price:500000,pg:1},
+  {id:'t8',name:'輪廻の覇者',price:5000000,pg:3}
+];
+let thApplied;
+const isDarkDev=()=>{try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}};
+const thPal=t=>t&&t.L?(isDarkDev()?t.D:t.L):null;
+function applyTheme(){
+  const k=S.th||'',t=THEMES.find(x=>x.id===k)||THEMES[0],r=document.documentElement.style,p=thPal(t);
+  ['bg','panel','line','text','sub','gold','ok','ng'].forEach(n=>{if(p)r.setProperty('--'+n,p[n]);else r.removeProperty('--'+n)});
+  if(p)r.setProperty('color-scheme',isDarkDev()?'dark':'light');else r.removeProperty('color-scheme');
+  thApplied=k;
+}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>applyTheme())}catch(e){}
+function updTitle(){
+  const e=$('#ttl');if(!e)return;
+  const t=TITLES.find(x=>x.id===S.ti&&(S.own||[]).includes(x.id));
+  const s=((S.pg||0)>0?'🔄×'+S.pg+' ':'')+(t?t.name:'');
+  e.textContent=s;e.style.display=s?'block':'none';
+}
+function renderPg(){
+  const c=$('#pgCard');if(!c)return;
+  const n=S.pg||0,req=pgReq(),can=S.coins>=req,pct=Math.min(100,S.coins/req*100);
+  c.innerHTML='<h3 style="margin:0 0 6px">🔄 転生</h3>'
+    +'<p class="note">コインと強化（報酬倍率・コンボ強化・コンボ制限時間・あそび運）をすべてリセットして、<b>永続の報酬倍率</b>を手に入れます。正解数・単語の評価値・最高記録・チャレンジ履歴・買った見た目は残ります。</p>'
+    +'<p style="margin:8px 0 2px">転生回数 <b style="color:var(--gold)">'+n+'</b> 回　永続倍率 <b style="color:var(--gold)">×'+(1+PG_BONUS*n).toFixed(2)+'</b></p>'
+    +'<p class="note" style="margin:0 0 6px">テストとチャレンジで貰えるコインに掛かります（スロット・サイコロ・ダービーの配当には掛かりません）。</p>'
+    +'<p class="note" style="margin:6px 0 2px">次の転生の条件：所持コイン '+req.toLocaleString()+' 以上　→ 転生後は ×'+(1+PG_BONUS*(n+1)).toFixed(2)+'</p>'
+    +'<div class="tmr"><i style="width:'+pct+'%;background:'+(can?'var(--ok)':'var(--gold)')+'"></i></div>'
+    +'<div class="row" style="margin-top:8px"><button class="btn" id="pgBtn" '+(can?'':'disabled')+'>転生する</button><span class="note">'+Math.floor(pct)+'%</span></div>';
+  $('#pgBtn').onclick=()=>{
+    const req=pgReq();
+    if(S.coins<req)return;
+    if(!confirm('転生しますか？\n\n・コインと強化がすべてリセットされます\n・永続倍率が ×'+(1+PG_BONUS*(S.pg||0)).toFixed(2)+' → ×'+(1+PG_BONUS*((S.pg||0)+1)).toFixed(2)+' になります'))return;
+    S.pg=(S.pg||0)+1;S.coins=0;S.lv={m:0,c:0,l:0,t:0};S.jp=1000;combo=0;
+    save();hud();renderShop();next();
+  };
+}
+function renderCosm(){
+  const c=$('#cosCard');if(!c)return;
+  const own=S.own||[],item=(it,kind)=>{
+    const has=!it.price||own.includes(it.id),on=kind==='th'?(S.th||'')===it.id:S.ti===it.id;
+    const lock=it.pg&&(S.pg||0)<it.pg;
+    let btn;
+    if(on)btn='<button class="btn" disabled>使用中</button>';
+    else if(has)btn='<button class="btn" data-k="'+kind+'" data-i="'+it.id+'" data-a="use">使う</button>';
+    else if(lock)btn='<button class="btn" disabled>転生'+it.pg+'回で解放</button>';
+    else btn='<button class="btn" data-k="'+kind+'" data-i="'+it.id+'" data-a="buy" '+(S.coins<it.price?'disabled':'')+'>'+it.price.toLocaleString()+'</button>';
+    const sw=kind==='th'?'<i style="display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px;border:2px solid '+(thPal(it)?thPal(it).line:'var(--line)')+';background:'+(thPal(it)?thPal(it).gold:'var(--gold)')+'"></i>':'';
+    return '<div class="up"><div><h3>'+sw+it.name+'</h3>'+(it.desc?'<p>'+it.desc+'</p>':'')+'</div>'+btn+'</div>';
+  };
+  c.innerHTML='<h3 style="margin:0 0 6px">🎨 見た目ショップ</h3><p class="note">ゲームの強さには関係しません。一度買えば転生しても残ります。</p>'
+    +'<div class="note" style="margin:10px 0 2px"><b>テーマ</b></div>'+THEMES.map(t=>item(t,'th')).join('')
+    +'<div class="note" style="margin:10px 0 2px"><b>称号</b>（ヘッダーのコインの下に表示）</div>'+TITLES.map(t=>item(t,'ti')).join('')
+    +'<div class="row" style="margin-top:8px"><button class="btn" id="tiOff" '+(S.ti?'':'disabled')+'>称号をはずす</button></div>';
+  $$('#cosCard [data-a]').forEach(b=>b.onclick=()=>{
+    const kind=b.dataset.k,id=b.dataset.i,it=(kind==='th'?THEMES:TITLES).find(x=>x.id===id);
+    if(!it)return;
+    if(b.dataset.a==='buy'){
+      if(S.coins<it.price||(it.pg&&(S.pg||0)<it.pg))return;
+      S.coins-=it.price;if(!S.own)S.own=[];S.own.push(id);
+    }
+    if(kind==='th')S.th=id;else S.ti=id;
+    save();hud();renderShop();
+  });
+  $('#tiOff').onclick=()=>{S.ti='';save();hud();renderShop()};
+}
+
+function hud(){
+  if(!S.jp)S.jp=1000;const j=$('#jp');if(j)j.textContent=S.jp.toLocaleString();
+  if(S.coins>(S.mx||0))S.mx=S.coins;
+  $('#coins').textContent=S.coins.toLocaleString();
+  $('#combo').textContent=combo;
+  $('#mult').textContent=(mult()*comboBonus(combo)).toFixed(2);
+  if((S.th||'')!==thApplied)applyTheme();
+  updTitle();
+  updTmr();
+}
+const sc=x=>(S.sc&&S.sc[x.w])||0;
+let lastW=null;
+function disp(x){return x.ms.slice().sort(()=>Math.random()-.5).slice(0,2).join('、')}
+function ovl(a,b){return a.ms.some(p=>b.ms.some(q=>p===q||(p.length>1&&q.length>1&&(p.includes(q)||q.includes(p)))))}
+function pick(n,ex){
+  const a=[];let t=0;
+  while(a.length<n){
+    const x=words[Math.random()*words.length|0];t++;
+    if(x===ex||a.includes(x))continue;
+    if(t<800&&(ovl(x,ex)||a.some(y=>ovl(x,y))))continue;
+    a.push(x);
+  }
+  return a;
+}
+function chooseWord(){
+  let c=pool().filter(x=>!(S.mode==='ex'||S.mode==='ej')||x.ex);
+  if(!c.length)return null;
+  if(c.length>1)c=c.filter(x=>x!==lastW);
+  const wt=c.map(x=>Math.pow(1.3,10-Math.max(sc(x),-30)));
+  let r=Math.random()*wt.reduce((a,b)=>a+b,0),i=0;
+  for(;i<c.length-1;i++){r-=wt[i];if(r<0)break}
+  return lastW=c[i];
+}
+function allDone(){
+  locked=true;const noEx=(S.mode==='ex'||S.mode==='ej')&&!pool().some(x=>x.ex);
+  $('#q').classList.remove('ex');
+  $('#q').textContent=noEx?'📝 例文が未登録です':'🎉 この範囲は習得済み';
+  $('#hint').textContent=noEx?'「編集」タブで例文を登録するか、範囲を変えてください':'評価値が10を超えた単語は出題されません';$('#gain').textContent='';
+  $('#ch').innerHTML=noEx?'':'<button class="btn" id="rs">この範囲の評価値をリセット</button>';
+  if(!noEx)$('#rs').onclick=()=>{pool().forEach(x=>{if(S.sc)delete S.sc[x.w]});save();updRange();next()};
+}
+function inRange(){const a=S.from||1,b=S.to||1e9;return words.filter(x=>x.n>=a&&x.n<=b)}
+function pool(){const p=inRange();return p.length?p:words}
+function updRange(){
+  $('#rf').value=S.from||'';$('#rt').value=S.to||'';
+  $('#rf').placeholder=1;$('#rt').placeholder=words.reduce((a,x)=>Math.max(a,x.n),0);
+  const r=inRange(),n=r.length,k=r.filter(x=>sc(x)>10).length;
+  $('#rn').textContent=n?n+'語（習得'+k+'）':'該当なし（全範囲）';
+}
+function applyRange(){
+  let a=+$('#rf').value||0,b=+$('#rt').value||0;
+  if(a&&b&&a>b)[a,b]=[b,a];
+  S.from=a;S.to=b;save();updRange();next();
+}
+let exFull='';let cmAbsent=false;
+function showPop(){
+  $('#popT').textContent='答え　No.'+cur.n+'　'+cur.w;
+  $('#popM').textContent=cur.ms.join('、');
+  $('#pop').classList.remove('hidden');
+}
+function hidePop(){$('#pop').classList.add('hidden')}
+$('#popX').onclick=hidePop;$('#popN').onclick=()=>next();
+function blankEx(c){
+  const e=c.ex,B='＿＿＿＿';
+  if(/\[[^\]]+\]/.test(e)){let k=0;exFull=e.replace(/\[([^\]]+)\]/g,'$1');return{txt:e.replace(/\[([^\]]+)\]/g,(a,b)=>k++?b:B),ok:true}}
+  const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const base=c.w.replace(/[～~()]/g,'').trim();
+  exFull=e;
+  for(const st of [base,base.length>3?base.slice(0,-1):'']){
+    if(!st)continue;
+    const re=new RegExp('\\b'+esc(st)+'\\w*','i');
+    if(re.test(e))return{txt:e.replace(re,B),ok:true};
+  }
+  return{txt:e,ok:false};
+}
+const escH=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function ulEx(c){
+  const e=c.ex,bm=e.match(/\[([^\]]+)\]/);
+  if(bm){const st=s=>s.replace(/\[([^\]]+)\]/g,'$1');return{pre:st(e.slice(0,bm.index)),hit:bm[1],post:st(e.slice(bm.index+bm[0].length)),ok:true}}
+  const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const base=c.w.replace(/[～~()]/g,'').trim();
+  for(const s of [base,base.length>3?base.slice(0,-1):'']){
+    if(!s)continue;
+    const m=new RegExp('\\b'+esc(s)+'\\w*','i').exec(e);
+    if(m)return{pre:e.slice(0,m.index),hit:m[0],post:e.slice(m.index+m[0].length),ok:true};
+  }
+  return{pre:e,hit:'',post:'',ok:false};
+}
+function exjHtml(s){return escH(s).replace(/「([^」]*)」/g,'<b style="color:var(--gold)">「$1」</b>')}
+function exjMean(c){const m=(c.exj||'').match(/「([^」]+)」/);return m?m[1].trim():''}
+function ejText(o){
+  const mm=exjMean(cur);
+  if(o===cur)return mm||disp(cur);
+  return mm?o.ms[Math.random()*o.ms.length|0]:disp(o);
+}
+function renderQ(en){
+  const q=$('#q');q.classList.toggle('ex',S.mode==='ex'||S.mode==='ej');
+  if(S.mode==='ej'){const r=ulEx(cur);q.innerHTML=escH(r.pre)+(r.ok?'<u style="text-decoration-color:var(--gold);text-decoration-thickness:3px;text-underline-offset:5px">'+escH(r.hit)+'</u>':'')+escH(r.post);return r.ok}
+  if(S.mode==='ex'){const r=blankEx(cur);q.textContent=r.txt;return r.ok}
+  q.textContent=en?cur.w:disp(cur);return true;
+}
+function next(){
+  hidePop();locked=false;qEl=0;$('#gain').textContent='';$('#gain').className='gain';
+  cur=chooseWord();if(!cur){allDone();return}
+  cmAbsent=Math.random()<0.1;
+  const opts=(cmAbsent?pick(4,cur):[cur,...pick(3,cur)]).sort(()=>Math.random()-.5);
+  const en=S.mode==='en';
+  const okq=renderQ(en);
+  let ht;
+  if(S.mode==='ex')ht=(cur.exj?exjHtml(cur.exj):'空欄に入る語を選んでください')+(okq?'':'（空欄にできません：[ ]で対象語を囲んでください）');
+  else if(S.mode==='ej')ht='下線部の意味を選んでください'+(okq?'':'（下線にできません：[ ]で対象語を囲んでください）');
+  else ht=en?'意味を選んでください':'英単語を選んでください';
+  $('#hint').innerHTML=ht+'　No.'+cur.n+'　評価 '+sc(cur);
+  $('#ch').innerHTML='';$('#ch').classList.remove('done');
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.textContent=S.mode==='ej'?ejText(o):en?disp(o):o.w;
+    b.onclick=()=>answer(b,o===cur,opts);
+    b.dataset.c=o===cur?1:0;b._o=o;
+    const tg=document.createElement('small');tg.className='tag';
+    tg.textContent='No.'+o.n+(S.mode==='en'||S.mode==='ej'?'\u3000'+o.w:'');b.appendChild(tg);
+    $('#ch').appendChild(b);
+  });
+  const xr=document.createElement('div');xr.className='xr';
+  [['分からない',false],['この中にはない',true]].forEach(([t,isNone])=>{
+    const x=document.createElement('button');x.className='xb';x.textContent=t;
+    x.onclick=()=>answer(x,isNone?cmAbsent:false);
+    xr.appendChild(x);
+  });
+  $('#ch').appendChild(xr);
+  const nb=document.createElement('button');
+  nb.id='nx';nb.textContent='次の問題 →';nb.onclick=next;$('#ch').appendChild(nb);
+}
+function answer(btn,right){
+  if(locked)return;locked=true;S.tot++;S.sc=S.sc||{};S.sc[cur.w]=sc(cur)+(right?1:-5);updRange();if(S.mode==='ex'&&exFull)$('#q').textContent=exFull;
+  if(S.mode==='ej')$('#hint').innerHTML=(cur.exj?exjHtml(cur.exj):'（訳は未登録）')+'　No.'+cur.n+'　評価 '+sc(cur);
+  const g=$('#gain');
+  if(right){
+    combo++;S.ok++;if(combo>S.best)S.best=combo;
+    const r=Math.round(10*mult()*comboBonus(combo));
+    S.coins+=r;btn.classList.add('ok');
+    g.textContent='正解！ +'+r+' コイン'+(combo>1?'（'+combo+'コンボ）':'');g.classList.add('ok');
+  }else{
+    combo=0;btn.classList.add('ng');
+    $$('#ch button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('ok')});
+    g.textContent='ざんねん… コンボが途切れた';g.classList.add('ng');
+  }
+  $('#ch').classList.add('done');
+  if(cmAbsent)showPop();
+  save();hud();
+}
+
+/* slot */
+function renderBets(){
+  const box=$('#bets');box.innerHTML='';
+  [10,50,100,500,1000,5000,10000,'ALL'].forEach(v=>{
+    const b=document.createElement('button');b.textContent=v==='ALL'?'ALL IN':v;
+    if(S.bet===v)b.className='on';
+    b.onclick=()=>{S.bet=v;save();renderBets()};box.appendChild(b);
+  });
+}
+let spinning=false;
+function setCell(el,s){el.textContent=s;el.dataset.s=s}
+function initReels(){const b=$('#reels');b.innerHTML='';for(let i=0;i<9;i++){const d=document.createElement('div');d.className='reel'+(i>=3&&i<=5?' mid':'');setCell(d,SYM[i%7]);b.appendChild(d)}}
+function rnd(){let r=Math.random();for(let i=0;i<SYM.length;i++){r-=WT[i];if(r<0)return SYM[i]}return SYM[0]}
+function judge(L,C,R){
+  if(L===C&&C===R){
+    const t={[SV]:[200,'7揃い'],[KK]:[80,'💎揃い'],[BR]:[30,'🎰揃い'],[CH]:[15,'チェリー揃い'],[BL]:[12,'ベル揃い'],[WM]:[8,'スイカ揃い'],[RP]:[1,'リプレイ（賭け金が戻る）']}[L];
+    return{mul:t[0],name:t[1],jp:L===SV,replay:L===RP};
+  }
+  const top=[SV,KK,BR];
+  if(top.includes(L)&&top.includes(C)&&top.includes(R))return{mul:5,name:'7・💎・🎰混合'};
+  if(L===CH&&C===CH)return{mul:4,name:'チェリー2つ'};
+  if(L===CH)return{mul:2,name:'左端チェリー'};
+  if(L===WM&&C===WM)return{mul:2,name:'スイカ2つ'};
+  if(L===BL&&C===BL)return{mul:2,name:'ベル2つ'};
+  return null;
+}
+function clearReach(){
+  $('#slotCard').classList.remove('reach','sreach');
+  $$('.reel').forEach(c=>c.classList.remove('rch','rchw'));
+}
+function clearFx(){clearReach();$('#slotCard').classList.remove('jpwin')}
+function startReach(cells,timers,slow,sup){
+  $('#slotCard').classList.add(sup?'sreach':'reach');
+  $('#res').innerHTML='<span class="rbn">'+(sup?'SUPER REACH!!':'REACH!')+'</span>';
+  [3,4].forEach(i=>cells[i].classList.add('rch'));
+  cells[5].classList.add('rchw');
+  [2,5,8].forEach(i=>{
+    clearInterval(timers[i]);
+    let d=110;
+    const tick=()=>{setCell(cells[i],rnd());d+=sup?55:45;slow[i]=setTimeout(tick,d)};
+    tick();
+  });
+}
+function confetti(){
+  const cols=['#ff3b3b','#ffb300','#ffee00','#3ddc97','#00b8ff','#7c4dff','#ff4fd8'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');d.className='cf';
+    d.style.left=Math.random()*100+'vw';d.style.background=cols[i%cols.length];
+    d.style.animationDuration=(2+Math.random()*2.5)+'s';d.style.animationDelay=(Math.random()*0.8)+'s';
+    d.style.transform='rotate('+Math.random()*360+'deg)';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),5400);
+  }
+}
+function jackpotFx(){$('#slotCard').classList.add('jpwin');confetti()}
+function spin(){
+  if(spinning)return;
+  const bet=S.bet==='ALL'?S.coins:S.bet;
+  if(bet<=0||bet>S.coins){$('#res').textContent='コインが足りません。テストで稼ぎましょう';$('#res').style.color='var(--ng)';return}
+  spinning=true;$('#spin').disabled=true;S.coins-=bet;S.jp+=Math.round(bet*0.05);hud();
+  const res=Array.from({length:9},rnd),cells=$$('.reel');
+  $('#res').textContent='';
+  cells.forEach(r=>r.classList.remove('win'));clearFx();
+  const reach=res[3]===res[4],sup=reach&&[SV,KK,BR].includes(res[3]);
+  const timers=cells.map(r=>{r.classList.add('spin');return setInterval(()=>setCell(r,rnd()),70)});
+  const slow=[];
+  if(reach)setTimeout(()=>startReach(cells,timers,slow,sup),1160);
+  cells.forEach((r,i)=>setTimeout(()=>{
+    clearInterval(timers[i]);clearTimeout(slow[i]);setCell(r,res[i]);r.classList.remove('spin');
+    if(i===8)finish(res,bet);
+  },(reach&&i%3===2)?3700:700+(i%3)*450));
+}
+function finish(res,bet){
+  clearReach();const j=judge(res[3],res[4],res[5]),luck=1+0.1*S.lv.l,cells=$$('.reel');
+  let total=0,msg;
+  if(j){
+    [3,4,5].forEach(i=>cells[i].classList.add('win'));
+    if(j.jp)jackpotFx();
+    total=j.replay?bet:Math.round(bet*j.mul*luck);
+    if(j.jp){total+=S.jp;S.jp=1000}
+    msg=(j.jp?'🎰 JACKPOT！ ':'🎉 ')+j.name+(j.replay?'':' ×'+j.mul)+' +'+total.toLocaleString();
+  }else msg='外れ… −'+bet;
+  S.coins+=total;save();hud();
+  const r=$('#res');r.textContent=msg;if(j&&j.jp)r.innerHTML='<span class="jpt">'+escH(msg)+'</span>';r.style.color=total>bet?'var(--ok)':total===bet?'var(--text)':'var(--ng)';
+  spinning=false;$('#spin').disabled=false;
+}
+
+/* shop */
+function renderShop(){
+  const defs=[
+    ['m','報酬倍率','正解時の獲得コインが +25%（現在 ×'+baseMult().toFixed(2)+'）'],
+    ['c','コンボ強化','コンボごとの上乗せが +5%（現在 1コンボ＝+'+Math.round((0.1+0.05*S.lv.c)*100)+'%、30コンボまで）'],
+    ['t','コンボ制限時間','コンボが途切れるまでの制限時間が伸びます（1レベルあたり+0.7秒。現在 '+qLimit().toFixed(1)+'秒。チャレンジには反映されません）'],
+    ['l','あそび運','スロット・サイコロの配当が +10%（現在 ×'+(1+0.1*S.lv.l).toFixed(1)+'）']
+  ];
+  $('#ups').innerHTML=defs.map(([k,t,d])=>{
+    const lv=S.lv[k]||0,mx=lv>=MAXLV[k],c=mx?0:cost[k]();
+    return `<div class="up"><div><h3>${t} Lv.${lv}<small style="color:var(--sub);font-weight:500"> / ${MAXLV[k]}</small></h3><p>${d}</p></div><button class="btn" data-k="${k}" ${mx||S.coins<c?'disabled':''}>${mx?'MAX':c.toLocaleString()}</button></div>`;
+  }).join('');
+  $$('#ups button').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k;if((S.lv[k]||0)>=MAXLV[k])return;
+    const c=cost[k]();
+    if(S.coins>=c){S.coins-=c;S.lv[k]=(S.lv[k]||0)+1;save();hud();renderShop()}
+  });
+  $('#sc').textContent=S.ok;$('#sm').textContent=Math.max(S.mx||0,S.coins).toLocaleString();$('#sa').textContent=(S.tot?Math.round(S.ok/S.tot*100):0)+'%';$('#sb').textContent=S.best;
+  renderPg();renderCosm();
+}
+
+/* combo time limit (quiz) */
+const qLimit=()=>{const l=S.lv.t||0;return 1+0.7*l};
+let qEl=0,tkLast=performance.now();
+function updTmr(){
+  const w=$('#tmrW');if(!w)return;
+  const on=combo>0&&!locked&&cur;
+  w.style.display=on?'block':'none';
+  if(!on)return;
+  const L=qLimit(),r=Math.max(0,1-qEl/L);
+  $('#tmrB').style.width=(r*100)+'%';$('#tmrB').style.background=r<.25?'var(--ng)':'var(--ok)';
+  $('#tmrT').textContent='コンボ制限 のこり '+Math.max(0,L-qEl).toFixed(1)+'秒';
+}
+/* challenge */
+const CH_L=[10,8,6,5,4,3,2],CH_N=[10,20,30,50];
+let ch=null;
+const chStep=l=>0.5/l;
+function csGet(){if(!S.cs)S.cs={};const c=S.cs;if(!c.m)c.m='en';if(!c.n)c.n=20;if(!c.l)c.l=8;return c}
+function chPool(){const a=+$('#cf').value||0,b=+$('#ct').value||0,lo=Math.min(a||1,b||1e9),hi=Math.max(a||1,b||1e9);return words.filter(x=>x.n>=(a&&b?lo:(a||1))&&x.n<=(a&&b?hi:(b||1e9)))}
+function chView(v){
+  $('#chSetup').classList.toggle('hidden',v==='run');
+  $('#chRun').classList.toggle('hidden',v!=='run');
+  $('#chHistCard').classList.toggle('hidden',v==='run');
+  if(v!=='end')$('#chEnd').classList.add('hidden');
+}
+function chSeg(id,arr,key,fmt){
+  const b=$(id);b.innerHTML='';
+  arr.forEach(v=>{const x=document.createElement('button');x.textContent=fmt(v);if(csGet()[key]===v)x.className='on';x.onclick=()=>{chKeep();csGet()[key]=v;save();renderChal()};b.appendChild(x)});
+}
+function chKeep(){const c=csGet();c.f=+$('#cf').value||0;c.t=+$('#ct').value||0}
+function renderChal(){
+  const c=csGet();
+  $('#cf').value=c.f!=null?c.f:(S.from||'');$('#ct').value=c.t!=null?c.t:(S.to||'');
+  chSeg('#cMode',['en','jp'],'m',v=>v==='en'?'英語→日本語':'日本語→英語');
+  const mx=chPool().length,nn=mx?Math.min(c.n,mx):c.n;
+  $('#cNum').value=nn;$('#cNum').max=mx||'';$('#cMax').textContent='最大 '+mx+'問';
+  chSeg('#cN',CH_N,'n',v=>v+'問');
+  chSeg('#cL',CH_L,'l',v=>v+'秒');
+  const st=chStep(c.l);
+  $('#cInfo').textContent='制限'+c.l+'秒：コンボ1回ごとに倍率 +'+Math.round(st*100)+'%（30コンボで最大 ×'+(1+30*st).toFixed(2)+'）。速く答えるほど最大×2のスピードボーナス。';
+  const h=S.ch||[];
+  $('#cBest').textContent=h.length?'ベスト '+Math.max(...h.map(x=>x.score)).toLocaleString()+' 点　挑戦 '+h.length+' 回（最新100件まで保存）':'まだ記録がありません';
+  const p=n=>String(n).padStart(2,'0');
+  $('#cHist').innerHTML=h.map(x=>{
+    const d=new Date(x.at);
+    return '<div class="up" data-i="'+h.indexOf(x)+'" style="cursor:pointer"><div><h3 style="font-size:15px">'+x.score.toLocaleString()+' 点'+(x.perfect?' ✨ノーミス':'')+'</h3><p>'+(d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes())+'　No.'+(x.a||1)+'〜'+(x.b||'最後')+'　'+x.n+'問　制限'+x.lim+'秒　'+(x.mode==='en'?'英→日':'日→英')+'</p><p>正解 '+x.ok+'/'+x.n+'　最大コンボ '+x.maxC+'　合計 '+x.sec.toFixed(1)+'秒</p></div><b style="color:var(--gold)">+'+x.coins.toLocaleString()+'</b></div>';
+  }).join('');
+}
+function chDetail(i){
+  const x=(S.ch||[])[i];if(!x)return;
+  const d=new Date(x.at),p=n=>String(n).padStart(2,'0');
+  const row=(k,v)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:17px"><span style="color:var(--sub)">'+k+'</span><b>'+v+'</b></div>';
+  $('#chDetBody').innerHTML='<div class="card" style="text-align:center;padding:26px 22px"><div class="note" style="font-size:14px">🏁 チャレンジ結果</div><div style="font-size:60px;font-weight:900;color:var(--gold);line-height:1.2;margin:6px 0">'+x.score.toLocaleString()+'<small style="font-size:22px"> 点</small></div>'+(x.perfect?'<div style="color:var(--ok);font-weight:900;font-size:18px">✨ ノーミス ×1.5</div>':'')+'<div style="text-align:left;margin-top:14px">'
+    +row('日時',d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes()))
+    +row('出題範囲','No.'+(x.a||1)+' 〜 '+(x.b||'最後'))
+    +row('形式',x.mode==='en'?'英語→日本語':'日本語→英語')
+    +row('問題数',x.n+'問')
+    +row('コンボ制限時間',x.lim+'秒')
+    +row('正解 / ミス',x.ok+' / '+x.miss)
+    +row('最大コンボ',x.maxC)
+    +row('合計タイム',x.sec.toFixed(1)+'秒（平均 '+(x.sec/Math.max(1,x.n)).toFixed(1)+'秒/問）')
+    +row('獲得コイン','+'+x.coins.toLocaleString())
+    +'</div></div>';
+  $('#chDet').classList.remove('hidden');
+}
+$('#cHist').onclick=e=>{const r=e.target.closest('[data-i]');if(r)chDetail(+r.dataset.i)};
+$('#chDetX').onclick=()=>$('#chDet').classList.add('hidden');
+function chHud(){
+  $('#cProg').textContent=Math.min(ch.i+1,ch.q.length)+'/'+ch.q.length;
+  $('#cScore').textContent=ch.score.toLocaleString();
+  $('#cCombo').textContent=ch.combo;
+  $('#cMul').textContent=(1+Math.min(ch.combo,30)*chStep(ch.lim)).toFixed(2);
+}
+function chBar(){
+  if(!ch)return;
+  const r=Math.max(0,1-ch.el/ch.lim),b=$('#cBar');
+  b.style.width=(r*100)+'%';b.style.background=r<.25?'var(--ng)':'var(--ok)';
+}
+function chNext(){
+  if(!ch||!ch.on)return;
+  if(ch.i>=ch.q.length){chFinish();return}
+  const cur=ch.q[ch.i],en=ch.mode==='en';
+  ch.cur=cur;ch.locked=false;ch.el=0;
+  $('#cq').textContent=en?cur.w:disp(cur);
+  const opts=[cur,...pick(3,cur)].sort(()=>Math.random()-.5),box=$('#cch');
+  box.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.textContent=en?disp(o):o.w;b.dataset.c=o===cur?1:0;
+    b.onclick=()=>chAnswer(b,o===cur);box.appendChild(b);
+  });
+  const g=$('#cGain');g.textContent='';g.className='gain';
+  chHud();chBar();
+}
+function chAnswer(btn,right){
+  if(!ch||!ch.on||ch.locked)return;
+  ch.locked=true;const t=ch.el,g=$('#cGain');ch.sec+=Math.min(t,999);
+  if(right){
+    ch.combo++;ch.ok++;if(ch.combo>ch.maxC)ch.maxC=ch.combo;
+    const sp=1+Math.max(0,1-t/ch.lim),cm=1+Math.min(ch.combo,30)*chStep(ch.lim),pts=Math.round(100*sp*cm);
+    ch.score+=pts;btn.classList.add('ok');
+    g.textContent='+'+pts+'（スピード ×'+sp.toFixed(2)+'　コンボ ×'+cm.toFixed(2)+'）';g.className='gain ok';
+    ch.i++;chHud();setTimeout(chNext,600);
+  }else{
+    ch.combo=0;ch.miss++;btn.classList.add('ng');
+    $$('#cch button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('ok')});
+    g.textContent='ミス… コンボが途切れた';g.className='gain ng';
+    ch.i++;chHud();setTimeout(chNext,1500);
+  }
+}
+function chFinish(){
+  ch.on=false;
+  const perfect=ch.miss===0&&ch.ok===ch.q.length,final=Math.round(ch.score*(perfect?1.5:1)),coins=Math.round(final/10*mult());
+  const prev=Math.max(0,...(S.ch||[]).map(x=>x.score));
+  S.ch.unshift({at:Date.now(),a:ch.a,b:ch.b,n:ch.q.length,mode:ch.mode,lim:ch.lim,score:final,ok:ch.ok,miss:ch.miss,maxC:ch.maxC,sec:ch.sec,coins,perfect});
+  if(S.ch.length>100)S.ch.length=100;
+  S.coins+=coins;save();hud();
+  const e=$('#chEnd');
+  e.innerHTML='<h3 style="margin:0 0 6px">結果</h3><div style="text-align:center"><div style="font-size:38px;font-weight:900;color:var(--gold)">'+final.toLocaleString()+' 点</div>'+(final>prev?'<div style="color:var(--ok);font-weight:900">🎉 ベスト更新！</div>':'')+(perfect?'<div style="color:var(--ok);font-weight:900">✨ ノーミス ×1.5</div>':'')+'<p class="note">正解 '+ch.ok+'/'+ch.q.length+'　最大コンボ '+ch.maxC+'　合計 '+ch.sec.toFixed(1)+'秒</p><div style="font-weight:900;font-size:20px;color:var(--gold)">+'+coins.toLocaleString()+' コイン</div></div>';
+  chView('end');e.classList.remove('hidden');renderChal();
+}
+$('#cGo').onclick=()=>{
+  const c=csGet();
+  let a=+$('#cf').value||0,b=+$('#ct').value||0;if(a&&b&&a>b)[a,b]=[b,a];
+  c.f=a;c.t=b;save();
+  const pl=words.filter(x=>x.n>=(a||1)&&x.n<=(b||1e9));
+  if(pl.length<4||words.length<4){$('#cErr').textContent='範囲内の単語が少なすぎます（4語以上必要）：'+pl.length+'語';return}
+  $('#cErr').textContent='';
+  const q=pl.slice().sort(()=>Math.random()-.5).slice(0,c.n);
+  ch={q,i:0,score:0,combo:0,maxC:0,ok:0,miss:0,sec:0,lim:c.l,mode:c.m,a,b,el:0,locked:true,on:true};
+  chView('run');chNext();
+};
+$('#cf').onchange=$('#ct').onchange=()=>{chKeep();save();renderChal()};
+$('#cNum').onchange=()=>{chKeep();const c=csGet(),mx=chPool().length;c.n=Math.max(1,Math.min(+$('#cNum').value||1,mx||1e9));save();renderChal()};
+$('#cStop').onclick=()=>{if(ch&&ch.on&&confirm('中断しますか？（記録・コインは付きません）')){ch.on=false;chView('setup')}};
+$('#cHClr').onclick=()=>{if(confirm('チャレンジの履歴を消去しますか？')){S.ch=[];save();renderChal()}};
+setInterval(()=>{
+  const now=performance.now(),dt=Math.min(0.5,(now-tkLast)/1000);tkLast=now;
+  if(!$('#quiz').classList.contains('hidden')&&!locked&&cur){
+    qEl+=dt;
+    if(combo>0&&qEl>=qLimit()){qEl=0;combo--;const g=$('#gain');g.textContent=combo>0?'コンボメーターが尽きた… コンボ −1（'+combo+'）':'時間切れ… コンボが途切れた';g.className='gain ng';hud()}
+    updTmr();
+  }
+  if(!$('#chal').classList.contains('hidden')&&ch&&ch.on&&!ch.locked){
+    ch.el+=dt;
+    if(ch.combo>0&&ch.el>=ch.lim){ch.combo=0;const g=$('#cGain');g.textContent='時間切れ… コンボが途切れた';g.className='gain ng';chHud()}
+    chBar();
+  }
+},100);
+
+/* ===== リーダーボード・全員への単語公開 ===== */
+window.boardData=()=>{
+  const t=TITLES.find(x=>x.id===S.ti&&(S.own||[]).includes(x.id));
+  return{ok:S.ok||0,best:S.best||0,mx:Math.max(S.mx||0,S.coins||0),pg:S.pg||0,ttl:t?t.name:'',off:!!S.bdOff};
+};
+const BD_CATS=[['ok','正解数'],['best','最高コンボ'],['mx','最高コイン'],['pg','転生回数']];
+let bdCat='ok';
+function renderBdCats(){
+  const b=$('#bdCat');b.innerHTML='';
+  BD_CATS.forEach(([k,t])=>{const x=document.createElement('button');x.textContent=t;if(bdCat===k)x.className='on';x.onclick=()=>{bdCat=k;renderBdCats();loadBoard()};b.appendChild(x)});
+}
+async function loadBoard(){
+  const m=$('#bdMsg'),box=$('#bdList');
+  renderBdCats();$('#bdJoin').checked=!S.bdOff;
+  const api=await cloudApi();
+  if(!api){box.innerHTML='';m.textContent='クラウドに接続できません';return}
+  if(!api.loggedIn()){box.innerHTML='';m.textContent='ログインするとリーダーボードを見られます（メニュー → 設定 → オンラインセーブ）';return}
+  m.textContent='読み込み中…';
+  try{
+    await api.pushBoard().catch(()=>{});
+    const rows=await api.board(bdCat),me=api.name();
+    box.innerHTML=rows.length?rows.map((r,i)=>'<div class="bdr'+(r.name===me?' me':'')+'"><span class="bk">'+(i<3?['🥇','🥈','🥉'][i]:(i+1))+'</span><span class="nm">'+escH(r.name)+(r.ttl?'<small>'+escH(r.ttl)+'</small>':'')+'</span><span class="v">'+(r[bdCat]||0).toLocaleString()+'</span></div>').join(''):'';
+    m.textContent=rows.length?'上位'+rows.length+'人（'+new Date().toLocaleTimeString('ja-JP')+' 更新）':'まだ記録がありません。';
+  }catch(e){box.innerHTML='';m.textContent=api.errJa(e)}
+}
+$('#bdReload').onclick=loadBoard;
+$('#bdJoin').onchange=async()=>{S.bdOff=!$('#bdJoin').checked;save();const api=await cloudApi();if(api&&api.loggedIn())api.pushBoard().then(()=>{$('#bdMsg').textContent=S.bdOff?'ランキングから外しました':'ランキングに参加しました';loadBoard()}).catch(e=>{$('#bdMsg').textContent=api.errJa(e)})};
+async function renderPubAdm(){
+  const c=$('#pubCard'),api=await cloudApi(),adm=!!(api&&api.loggedIn()&&api.isAdmin());
+  c.classList.toggle('hidden',!adm);
+  if(!adm)return;
+  try{const p=await api.pubGet();$('#pubAdm').textContent=p?'現在の公開内容：'+p.n+'語（'+new Date(p.at).toLocaleString('ja-JP')+' '+p.by+'）':'まだ公開されていません（内蔵リストが使われています）'}
+  catch(e){$('#pubAdm').textContent=api.errJa(e)}
+}
+$('#pubAll').onclick=async()=>{
+  const api=await cloudApi(),m=$('#pubAdm');
+  if(!api||!api.loggedIn()||!api.isAdmin()){m.textContent='管理者のIDでログインしてください';return}
+  const txt=wordsTxt(),bytes=new Blob([txt]).size;
+  if(bytes>900000){m.textContent='リストが大きすぎて公開できません（'+Math.round(bytes/1000)+'KB／上限の目安 900KB）';return}
+  if(!confirm('いまの単語リスト（'+words.length+'語・例文'+words.filter(x=>x.ex).length+'件）を、全員の公開リストにします。よろしいですか？'))return;
+  m.textContent='公開中…';
+  try{
+    await api.pubPut(txt,words.length);
+    setWsrc({h:hashStr(txt),custom:false,src:'cloud'});pubInfo('公開リスト（'+words.length+'語）を使用中');
+    m.textContent='✅ 公開しました（'+new Date().toLocaleString('ja-JP')+'）。全員の端末には次に開いたときに反映されます';
+  }catch(e){m.textContent=api.errJa(e)}
+};
+
+/* wiring */
+function goTab(t){
+  $$('nav button[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+  $('#menuBtn').classList.toggle('on',t==='store'||t==='shop'||t==='help'||t==='board');
+  $$('.mn .mi').forEach(x=>x.classList.toggle('on',x.dataset.t===t));hidePop();
+  ['quiz','slot','chal','store','shop','help','view','edit','board'].forEach(id=>$('#'+id).classList.toggle('hidden',id!==t));
+  if(t==='shop'||t==='store')renderShop();
+  if(t==='chal')renderChal();
+  if(t==='edit')renderEdit();
+  if(t==='view')showView(vIdx);
+  if(t==='board')loadBoard();
+  window.scrollTo(0,0);
+}
+$$('nav button[data-t]').forEach(b=>b.onclick=()=>goTab(b.dataset.t));
+function mnOpen(){$('#mnBk').classList.remove('hidden');$('#mn').classList.add('open');$('#mn').setAttribute('aria-hidden','false')}
+function mnClose(){$('#mnBk').classList.add('hidden');$('#mn').classList.remove('open');$('#mn').setAttribute('aria-hidden','true')}
+$('#menuBtn').onclick=mnOpen;$('#mnX').onclick=mnClose;$('#mnBk').onclick=mnClose;
+$$('.mn .mi').forEach(b=>b.onclick=()=>{mnClose();goTab(b.dataset.t)});
+(()=>{
+  let tx=null,ty=0;
+  document.addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY},{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(tx==null)return;
+    const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,open=$('#mn').classList.contains('open');
+    if(Math.abs(dx)>70&&Math.abs(dy)<60){
+      if(!open&&dx<0&&tx>innerWidth-40&&$('#raceOv').classList.contains('hidden'))mnOpen();
+      else if(open&&dx>0)mnClose();
+    }
+    tx=null;
+  },{passive:true});
+})();
+$('#goEdit').onclick=()=>goTab('edit');
+$('#editBack').onclick=()=>goTab('shop');
+$$('[data-m]').forEach(b=>b.onclick=()=>{
+  S.mode=b.dataset.m;$$('[data-m]').forEach(x=>x.classList.toggle('on',x===b));save();next();
+});
+$('#spin').onclick=spin;
+$('#rf').onchange=$('#rt').onchange=applyRange;
+$('#rsAll').onclick=()=>{if(confirm('全単語の評価値をリセットしますか？')){S.sc={};save();updRange();next()}};
+$('#impBtn').onclick=()=>{
+  const t=$('#imp').value,n=parseList(t).length;
+  if(n<20){$('#impMsg').textContent='読み取れた単語が少なすぎます（'+n+'語）';return}
+  setWords(parseList(t));setWsrc(Object.assign(wsrc(),{custom:true}));showCustom({});$('#impMsg').textContent=n+'語を読み込みました（例文は同じ単語のものを引き継ぎます）';next();
+};
+$('#file').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  const msg=$('#impMsg');let txt='';
+  try{
+    const buf=await f.arrayBuffer(),ext=f.name.split('.').pop().toLowerCase();
+    if(ext==='xlsx'||ext==='xls'){
+      if(!window.XLSX){msg.textContent='Excel読み込みライブラリを取得できませんでした。csvで保存して試してください';return}
+      const wb=XLSX.read(buf,{type:'array'});
+      txt=wb.SheetNames.map(n=>XLSX.utils.sheet_to_csv(wb.Sheets[n],{FS:'\t'})).join('\n');
+    }else{
+      txt=decodeTxt(buf);
+      if(ext==='json'){
+        const j=JSON.parse(txt);
+        const arr=Array.isArray(j)?j:Object.entries(j);
+        txt=arr.map(x=>Array.isArray(x)?x[0]+'\t'+x[1]:(x.w||x.word||x.en)+'\t'+(x.m||x.meaning||x.jp||x.ja)).join('\n');
+      }
+    }
+    txt=txt.replace(/^\ufeff/,'');
+    $('#imp').value=txt;$('#impBtn').click();
+  }catch(err){msg.textContent='読み込みに失敗しました：'+err.message}
+  e.target.value='';
+};
+$('#reset').onclick=()=>{
+  if(!confirm('コイン・強化・評価値などを初期化します（登録単語は残ります）。よろしいですか？'))return;
+  S={coins:0,lv:{m:0,c:0,l:0,t:0},best:0,ok:0,tot:0,mode:'en',bet:10,imp:''};combo=0;normS();save();
+  buildWords();hud();renderBets();renderShop();next();
+};
+
+function saveJSON(){const o=Object.assign({app:'leap-slot',v:2,at:new Date().toISOString()},S);delete o.imp;return JSON.stringify(o,null,1)}
+function applySave(txt,skip){
+  const m=$('#svMsg');
+  try{
+    const d=JSON.parse(txt);
+    if(!d||typeof d!=='object'||typeof d.coins!=='number'||!d.lv)throw new Error('セーブデータの形式が違います');
+    if(!skip&&!confirm('現在のデータを上書きして読み込みます。よろしいですか？'))return;
+    delete d.app;delete d.v;delete d.at;delete d.imp;
+    S=Object.assign({coins:0,lv:{m:0,c:0,l:0,t:0},best:0,ok:0,tot:0,mode:'en',bet:10,imp:''},d);
+    combo=0;normS();save();buildWords();hud();renderBets();renderShop();
+    $$('[data-m]').forEach(x=>x.classList.toggle('on',x.dataset.m===S.mode));
+    next();m.textContent='読み込みました';
+  }catch(e){m.textContent='失敗：'+e.message}
+}
+$('#svOut').onclick=async()=>{
+  const m=$('#svMsg');
+  let dl=null;
+  try{dl=window.claude&&claude.use?await claude.use('downloads'):null}catch(e){}
+  if(!dl){$('#svTxt').value=saveJSON();m.textContent='ファイル保存が使えないため、下の欄にJSONを表示しました。コピーして保存してください';return}
+  try{await dl.save({filename:'leap-slot-save.json',data:saveJSON()});m.textContent='書き出しました'}
+  catch(e){m.textContent=e&&e.code==='declined'?'キャンセルしました':'書き出せませんでした（コピーを使ってください）'}
+};
+$('#svCopy').onclick=async()=>{
+  const t=saveJSON();$('#svTxt').value=t;
+  try{await navigator.clipboard.writeText(t);$('#svMsg').textContent='コピーしました'}
+  catch(e){$('#svTxt').select();$('#svMsg').textContent='下の欄のJSONを手動でコピーしてください'}
+};
+$('#svIn').onchange=async e=>{const f=e.target.files[0];if(f)applySave(await f.text());e.target.value=''};
+$('#svLoad').onclick=()=>applySave($('#svTxt').value);
+
+/* edit mode */
+let eIdx=1;
+const wordByN=n=>words.find(x=>x.n===n);
+function showEdit(n){
+  eIdx=n;$('#eN').value=n;
+  const x=wordByN(n);
+  $('#eW').value=x?x.w:'';$('#eM').value=x?x.ms.join('、'):'';
+  $('#eE').value=x&&x.ex?x.ex:'';$('#eJ').value=x&&x.exj?x.exj:'';
+  $('#eInfo').textContent=x?'No.'+n+'：登録済み／例文 '+(x.ex?'あり':'なし')+'／評価値 '+sc(x):'No.'+n+'：未登録（保存すると新規登録されます）';
+  $('#eMsg').textContent='';
+}
+function renderEdit(){
+  renderPubAdm();
+  $('#tStat').textContent='登録 '+words.length+'語／例文あり '+words.filter(x=>x.ex).length+'語';
+  showEdit(eIdx);
+}
+$('#eGo').onclick=()=>showEdit(Math.max(1,+$('#eN').value||1));
+$('#eP').onclick=()=>showEdit(Math.max(1,eIdx-1));
+$('#eNx').onclick=()=>showEdit(eIdx+1);
+$('#eFind').onclick=()=>{const f=words.find(x=>x.n>eIdx&&!x.ex);if(f)showEdit(f.n);else $('#eMsg').textContent='これ以降に例文未登録の単語はありません'};
+
+/* view mode (read-only) */
+let vIdx=1;
+function showView(n){
+  vIdx=n;$('#vN').value=n;
+  const x=wordByN(n),hl=t=>escH(t).replace(/\[([^\]]*)\]/g,'<b style="color:var(--gold)">$1</b>').replace(/「([^」]*)」/g,'<b style="color:var(--gold)">「$1」</b>');
+  $('#vW').textContent=x?x.w:'';
+  $('#vM').textContent=x?x.ms.join('、'):'';
+  $('#vE').innerHTML=x&&x.ex?hl(x.ex):'<span style="color:var(--sub);font-weight:400">例文はありません</span>';
+  $('#vJ').innerHTML=x&&x.exj?hl(x.exj):'<span style="color:var(--sub);font-weight:400">訳はありません</span>';
+  $('#vInfo').textContent=x?'No.'+n+' ／ 全'+words.length+'語':'No.'+n+'：この番号の単語はありません';
+}
+$('#vGo').onclick=()=>showView(Math.max(1,+$('#vN').value||1));
+$('#vP').onclick=()=>showView(Math.max(1,vIdx-1));
+$('#vNx').onclick=()=>showView(vIdx+1);
+$('#vN').onkeydown=e=>{if(e.key==='Enter')$('#vGo').onclick()};$('#eSave').onclick=()=>{
+  const n=+$('#eN').value;
+  if(!n||n<1){$('#eMsg').textContent='番号を入力してください';return}
+  const w=$('#eW').value.trim(),ms=items($('#eM').value);
+  if(!w||!ms.length){$('#eMsg').textContent='英単語と意味は必須です';return}
+  const cl=s=>s.replace(/[\t\r\n]+/g,' ').trim();
+  const ex=cl($('#eE').value),exj=cl($('#eJ').value);
+  const x=wordByN(n);
+  if(x){
+    if(x.w!==w&&S.sc&&S.sc[x.w]!==undefined){S.sc[w]=S.sc[x.w];delete S.sc[x.w]}
+    Object.assign(x,{w,ms,ex,exj});
+  }else{words.push({n,w,ms,ex,exj});words.sort((a,b)=>a.n-b.n)}
+  saveWords();save();$('#wc').textContent=words.length;updRange();
+  renderEdit();$('#eMsg').textContent='保存しました';
+};
+$('#eDel').onclick=()=>{
+  const n=+$('#eN').value,x=wordByN(n);
+  if(!x){$('#eMsg').textContent='その番号は未登録です';return}
+  if(words.length<=10){$('#eMsg').textContent='登録単語が少なくなりすぎるため削除できません';return}
+  if(!confirm('No.'+n+' '+x.w+' を削除します。よろしいですか？'))return;
+  words=words.filter(y=>y!==x);saveWords();$('#wc').textContent=words.length;updRange();
+  renderEdit();$('#eMsg').textContent='削除しました';
+};
+$('#wReset').onclick=async()=>{
+  if(!confirm('登録単語（例文を含む）をすべて消して、公開中の単語リストに戻します。よろしいですか？'))return;
+  $('#tMsg').textContent='読み込み中…';
+  if(await syncPub('reset')){renderEdit();$('#tMsg').textContent='公開リスト（'+words.length+'語）に戻しました'}
+  else $('#tMsg').textContent='公開リストを取得できませんでした。通信環境を確認してください';
+};
+$('#pubBtn').onclick=async()=>{
+  if(!confirm('公開中の単語リスト'+(pubN?'（'+pubN+'語）':'')+'に切り替えます。例文と評価値は同じ単語のものを引き継ぎます。よろしいですか？'))return;
+  if(await syncPub('update'))$('#impMsg').textContent='公開リストに切り替えました';
+};
+function wordsTxt(){
+  const c=s=>(s||'').replace(/[\t\r\n]+/g,' ');
+  return ['#leapslot v1 : 番号<TAB>英単語<TAB>意味<TAB>例文<TAB>例文の訳'].concat(words.map(x=>[x.n,c(x.w),c(x.ms.join('、')),c(x.ex),c(x.exj)].join('\t'))).join('\n')+'\n';
+}
+$('#tOut').onclick=async()=>{
+  const m=$('#tMsg'),t=wordsTxt();let dl=null;
+  try{dl=window.claude&&claude.use?await claude.use('downloads'):null}catch(e){}
+  if(!dl){$('#tTxt').value=t;m.textContent='ファイル保存が使えないため、下の欄に表示しました。コピーして保存してください';return}
+  try{await dl.save({filename:'leap-words.txt',data:t});m.textContent='書き出しました'}
+  catch(e){m.textContent=e&&e.code==='declined'?'キャンセルしました':'書き出せませんでした（コピーを使ってください）'}
+};
+$('#tCopy').onclick=async()=>{
+  const t=wordsTxt();$('#tTxt').value=t;
+  try{await navigator.clipboard.writeText(t);$('#tMsg').textContent='コピーしました'}
+  catch(e){$('#tTxt').select();$('#tMsg').textContent='下の欄のテキストを手動でコピーしてください'}
+};
+
+/* dice */
+let dChip=10,dBets={},dRolling=false;
+const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function setDie(el,n){el.innerHTML='';for(let i=0;i<9;i++){const p=document.createElement('i');if(PIPS[n].includes(i))p.className='on';el.appendChild(p)}}
+function initDice(){const d=$('#dice');d.innerHTML='';[1,3,5].forEach(n=>{const e=document.createElement('div');e.className='die';setDie(e,n);d.appendChild(e)})}
+const dTotal=()=>Object.values(dBets).reduce((a,b)=>a+b,0);
+function dmsg(t,c){const m=$('#dres');m.textContent=t;m.style.color=c||'var(--text)'}
+function renderChips(){
+  const b=$('#chips');b.innerHTML='';
+  [10,50,100,500].forEach(v=>{const x=document.createElement('button');x.textContent=v;if(dChip===v)x.className='on';x.onclick=()=>{dChip=v;renderChips()};b.appendChild(x)});
+}
+function renderBoard(win){
+  win=win||new Set();
+  const g=$('#dgrid');g.innerHTML='';
+  const row=(cols,items)=>{
+    const d=document.createElement('div');d.className='dr';d.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    items.forEach(([k,t,s])=>{
+      const b=document.createElement('button');b.className='dc'+(win.has(k)?' hit':'');
+      b.innerHTML='<span>'+t+'</span><small>'+s+'</small>'+(dBets[k]?'<i>'+dBets[k]+'</i>':'');
+      b.onclick=()=>addBet(k);d.appendChild(b);
+    });
+    g.appendChild(d);
+  };
+  const lab=t=>{const l=document.createElement('div');l.className='dlab';l.textContent=t;g.appendChild(l)};
+  row(2,[['small','小','4〜10'],['big','大','11〜17']]);
+  lab('出目（出た個数ぶん配当）');
+  row(6,[1,2,3,4,5,6].map(n=>['n'+n,n,'']));
+  lab('ゾロ目');
+  row(1,[['any','ゾロ目（どれでも）','30倍']]);
+  row(6,[1,2,3,4,5,6].map(n=>['t'+n,''+n+n+n,'180倍']));
+  $('#dtot').textContent=dTotal();
+}
+function addBet(k){
+  if(dRolling)return;
+  if(dTotal()+dChip>S.coins){dmsg('コインが足りません','var(--ng)');return}
+  dBets[k]=(dBets[k]||0)+dChip;renderBoard();dmsg('');
+}
+function rollDice(){
+  if(dRolling)return;
+  const tot=dTotal();
+  if(tot<=0){dmsg('マスをタップしてベットしてください','var(--sub)');return}
+  if(tot>S.coins){dmsg('コインが足りません','var(--ng)');return}
+  dRolling=true;$('#droll').disabled=true;S.coins-=tot;hud();dmsg('');renderBoard();
+  const r=[0,0,0].map(()=>1+(Math.random()*6|0)),ds=$$('.die');
+  $('#dice').classList.add('spin');
+  const tm=ds.map(e=>setInterval(()=>setDie(e,1+(Math.random()*6|0)),70));
+  ds.forEach((e,i)=>setTimeout(()=>{
+    clearInterval(tm[i]);setDie(e,r[i]);
+    if(i===2){$('#dice').classList.remove('spin');finishDice(r,tot)}
+  },600+i*300));
+}
+function finishDice(r,tot){
+  const sum=r[0]+r[1]+r[2],triple=r[0]===r[1]&&r[1]===r[2],luck=1+0.1*S.lv.l;
+  let ret=0;const win=new Set();
+  for(const [k,a] of Object.entries(dBets)){
+    let p=0;
+    if(k==='big'){if(!triple&&sum>=11)p=a}
+    else if(k==='small'){if(!triple&&sum<=10)p=a}
+    else if(k[0]==='n'){p=a*r.filter(x=>x===+k[1]).length}
+    else if(k==='any'){if(triple)p=a*30}
+    else if(k[0]==='t'){if(triple&&r[0]===+k[1])p=a*180}
+    if(p>0){ret+=a+Math.round(p*luck);win.add(k)}
+  }
+  S.coins+=ret;save();hud();renderBoard(win);
+  const kind=triple?'ゾロ目':sum>=11?'大':'小';
+  let msg='出目 '+r.join('・')+'（合計'+sum+'・'+kind+'）\n';
+  if(ret>tot)msg+='🎉 +'+(ret-tot).toLocaleString();
+  else if(ret===tot)msg+='トントン（賭け金が戻った）';
+  else if(ret>0)msg+='払戻 '+ret.toLocaleString()+'（−'+(tot-ret).toLocaleString()+'）';
+  else msg+='外れ −'+tot.toLocaleString();
+  dmsg(msg,ret>tot?'var(--ok)':ret===tot?'var(--text)':'var(--ng)');
+  $('#dres').style.whiteSpace='pre-line';
+  dRolling=false;$('#droll').disabled=false;
+}
+$('#droll').onclick=rollDice;
+$('#dclr').onclick=()=>{if(dRolling)return;dBets={};renderBoard();dmsg('')};
+$$('[data-g]').forEach(b=>b.onclick=()=>{
+  $$('[data-g]').forEach(x=>x.classList.toggle('on',x===b));
+  $('#slotCard').classList.toggle('hidden',b.dataset.g!=='slot');
+  $('#diceCard').classList.toggle('hidden',b.dataset.g!=='dice');
+  $('#derbyCard').classList.toggle('hidden',b.dataset.g!=='derby');
+});
+/* derby */
+const DB_NAMES=['ワードマスター','エイタンゴー','ジュケンノオウ','フラッシュカード','アンキノカミ','コンボダッシュ','ゴウカクロード','ヤマカンジャー','ダイヤモンドリーフ','サイコロスター','ジャックポット','ミスフォーミング','レインボーロード','ゴールデンペン'];
+const DB_COL=['#f5f5f5','#222','#e53935','#1e88e5','#fdd835','#43a047','#fb8c00','#ec407a'],DB_TXT=['#222','#fff','#fff','#fff','#222','#fff','#222','#fff'];
+const DB_TYPES=[['win','単勝',1],['place','複勝',1],['qui','馬連',2],['exa','馬単',2],['wide','ワイド',2],['tri','3連複',3],['tfc','3連単',3]];
+const DB_RTP=0.85;
+let dbH=[],dbP=null,dbType='win',dbSel=[],dbTk=[],dbChip=100,dbState='bet',dbEls=[];
+const dbBadge=i=>'<span class="hb" style="background:'+DB_COL[i]+';color:'+DB_TXT[i]+'">'+(i+1)+'</span>';
+const dbNeed=()=>DB_TYPES.find(t=>t[0]===dbType)[2];
+const dbOrd=t=>t==='exa'||t==='tfc';
+const dbName=t=>DB_TYPES.find(x=>x[0]===t)[1];
+const dbJoin=(t,s)=>s.map(x=>x+1).join(dbOrd(t)?'→':'-');
+const dbKey=(t,s)=>(dbOrd(t)||t==='win'||t==='place')?s.join(','):s.slice().sort((a,b)=>a-b).join(',');
+const dbOdds=p=>Math.min(9999,Math.max(1.1,DB_RTP/p));
+const fmtO=o=>o>=100?String(Math.round(o)):o.toFixed(1);
+function dbCalc(w){
+  const n=w.length,W=w.reduce((a,b)=>a+b,0);
+  const P={win:Array(n).fill(0),place:Array(n).fill(0),qui:{},exa:{},wide:{},tri:{},tfc:{}};
+  const add=(o,k,v)=>{o[k]=(o[k]||0)+v},srt=a=>a.slice().sort((x,y)=>x-y).join(',');
+  for(let a=0;a<n;a++)for(let b=0;b<n;b++){if(b===a)continue;for(let c=0;c<n;c++){if(c===a||c===b)continue;
+    const p=w[a]/W*w[b]/(W-w[a])*w[c]/(W-w[a]-w[b]);
+    P.win[a]+=p;[a,b,c].forEach(x=>P.place[x]+=p);
+    add(P.exa,a+','+b,p);add(P.tfc,a+','+b+','+c,p);add(P.qui,srt([a,b]),p);add(P.tri,srt([a,b,c]),p);
+    [[a,b],[a,c],[b,c]].forEach(q=>add(P.wide,srt(q),p));
+  }}
+  return P;
+}
+function dbProb(t,s){return t==='win'?dbP.win[s[0]]:t==='place'?dbP.place[s[0]]:dbP[t][dbKey(t,s)]}
+const dbSpent=()=>dbTk.reduce((a,t)=>a+t.stake,0);
+function dbNew(){
+  const names=DB_NAMES.slice().sort(()=>Math.random()-.5).slice(0,8);
+  dbH=names.map(n=>({n,w:1+Math.pow(Math.random(),1.6)*9}));
+  dbP=dbCalc(dbH.map(h=>h.w));
+  dbSel=[];dbTk=[];dbState='bet';
+  $('#dbGo').textContent='レース開始';$('#dbGo').disabled=false;$('#dbres').textContent='';
+  renderTrack();renderTypes();renderPick();renderTk();
+}
+let dbDots=[];
+const DB_G={Ls:120,cx:180,cy:110,R0:30,D:7,laps:2};
+function dbXY(i,p){
+  const {Ls,cx,cy,R0,D}=DB_G,r=R0+i*D,xr=cx+Ls/2,xl=cx-Ls/2,P=2*Ls+2*Math.PI*r;
+  let d=p*P;
+  if(d<Ls/2)return[cx+d,cy+r];
+  d-=Ls/2;
+  if(d<Math.PI*r){const th=d/r;return[xr+r*Math.sin(th),cy+r*Math.cos(th)]}
+  d-=Math.PI*r;
+  if(d<Ls)return[xr-d,cy-r];
+  d-=Ls;
+  if(d<Math.PI*r){const th=Math.PI+d/r;return[xl+r*Math.sin(th),cy+r*Math.cos(th)]}
+  d-=Math.PI*r;
+  return[xl+d,cy+r];
+}
+let bigDots=[],dbPauseAt=0,dbShift=0,dbRes=null;
+function renderBig(){
+  const {Ls,cx,cy,R0,D}=DB_G,Ro=R0+7*D+7,Ri=R0-7;
+  const rect=(r,at)=>'<rect x="'+(cx-Ls/2-r)+'" y="'+(cy-r)+'" width="'+(Ls+2*r)+'" height="'+(2*r)+'" rx="'+r+'" '+at+'/>';
+  let s='<svg viewBox="0 0 200 320" style="width:100%;height:calc(100vh - 220px);display:block"><g transform="translate(210,-20) rotate(90)">';
+  s+=rect(Ro,'fill="#9c6b3f"')+rect(Ri,'fill="#2e7d32"');
+  for(let i=0;i<=8;i++)s+=rect(R0+(i-0.5)*D,'fill="none" stroke="#fff" stroke-opacity=".25" stroke-width=".5"');
+  s+='<line x1="'+cx+'" x2="'+cx+'" y1="'+(cy+Ri)+'" y2="'+(cy+Ro)+'" stroke="#fff" stroke-width="2"/></g>';
+  dbH.forEach((h,i)=>{s+='<circle id="bc'+i+'" r="3.6" fill="'+DB_COL[i]+'" stroke="#000" stroke-opacity=".6" stroke-width=".6"/><text id="bt'+i+'" text-anchor="middle" font-size="4.4" font-weight="900" fill="'+DB_TXT[i]+'">'+(i+1)+'</text>'});
+  s+='</svg>';
+  $('#bigTrack').innerHTML=s;
+  bigDots=dbH.map((h,i)=>({c:$('#bc'+i),t:$('#bt'+i)}));
+}
+function openOv(){
+  renderBig();dbPos(dbH.map(()=>0));
+  $('#ovRes').textContent='';$('#ovClose').classList.add('hidden');$('#ovLap').textContent='1/'+DB_G.laps+'周';
+  $('#raceOv').classList.remove('hidden');
+}
+function setLap(p){const l=Math.min(DB_G.laps,Math.floor(p*DB_G.laps)+1);$('#ovLap').textContent=l+'/'+DB_G.laps+'周'}
+$('#ovClose').onclick=()=>$('#raceOv').classList.add('hidden');
+function dwOpen(){
+  const b=$('#dwTk');b.innerHTML='';
+  dbTk.forEach((t,i)=>{
+    const d=document.createElement('div');d.className='tk';
+    const sp=document.createElement('span');
+    sp.textContent=(dbRes?(dbRes[i]>0?'✅ ':'❌ '):'')+dbName(t.type)+' '+dbJoin(t.type,t.sel)+'　'+t.stake+' ×'+fmtO(t.odds)+(dbRes&&dbRes[i]>0?'　+'+dbRes[i]:'');
+    d.appendChild(sp);b.appendChild(d);
+  });
+  $('#dwTot').textContent=dbSpent();
+  if(dbState==='racing'&&!dbPauseAt)dbPauseAt=performance.now();
+  $('#dwSt').textContent=dbState==='racing'?'⏸ レース一時停止中':'';
+  $('#dwBk').classList.remove('hidden');$('#dw').classList.add('open');
+}
+function dwClose(){
+  $('#dwBk').classList.add('hidden');$('#dw').classList.remove('open');
+  if(dbPauseAt){dbShift+=performance.now()-dbPauseAt;dbPauseAt=0}
+}
+$('#ovTk').onclick=dwOpen;$('#dwX').onclick=dwClose;$('#dwBk').onclick=dwClose;
+function dbPos(ps){ps.forEach((p,i)=>{
+  const [x,y]=dbXY(i,(p*DB_G.laps)%1);
+  dbDots[i].setAttribute('cx',x);dbDots[i].setAttribute('cy',y);
+  const b=bigDots[i];
+  if(b&&b.c){const bx=210-y,by=x-20;b.c.setAttribute('cx',bx);b.c.setAttribute('cy',by);b.t.setAttribute('x',bx);b.t.setAttribute('y',by+1.6)}
+})}
+function renderLive(ord){
+  const h='<span class="note">順位</span>'+ord.map(i=>dbBadge(i)).join('');$('#live').innerHTML=h;$('#ovLive').innerHTML=h;
+}
+function renderTrack(){
+  const {Ls,cx,cy,R0,D}=DB_G,Ro=R0+7*D+7,Ri=R0-7;
+  const rect=(r,at)=>'<rect x="'+(cx-Ls/2-r)+'" y="'+(cy-r)+'" width="'+(Ls+2*r)+'" height="'+(2*r)+'" rx="'+r+'" '+at+'/>';
+  let s='<svg viewBox="0 0 360 220" style="width:100%;display:block;margin-bottom:6px">';
+  s+=rect(Ro,'fill="#9c6b3f"')+rect(Ri,'fill="#2e7d32"');
+  for(let i=0;i<=8;i++)s+=rect(R0+(i-0.5)*D,'fill="none" stroke="#fff" stroke-opacity=".25" stroke-width=".6"');
+  s+='<line x1="'+cx+'" x2="'+cx+'" y1="'+(cy+Ri)+'" y2="'+(cy+Ro)+'" stroke="#fff" stroke-width="2.5"/>';
+  s+='<text x="'+cx+'" y="'+(cy+4)+'" text-anchor="middle" font-size="9" fill="#fff" fill-opacity=".6" font-weight="700">ダービー</text>';
+  dbH.forEach((h,i)=>{s+='<circle id="hd'+i+'" r="3.4" fill="'+DB_COL[i]+'" stroke="#000" stroke-opacity=".6" stroke-width=".8"/>'});
+  s+='</svg>';
+  $('#track').innerHTML=s;
+  dbDots=dbH.map((h,i)=>$('#hd'+i));
+  dbPos(dbH.map(()=>0));
+  renderLive(dbH.map((h,i)=>i));
+}
+function renderTypes(){
+  const b=$('#dbTypes');b.innerHTML='';
+  DB_TYPES.forEach(([k,t])=>{
+    const x=document.createElement('button');x.textContent=t;if(dbType===k)x.className='on';
+    x.onclick=()=>{if(dbState!=='bet')return;dbType=k;dbSel=[];renderTypes();renderPick()};
+    b.appendChild(x);
+  });
+}
+function renderPick(){
+  const g=$('#dbPick');g.innerHTML='';
+  const pop=dbH.map((h,i)=>i).sort((a,b)=>dbH[b].w-dbH[a].w);
+  dbH.forEach((h,i)=>{
+    const si=dbSel.indexOf(i),b=document.createElement('button');
+    b.className='hr'+(si>=0?' sel':'');
+    const mk=si<0?'':dbOrd(dbType)?(si+1)+'着':'✔';
+    b.innerHTML=dbBadge(i)+'<span class="nm">'+h.n+'<br><small style="color:var(--sub);font-weight:500">'+(pop.indexOf(i)+1)+'番人気</small></span><span class="od">単 '+fmtO(dbOdds(dbP.win[i]))+'<br>複 '+fmtO(dbOdds(dbP.place[i]))+'</span><span class="mk">'+mk+'</span>';
+    b.onclick=()=>{
+      if(dbState!=='bet')return;
+      const k=dbSel.indexOf(i);
+      if(k>=0)dbSel.splice(k,1);else if(dbSel.length<dbNeed())dbSel.push(i);
+      renderPick();
+    };
+    g.appendChild(b);
+  });
+  const ok=dbSel.length===dbNeed();
+  $('#dbOddsLine').textContent=ok?dbName(dbType)+' '+dbJoin(dbType,dbSel)+'　オッズ ×'+fmtO(dbOdds(dbProb(dbType,dbSel))):'馬を'+dbNeed()+'頭選んでください'+(dbOrd(dbType)?'（選んだ順が着順）':'');
+  $('#dbAdd').disabled=!ok;
+}
+function renderTk(res){
+  const b=$('#dbTkt');b.innerHTML='';
+  dbTk.forEach((t,i)=>{
+    const d=document.createElement('div');d.className='tk';
+    const sp=document.createElement('span');
+    sp.textContent=(res?(res[i]>0?'✅ ':'❌ '):'')+dbName(t.type)+' '+dbJoin(t.type,t.sel)+'　'+t.stake+' ×'+fmtO(t.odds)+(res&&res[i]>0?'　+'+res[i]:'');
+    d.appendChild(sp);
+    if(!res){const x=document.createElement('button');x.textContent='✕';x.className='btn';x.style.padding='4px 10px';x.onclick=()=>{dbTk.splice(i,1);renderTk()};d.appendChild(x)}
+    b.appendChild(d);
+  });
+  $('#dbTot').textContent=dbSpent();
+}
+function dbRenderChips(){
+  const b=$('#dbChips');b.innerHTML='';
+  [10,50,100,500,1000,5000].forEach(v=>{const x=document.createElement('button');x.textContent=v;if(dbChip===v)x.className='on';x.onclick=()=>{dbChip=v;dbRenderChips()};b.appendChild(x)});
+}
+$('#dbAdd').onclick=()=>{
+  if(dbState!=='bet'||dbSel.length!==dbNeed())return;
+  if(dbSpent()+dbChip>S.coins){$('#dbres').textContent='コインが足りません';$('#dbres').style.color='var(--ng)';return}
+  dbTk.push({type:dbType,sel:dbSel.slice(),stake:dbChip,odds:dbOdds(dbProb(dbType,dbSel))});
+  dbSel=[];$('#dbres').textContent='';renderPick();renderTk();
+};
+$('#dbClr').onclick=()=>{if(dbState!=='bet')return;dbTk=[];dbSel=[];renderTk();renderPick()};
+$('#dbGo').onclick=()=>{
+  if(dbState==='done'){dbNew();return}
+  if(dbState!=='bet')return;
+  const tot=dbSpent(),m=$('#dbres');
+  if(!tot){m.textContent='ベットを追加してください';m.style.color='var(--sub)';return}
+  if(tot>S.coins){m.textContent='コインが足りません';m.style.color='var(--ng)';return}
+  S.coins-=tot;hud();save();
+  dbState='racing';$('#dbGo').disabled=true;m.textContent='';dbSel=[];renderPick();openOv();
+  runRace(tot);
+};
+function runRace(tot){
+  let rest=dbH.map((h,i)=>i);const order=[];
+  while(rest.length){
+    const W=rest.reduce((a,i)=>a+dbH[i].w,0);let r=Math.random()*W,k=0;
+    for(;k<rest.length-1;k++){r-=dbH[rest[k]].w;if(r<0)break}
+    order.push(rest[k]);rest.splice(k,1);
+  }
+  const T=Array(8);order.forEach((h,rk)=>T[h]=16+rk*0.8);
+  const ph=dbH.map(()=>[Math.random()*6.28,1.2+Math.random()*1.8]),A=0.6,G=(i,x)=>x-(A/ph[i][1])*(Math.cos(ph[i][0]+ph[i][1]*x)-Math.cos(ph[i][0]));
+  const GM=dbH.map(()=>0.65+Math.random()*0.95);/* <1:逃げ(前半先行) >1:差し(後半に捲る) */
+  const t0=performance.now(),got=Array(8).fill(false);let done=0;
+  dbPauseAt=0;dbShift=0;dbRes=null;dwClose();
+  function step(now){
+    if(dbPauseAt){requestAnimationFrame(step);return}
+    const t=(now-t0-dbShift)/1000,ps=[];
+    for(let i=0;i<8;i++){
+      const s=Math.min(1,t/T[i]);
+      let p=Math.pow(Math.max(0,G(i,t)/G(i,T[i])),GM[i]);
+      p=t>=T[i]?1:Math.max(0,Math.min(0.999,p));
+      ps.push(p);
+      if(t>=T[i]&&!got[i]){got[i]=true;done++}
+    }
+    dbPos(ps);
+    renderLive(ps.map((p,i)=>i).sort((a,b)=>ps[b]-ps[a]||T[a]-T[b]));setLap(Math.max(...ps));
+    if(done<8)requestAnimationFrame(step);else settleRace(order,tot);
+  }
+  requestAnimationFrame(step);
+}
+function settleRace(order,tot){
+  const luck=1+0.1*S.lv.l,top=order.slice(0,3),two=order.slice(0,2);
+  const ret=dbTk.map(t=>{
+    const s=t.sel;let hit=false;
+    if(t.type==='win')hit=s[0]===order[0];
+    else if(t.type==='place')hit=top.includes(s[0]);
+    else if(t.type==='qui')hit=s.every(x=>two.includes(x));
+    else if(t.type==='exa')hit=s[0]===order[0]&&s[1]===order[1];
+    else if(t.type==='wide'||t.type==='tri')hit=s.every(x=>top.includes(x));
+    else hit=s[0]===order[0]&&s[1]===order[1]&&s[2]===order[2];
+    return hit?t.stake+Math.round(t.stake*(t.odds-1)*luck):0;
+  });
+  const total=ret.reduce((a,b)=>a+b,0),net=total-tot;
+  dbRes=ret;S.coins+=total;save();hud();renderTk(ret);
+  const m=$('#dbres');
+  m.textContent='1着 '+(order[0]+1)+'番　2着 '+(order[1]+1)+'番　3着 '+(order[2]+1)+'番\n'+(net>0?'🎉 +'+net.toLocaleString():net===0?'トントン':'ハズレ −'+(-net).toLocaleString());
+  m.style.color=net>0?'var(--ok)':net===0?'var(--text)':'var(--ng)';
+  $('#ovRes').textContent=m.textContent;$('#ovRes').style.color=m.style.color;$('#ovClose').classList.remove('hidden');
+  dbState='done';$('#dbGo').disabled=false;$('#dbGo').textContent='次のレース →';
+}
+dbRenderChips();dbNew();
+initDice();renderBoard();renderChips();
+
+load();buildWords();
+$$('[data-m]').forEach(x=>x.classList.toggle('on',x.dataset.m===S.mode));
+hud();renderBets();initReels();next();
+syncPub();
+</script>
+<script type="module">
+/* Firebase の REST API を直接呼ぶ方式（SDKを使わないので、ファイルを直接開いても動きます） */
+const q=s=>document.querySelector(s),cfg=window.FIREBASE_CONFIG;
+const say=(t,c)=>{const m=q('#fbMsg');m.textContent=t;m.style.color=c||'var(--sub)'};
+const NG='var(--ng)',OK='var(--ok)';
+if(!cfg||!cfg.apiKey){
+  say('Firebaseの設定が未入力です。ファイル冒頭の FIREBASE_CONFIG を入力してください。',NG);
+  ['#fbIn','#fbUp'].forEach(i=>q(i).disabled=true);
+  window.cloudSet(null);
+}else{
+  const KEY=cfg.apiKey,PID=cfg.projectId,SKEY='leapslot_fb';
+  const AUTH='https://identitytoolkit.googleapis.com/v1/accounts:';
+  const TOKURL='https://securetoken.googleapis.com/v1/token?key='+encodeURIComponent(KEY);
+  const ROOT='https://firestore.googleapis.com/v1/projects/'+encodeURIComponent(PID)+'/databases/(default)/documents',DOCBASE=ROOT+'/',DOCURL=DOCBASE+'users/';
+  let user=null,synced=false,timer=null,dirty=false;
+  const mail=id=>id.toLowerCase()+'@leap-save.example.com';
+  const idOk=id=>/^[A-Za-z0-9_.-]{3,20}$/.test(id);
+  const RELOGIN='ログインの有効期限が切れました。もう一度ログインしてください';
+  const ERR={EMAIL_EXISTS:'このIDはすでに使われています',INVALID_LOGIN_CREDENTIALS:'IDかパスワードが違います',INVALID_PASSWORD:'IDかパスワードが違います',EMAIL_NOT_FOUND:'IDかパスワードが違います',WEAK_PASSWORD:'パスワードは6文字以上にしてください',NETWORK:'ネットワークに接続できません（ファイアウォール等で通信が止められている可能性があります）',OPERATION_NOT_ALLOWED:'Firebaseで「メール/パスワード」のログイン方法を有効にしてください',TOO_MANY_ATTEMPTS_TRY_LATER:'試行回数が多すぎます。しばらくしてからやり直してください',PERMISSION_DENIED:'Firestoreのルールで拒否されました。ルールの設定を確認してください',UNAUTHENTICATED:RELOGIN,TOKEN_EXPIRED:RELOGIN,INVALID_REFRESH_TOKEN:RELOGIN,USER_NOT_FOUND:RELOGIN,USER_DISABLED:'このアカウントは無効になっています',API_KEY_INVALID:'APIキーが無効です。FIREBASE_CONFIG を確認してください'};
+  const errJa=e=>ERR[e.code]||ERR[e.status]||('エラー：'+(e.code||e.message));
+  const now=()=>new Date().toLocaleTimeString('ja-JP');
+  async function http(url,opt){
+    let r;
+    try{r=await fetch(url,opt)}catch(e){throw Object.assign(new Error('network'),{code:'NETWORK'})}
+    let j={};try{j=await r.json()}catch(e){}
+    if(!r.ok){
+      const er=j.error||{},m=String(er.message||'');
+      throw Object.assign(new Error(m||('HTTP '+r.status)),{code:m.split(/[ :]/)[0],status:er.status||'',http:r.status});
+    }
+    return j;
+  }
+  function setUser(u){
+    user=u;
+    try{u?localStorage.setItem(SKEY,JSON.stringify({uid:u.uid,email:u.email,refresh:u.refresh})):localStorage.removeItem(SKEY)}catch(e){}
+  }
+  async function signWith(path,email,pw){
+    const j=await http(AUTH+path+'?key='+encodeURIComponent(KEY),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw,returnSecureToken:true})});
+    return{uid:j.localId,email:j.email||email,idToken:j.idToken,refresh:j.refreshToken,exp:Date.now()+(+j.expiresIn||3600)*1000};
+  }
+  async function token(){
+    if(!user)throw Object.assign(new Error('not logged in'),{code:'UNAUTHENTICATED'});
+    if(!user.idToken||Date.now()>user.exp-60000){
+      const j=await http(TOKURL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(user.refresh)});
+      user.idToken=j.id_token;user.refresh=j.refresh_token||user.refresh;user.exp=Date.now()+(+j.expires_in||3600)*1000;
+      setUser(user);
+    }
+    return user.idToken;
+  }
+  async function getSave(){
+    const t=await token();
+    try{
+      const j=await http(DOCURL+encodeURIComponent(user.uid),{headers:{Authorization:'Bearer '+t}}),f=j.fields||{};
+      return{data:(f.data&&f.data.stringValue)||'',at:Number(f.at&&(f.at.integerValue||f.at.doubleValue))||0};
+    }catch(e){if(e.http===404||e.status==='NOT_FOUND')return null;throw e}
+  }
+  async function putSave(data){
+    const t=await token();
+    await http(DOCURL+encodeURIComponent(user.uid),{method:'PATCH',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({fields:{data:{stringValue:data},at:{integerValue:String(Date.now())}}})});
+  }
+  async function push(){
+    if(!user)return;
+    await putSave(saveJSON());
+    let bm='';
+    try{await pushBoard()}catch(e){bm='（ランキングへは反映できませんでした：'+errJa(e)+'）'}
+    dirty=false;say('☁ 保存しました（'+now()+'）'+bm,bm?NG:OK);
+  }
+  async function firstSync(){
+    try{
+      const sn=await getSave();
+      if(sn){
+        const at=new Date(sn.at).toLocaleString('ja-JP');
+        if(confirm('クラウドにセーブデータがあります（'+at+' 保存）。\nOK：クラウドのデータを読み込む\nキャンセル：この端末のデータでクラウドを上書き')){
+          applySave(sn.data,true);say('☁ クラウドのデータを読み込みました',OK);
+        }else await push();
+      }else await push();
+      synced=true;
+    }catch(e){say(errJa(e),NG)}
+  }
+  function view(){
+    q('#fbLogin').classList.toggle('hidden',!!user);
+    q('#fbUser').classList.toggle('hidden',!user);
+    if(user)q('#fbName').textContent=(user.email||'').split('@')[0];
+  }
+  window.cloudSched=()=>{
+    if(!user||!synced||!q('#fbAuto').checked)return;
+    dirty=true;clearTimeout(timer);
+    timer=setTimeout(()=>push().catch(e=>say(errJa(e),NG)),4000);
+  };
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&dirty&&user&&synced){clearTimeout(timer);push().catch(()=>{})}});
+  const cred=()=>{
+    const id=q('#fbId').value.trim(),pw=q('#fbPw').value;
+    if(!idOk(id)){say('IDは英数字・「_」「.」「-」の3〜20文字にしてください',NG);return null}
+    if(pw.length<6){say('パスワードは6文字以上にしてください',NG);return null}
+    return [mail(id),pw];
+  };
+  async function login(path,busy){
+    const c=cred();if(!c)return;
+    say(busy);
+    try{
+      synced=false;setUser(await signWith(path,...c));q('#fbPw').value='';view();await firstSync();
+    }catch(e){say(errJa(e),NG)}
+  }
+  q('#fbUp').onclick=()=>login('signUp','登録中…');
+  q('#fbIn').onclick=()=>login('signInWithPassword','ログイン中…');
+  q('#fbOut').onclick=async()=>{
+    if(dirty){try{await push()}catch(e){}}
+    clearTimeout(timer);dirty=false;synced=false;setUser(null);view();say('ログアウトしました');
+  };
+  q('#fbPush').onclick=async()=>{try{await push()}catch(e){say(errJa(e),NG)}};
+  q('#fbPull').onclick=async()=>{
+    try{
+      const sn=await getSave();
+      if(!sn){say('クラウドにデータがありません',NG);return}
+      if(!confirm('この端末のデータを、クラウドのデータ（'+new Date(sn.at).toLocaleString('ja-JP')+' 保存）で上書きします。よろしいですか？'))return;
+      applySave(sn.data,true);say('☁ 読み込みました（'+now()+'）',OK);
+    }catch(e){say(errJa(e),NG)}
+  };
+  /* ---- リーダーボード・公開単語リスト ---- */
+  const myName=()=>((user&&user.email)||'').split('@')[0];
+  const isAdmin=()=>!!user&&(window.ADMIN_IDS||[]).map(s=>String(s).toLowerCase()).includes(myName());
+  const iv=n=>({integerValue:String(Math.max(0,Math.min(9e15,Math.floor(Number(n)||0))))});
+  const nv=f=>Number(f&&(f.integerValue||f.doubleValue))||0;
+  async function docGet(path,auth){
+    const h=auth?{Authorization:'Bearer '+await token()}:{};
+    try{const j=await http(DOCBASE+path+'?key='+encodeURIComponent(KEY),{headers:h});return j.fields||{}}
+    catch(e){if(e.http===404||e.status==='NOT_FOUND')return null;throw e}
+  }
+  async function docSet(path,fields){
+    const t=await token();
+    await http(DOCBASE+path+'?key='+encodeURIComponent(KEY),{method:'PATCH',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({fields})});
+  }
+  async function pushBoard(){
+    if(!user)return;
+    const d=window.boardData&&window.boardData();if(!d)return;
+    if(d.off){
+      const t=await token();
+      try{await http(DOCBASE+'board/'+encodeURIComponent(user.uid)+'?key='+encodeURIComponent(KEY),{method:'DELETE',headers:{Authorization:'Bearer '+t}})}
+      catch(e){if(e.http!==404&&e.status!=='NOT_FOUND')throw e}
+      return;
+    }
+    await docSet('board/'+user.uid,{name:{stringValue:myName()},ttl:{stringValue:d.ttl||''},ok:iv(d.ok),best:iv(d.best),mx:iv(d.mx),pg:iv(d.pg),at:iv(Date.now())});
+  }
+  async function boardTop(cat){
+    const t=await token();
+    const j=await http(ROOT+':runQuery?key='+encodeURIComponent(KEY),{method:'POST',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'board'}],orderBy:[{field:{fieldPath:cat},direction:'DESCENDING'}],limit:30}})});
+    return (Array.isArray(j)?j:[]).filter(x=>x.document).map(x=>{const f=x.document.fields||{};return{name:(f.name&&f.name.stringValue)||'',ttl:(f.ttl&&f.ttl.stringValue)||'',ok:nv(f.ok),best:nv(f.best),mx:nv(f.mx),pg:nv(f.pg)}});
+  }
+  async function pubGet(){
+    const f=await docGet('pub/words',false);
+    return f&&f.txt?{txt:f.txt.stringValue||'',at:nv(f.at),by:(f.by&&f.by.stringValue)||'',n:nv(f.n)}:null;
+  }
+  async function pubPut(txt,n){await docSet('pub/words',{txt:{stringValue:txt},at:iv(Date.now()),by:{stringValue:myName()},n:iv(n)})}
+  window.cloudSet({loggedIn:()=>!!user,name:myName,isAdmin,pushBoard,board:boardTop,pubGet,pubPut,errJa});
+  /* 前回のログインを復元 */
+  (async()=>{
+    let s=null;
+    try{s=JSON.parse(localStorage.getItem(SKEY)||'null')}catch(e){}
+    if(!(s&&s.refresh&&s.uid)){view();return}
+    user={uid:s.uid,email:s.email,refresh:s.refresh,idToken:'',exp:0};view();
+    try{await token();await firstSync()}
+    catch(e){
+      if(e.code==='NETWORK'){say(errJa(e),NG)}
+      else{setUser(null);view();say(errJa(e),NG)}
+    }
+  })();
+}
+</script>
+</body>
+</html>
